@@ -1,5 +1,9 @@
 pragma solidity^0.4.0;
+<<<<<<< HEAD
 import "./borrower.sol";
+=======
+import "./Borrower1.sol";
+>>>>>>> 92386bfb62f436a5f9b1dba7c52e156b0e14c960
 contract fi is bor{
     uint256 loanamount;
     uint256 tokenvalue;
