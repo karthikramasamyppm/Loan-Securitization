@@ -1,0 +1,57 @@
+<html>
+<head>
+    <title>New Financial Institution</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        function validateForm() {
+            var x = document.forms["myForm"]["metamaskaddress"].value;
+            if (x == "") {
+                alert("it should contain 16 digits");
+                return false;
+            }
+        }
+        </script>
+    <style>
+        input 
+        {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 2px solid #ccc;
+            box-sizing: border-box;
+        }
+        button 
+        {
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 10%;
+        }
+</style>
+</head>
+<body  background="Ethereum-homestead-background-1.jpg">
+    <br><div class="container">
+    <center><div>
+        <center><h1 align="center" >New Financial Insitution Details</h1></center>
+    </div></center><br>
+    <div class="container">
+            <font face="verdana" size="3"><i><b>MetaMask Address</b></i></font><input type="text" placeholder="Metamask Account Address" name="meta">
+            <form name="myForm" action="/action_page.php"
+        onsubmit="return validateForm()" method="post">
+     
+        </form>
+
+            <font face="verdana" size="3"><i><b>Approval Amount</b></i></font><input type="text" placeholder="Amount" name="amount">
+	    <font face="verdana" size="3"><i><b>Rate Of Interest</b></i></font><input type="text" placeholder="Rate of interest" name="Interest">
+            <font face="verdana" size="3"><i><b>Loan Duration</b></i></font><input type="text" placeholder="Monthly payment" name="montpay">
+            <button type="button" class="btn btn-success">Register</button>
+             <button type="button" class="btn btn-danger">Cancel</button>
+           </div>
+    </div>
+</body>
+</html>
