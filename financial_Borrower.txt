@@ -1,0 +1,106 @@
+pragma solidity ^0.4.0;
+//import "./srec20sol.sol";
+contract bank{
+ 
+   address owner;
+   string public name;
+   string public symbol; 
+   uint256 totalsupply;
+   address[] laccno;
+   bytes32[] lbankname;
+   uint256[] lether;
+   address[] lbacc;
+   bytes32[] lbtokenname;
+   uint256[] ltokenforloan;
+   uint256[] lbowether;
+    mapping(address=>uint256)balances;
+    mapping(address=>borrowers)public bow; 
+    
+     function bank() {
+        owner=msg.sender;
+        name="Bank";
+        symbol="$BK";
+        totalsupply=10;
+        balances[msg.sender]=totalsupply;
+    }
+     function totalSupply() constant returns (uint256)
+    {
+        return totalsupply;
+    }
+
+    modifier onlyowner() {
+        require(owner==msg.sender);
+        _;
+    }
+   
+   struct banks {
+      bytes32 bankname;
+      uint256 ether1;
+      address accno_;
+      
+   } 
+    struct borrowers {
+      bytes32 bowname;
+      uint256 bowtoken;
+      address bowaccno_;
+      uint256 bowether;
+      
+   } 
+      mapping(address=>banks)public show; 
+   function setFIdetails(address accno,bytes32 bankname,uint256 ether1) public {
+       show[accno].accno_=accno;
+       show[accno].bankname=bankname;
+        show[accno].ether1 = ether1;
+        laccno.push(accno);
+        lbankname.push(bankname);
+        lether.push(ether1);
+   }
+   
+   function getFIdetails() public view returns(address[],bytes32[],uint256[]) {
+       return(laccno,lbankname,lether);
+   }
+  function setBorrowerdetails(address accno1,bytes32 tokenname1,uint256 bowtoken,uint256 bowether) public{
+       bow[accno1].bowaccno_=accno1;
+       bow[accno1].bowname=tokenname1;
+        bow[accno1].bowtoken = bowtoken;
+        bow[accno1].bowether = bowether;
+        lbacc.push(accno1);
+        lbtokenname.push(tokenname1);
+        ltokenforloan.push(bowtoken);
+        lbowether.push(bowether);
+        calculate(bowtoken,bowether,accno1);
+        
+        
+   }
+   function getBOrrowerdetails() public view returns(address[],bytes32[],uint256[],uint256[]) {
+       return(lbacc,lbtokenname,ltokenforloan,lbowether);
+   }
+       
+function calculate(uint256 bowtoken,uint256 bowether,address accno1)
+ {
+     uint256 eth = bowtoken * 0.5 ether;
+     uint256 loanamount = eth/100 * 80;
+      require(loanamount >= bowether);
+      loanamount = bowether;
+      transfer(accno1,loanamount);
+}
+   
+    
+  function transfer(address accno1,uint256 loanamount) public onlyowner constant returns(uint256){
+   balances[msg.sender] = totalsupply+ bow[accno1].bowtoken;
+   totalsupply +=bow[accno1].bowtoken;
+   balances[accno1] = balances[accno1]-bow[accno1].bowtoken;
+   return(totalsupply);
+   
+    
+  }
+  function balanceOf(address owner) public view returns (uint256) {
+    return balances[owner];
+  }
+ function sendPayment(address accno1 ,uint256 loanamount)public payable
+  { 
+    address  objAddress = bow[accno1].bowaccno_;
+      objAddress.transfer(loanamount);
+    
+  }
+}

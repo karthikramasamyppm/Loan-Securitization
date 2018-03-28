@@ -1,0 +1,96 @@
+pragma solidity ^0.4.0;
+import "./ERC20.sol";
+contract bank is ERC20{
+ 
+   address owner;
+   string public name;
+   string public symbol;
+   uint256 totalsupply;
+   uint256 loanamount;
+    mapping(address=>uint256)balances;
+    mapping(address=>borrowers) bow; 
+    
+     function bank() {
+        owner=msg.sender;
+        name="Bank";
+        symbol="B";
+        totalsupply=0;
+        balances[msg.sender]=totalsupply;
+    }
+     function totalSupply() constant returns (uint256)
+    {
+        return totalsupply;
+    }
+
+    modifier onlyowner() {
+        require(owner==msg.sender);
+        _;
+    }
+   
+   struct banks {
+      string bankname;
+      uint256 ether1;
+      address accno_;
+      
+   } 
+    struct borrowers {
+      string bowname;
+      uint256 bowtoken;
+      address bowaccno_;
+      uint256 bowether;
+      
+   } 
+      mapping(address=>banks)public show; 
+   function getFIdetails(address accno,string bankname,uint256 ether1) public{
+       show[accno].accno_=accno;
+       show[accno].bankname=bankname;
+        show[accno].ether1 = ether1;
+     
+   }
+  function getBorrowerdetails(address accno1,string tokenname1,uint256 bowtoken,uint256 bowether) public{
+      
+       bow[accno1].bowaccno_=accno1;
+       bow[accno1].bowname=tokenname1;
+        bow[accno1].bowtoken = bowtoken;
+        bow[accno1].bowether = bowether;
+        calculate(bowtoken,bowether,accno1);
+        
+        
+   }
+ function calculate(uint256 bowtoken,uint256 bowether,address accno1)public constant returns(uint256)
+ {
+     uint256 eth = bowtoken * 0.5 ether;
+     loanamount = eth/100 * 80;
+      require(loanamount >= bowether);
+      loanamount = bowether;
+      transfer(accno1,loanamount);
+      return(loanamount);
+}
+   
+    
+  function transfer(address accno1,uint256 loanamount) public onlyowner constant returns(uint256){
+   balances[msg.sender] = totalsupply+ bow[accno1].bowtoken;
+   totalsupply +=bow[accno1].bowtoken;
+   balances[accno1] = balances[accno1]-bow[accno1].bowtoken;
+   return(totalsupply);
+  // sendPayment(accno1,loanamount);
+  
+   
+    
+  }
+  function balanceOf(address owner) public view returns (uint256) {
+    return balances[owner];
+  }
+  
+  function sendPayment(address accno1 ,uint256 loanamount)public payable
+  { 
+    address  objAddress = bow[accno1].bowaccno_;
+      objAddress.transfer(loanamount);
+    
+     
+     
+}
+  
+  
+
+}
