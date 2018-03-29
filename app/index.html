@@ -1,11 +1,34 @@
+<!--<!DOCTYPE html>
+<html>
+<head>
+  <title>MetaCoin - Truffle Webpack Demo w/ Frontend</title>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <script src="./app.js"></script>
+</head>
+<body>
+  <h1>MetaCoin</h1>
+  <h2>Example Truffle Dapp</h2>
+  <h3>You have <span class="black"><span id="balance"></span> META</span></h3>
+
+  <br>
+  <h1>Send MetaCoin</h1>
+  <br><label for="amount">Amount:</label><input type="text" id="amount" placeholder="e.g., 95"></input>
+  <br><label for="receiver">To Address:</label><input type="text" id="receiver" placeholder="e.g., 0x93e66d9baea28c17d9fc393b53e3fbdd76899dae"></input>
+  <br><br><button id="send" onclick="App.sendCoin()">Send MetaCoin</button>
+  <br><br>
+  <span id="status"></span>
+  <br>
+  <span class="hint"><strong>Hint:</strong> open the browser developer console to view any errors and warnings.</span>
+</body>
+</html>-->
 <!DOCTYPE html>
 <html>
         <head><center></head>
                 <meta charset="utf-8">
                 <title>test</title>
-                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-                 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+                <link rel="stylesheet" href="app/stylesheets/bootstrap.min.css">
+                <script src="app/javascript/jquery.min.js"></script>
+                 <script src="app/javascript/bootstrap.min.js"></script>
              <style>
             
 button {
@@ -26,16 +49,61 @@ button:hover {
     opacity: 0.8;
 }
 
+body{
+  background-image: url('app/images.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center; 
+}
                 </style>
-                <body background="Ethereum-homestead-background-1.jpg" ><br><br><br>
+                <body onload="plug()" ><br><br><br>
                   <center>
                     
                    <br><br><br>
                   <b><h1>LOAN SECURITIZATION</h1></b><br><br><br>
                   
-                 <form action="naviagtionbar.html">
-                    <button class="btn btn-success">START PROCESS</button>
+                 <form action="app/naviagtionbar.html">
+                    <!-- <button class="btn btn-success">START PROCESS</button> -->
+                    <input type="submit" class="btn btn-success" value="START PROCESS"  onclick="getNavigationPage();"/>
                  </form>
                  </center>
-                  </body>
-                 </html>
+<script>
+
+function plug()
+{
+	 if (typeof web3 !== 'undefined')
+        {
+            web3 = new Web3(web3.currentProvider);
+            alert("Metamask Plugged in.....")
+            check();
+        }
+       else
+        {
+               alert("First You need to install meta mask");
+	       window.location.assign("https://metamask.io/")
+               return;
+        }
+}
+function check()
+{
+// Checking if Web3 has been injected by the browser (Mist/MetaMask)
+// Use Mist/MetaMask's provider
+window.web3 = new Web3(web3.currentProvider); 
+if (web3.currentProvider.isMetaMask === true) {
+if (typeof web3.eth.defaultAccount === 'undefined')
+ {
+          alert('Oops! You Need to Unlock your Account');
+ }
+else
+ {
+      alert("Metamask is Unlocked");
+  }
+}
+}
+
+function getNavigationPage(){
+  window.location("app/naviagtionbar.html");
+}
+</script>
+</body>
+</html>
