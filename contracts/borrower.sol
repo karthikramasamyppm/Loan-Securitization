@@ -28,7 +28,7 @@ contract borrower is ERC20{
         balance[from] -= value;
        balance[to] +=value;
       
-    ]
+    }
 
 
 }
