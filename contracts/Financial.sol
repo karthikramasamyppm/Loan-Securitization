@@ -1,137 +1,50 @@
 pragma solidity^0.4.0;
-
-contract financial  {
-    
-    uint256 FI_interest;
-    uint256 FI_duration;
-    uint256 initial_financial_ether;
-    uint256 loan_count;
-    address financial_institution;
-     uint256[] total_loan;
-     uint256[]  spv_loan;
-     uint256 return_ether;
-      uint256 initial_spv_ether;
-      uint256 initial_investor_ether;
-      uint256 bank_take_interest;
-      uint256 spv_take_interest;
-      uint256 balance_amount_investor;
-     mapping(address => uint256)balance;
-    function financial () public {
-        financial_institution =msg.sender;
-    }
+<<<<<<< HEAD
+import "./borrower.sol";
+=======
+import "./Borrower1.sol";
+>>>>>>> 92386bfb62f436a5f9b1dba7c52e156b0e14c960
+contract fi is bor{
+    uint256 loanamount;
+    uint256 tokenvalue;
+    uint256 eth;
+    uint256 ethervalue;
     struct loandetails
     {
-        address borrower;
+        address to;
         uint256 loanamount;
-        uint256 token;
-        uint256 duration;
-        uint256 tot_amount;
-        
+        uint256 value;
+       uint256 duration;
     }
-    mapping(address=> loandetails)public detail;
- 
-    
-    function register(uint256 interest,uint256 duration)public payable
+    mapping(address=> loandetails)detail;
+    function ethertransfer(address to,uint256 tokenvalue)public view returns(uint256,uint256)
     {
-        initial_financial_ether = msg.value;
-        FI_interest=interest;
-        FI_duration=duration;
-    }
-    function existing()public view returns(address,uint256,uint256,uint256)
-    {
-         return(financial_institution,initial_financial_ether,FI_interest,FI_duration);
-    }
-    
-    
-    function borrowMoney(uint256 tokenvalue)public payable
-    {
-       
-        detail[msg.sender].borrower = msg.sender;
-        detail[msg.sender].token = tokenvalue;
-        detail[msg.sender].loanamount = ((tokenvalue * 80 / 100)) ;
-        total_loan.push(tokenvalue);
-        detail[msg.sender].duration = 12;
-        loan_count +=1;
-        msg.sender.transfer(detail[msg.sender].loanamount * 1 ether);
-        initial_financial_ether -= detail[msg.sender].loanamount;
-       CalculateMonthlypayment();
-    }
-    
-  
-    
-    function CalculateMonthlypayment()public payable
-    {
-        uint256 monthlypayment = detail[msg.sender].loanamount / FI_duration;
-        uint256 interest = ((detail[msg.sender].loanamount*10) /100 )/ FI_duration;
-        detail[msg.sender].tot_amount = monthlypayment+interest;
-        detail[msg.sender].loanamount -=  detail[msg.sender].tot_amount;
-       }
-    
-    function sendMonthlypayment(address financialinstitution)public payable
-    {
-        
-        financialinstitution.transfer(msg.value);
-        initial_financial_ether +=  detail[msg.sender].tot_amount;
-        
-        if(spv_loan.length != 0)
-        {
-         bank_take_interest=( detail[msg.sender].tot_amount*10)/100;
-        initial_financial_ether+=bank_take_interest;
-        
-        spv_take_interest=(( detail[msg.sender].tot_amount-bank_take_interest)*10)/100;
-        initial_spv_ether +=spv_take_interest;
-        }
-        
-        if(loan_count/3 !=0)
-        {
-        balance_amount_investor=( detail[msg.sender].tot_amount-bank_take_interest)-spv_take_interest;
-        initial_investor_ether += balance_amount_investor;
-        }
-     
-     }
-    function ViewLoanamount()public view returns(uint256,uint256)
-    {
-        return( detail[msg.sender].loanamount,detail[msg.sender].tot_amount);
-    }
-    
-    function sell_loan()public payable
-    {
-        spv_loan = total_loan;
-        return_ether = spv_loan.length * 10 ether;
-        initial_financial_ether +=return_ether;
-        initial_spv_ether -=return_ether;
-    }
-    
-    function SPV_ether()public payable
-    {
-        initial_spv_ether = msg.value;
+        eth = tokenvalue * 1 ether;
+        loanamount = eth/100 * 80;
+         ethervalue = loanamount / 1 ether;
+        detail[to].to = to;
+        detail[to].value = tokenvalue;
+        detail[to].loanamount = ethervalue;
+         detail[to].duration = 12;
+        return(detail[to].duration,detail[to].loanamount);
     }
      
-    function spv_details()public view returns(uint256[],uint256)
+    function sendether(address to) public payable 
     {
-        return(spv_loan,return_ether);
-    }
-     function investor_ether()public payable
-    {
-        initial_investor_ether = msg.value;
+        to.transfer(msg.value);
     }
     
-    function view_Package()public view returns(uint256)
+    function viewether(address to)public constant returns(uint256,uint256)
     {
-      
-         return(loan_count / 3);
-         
+        return(detail[to].duration,detail[to].loanamount);
     }
     
-    function send_package(uint256 pack)public
+    function sellloan(address to,uint256 value)
     {
-        spv_loan.length -= 3*pack;
-        initial_spv_ether += pack*3 * 10 ether;
-        initial_investor_ether -=pack*3 * 10 ether;
+        balance[msg.sender] -=value;
+        balance[to] +=value;
     }
 }
-    
-  
 
 
    
