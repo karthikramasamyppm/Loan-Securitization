@@ -17,12 +17,10 @@ contract financial  {
     uint256 bank_take_interest;
     uint256 spv_take_interest;
     uint256 balance_amount_investor;
-    mapping(address => uint256)balance;
-   
-   function financial () public {
+     mapping(address => uint256)balance;
+    function financial () public {
         financial_institution =msg.sender;
     }
-    
     struct loandetails
     {
         address borrower;
@@ -30,7 +28,7 @@ contract financial  {
         uint256 token;
         uint256 duration;
         uint256 tot_amount;
-      
+        
     }
     mapping(address=> loandetails)public detail;
  
@@ -58,7 +56,7 @@ contract financial  {
         loan_count +=1;
         msg.sender.transfer(detail[msg.sender].loanamount * 1 ether);
         initial_financial_ether -= detail[msg.sender].loanamount;
-       CalculateMonthlypayment();
+        CalculateMonthlypayment();
     }
     
   
@@ -69,7 +67,7 @@ contract financial  {
         uint256 interest = ((detail[msg.sender].loanamount*10) /100 )/ FI_duration;
         detail[msg.sender].tot_amount = monthlypayment+interest;
         detail[msg.sender].loanamount -=  detail[msg.sender].tot_amount;
-       }
+    }
     
     function sendMonthlypayment(address financialinstitution)public payable
     {
@@ -105,14 +103,10 @@ contract financial  {
         initial_financial_ether +=return_ether;
         initial_spv_ether -=return_ether;
     }
-
-    function SPV()public
-    {
-        spv_add = msg.sender;
-    }
    
     function SPV_ether()public payable
     {
+         spv_add = msg.sender;
         initial_spv_ether = msg.value;
     }
      
@@ -143,6 +137,10 @@ contract financial  {
         initial_investor_ether -=pack*3 * 10 ether;
     }
     
+    function Investor_detail()public view returns(uint256)
+    {
+        return(initial_investor_ether);
+    }
     function view_investor_package () public view returns(uint256)
     {
         return(pack);
@@ -151,7 +149,4 @@ contract financial  {
 
    
 
-     
-  
-
-
+   
