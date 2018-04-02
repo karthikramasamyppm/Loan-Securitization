@@ -1,76 +1,53 @@
 <!--<!DOCTYPE html>
 <html>
 <head>
-  <title>MetaCoin - Truffle Webpack Demo w/ Frontend</title>
+  <title>Loan-Securitization</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="./app.js"></script>
+
+  <!--<script src="Financial.json"</script>
+
 </head>
-<body>
-  <h1>MetaCoin</h1>
-  <h2>Example Truffle Dapp</h2>
-  <h3>You have <span class="black"><span id="balance"></span> META</span></h3>
+<body onload="plug()">
+      <nav class="navbar navbar-inverse navbar-fixed">
+      <!--<nav class="navbar navbar-expand-sm bg-success navbar-dark">
+          <div class="container-fluid">
+          <div class="navbar-header">
+          <a class="navbar-brand" href="#">LOAN SECURITIZATION</a>
+          </div>
+              <ul class="nav navbar-nav navbar-right">
+              <!--<li><a href="#">Loan Request</a></li>-->
+              <!--<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#" id="loan request">Loan Request<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" id="select_fin">Select Financial insitution</a></li>
+                        <li><a href="/app/select instution.html" id="loan payment">Monthly Payment</a></li>
+                    </ul>
+              </li>
+              <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Financial insitution<span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                          <!--<li><a href="#" id="">Existing Financial insitution</a></li>
+                          <li><a href="#" id="new_fin">New Financial insitution Registration</a></li>
+                  </ul>
+              <li><a href="#" id="loan_pay">Loan Payment</a></li>
+              <li><a href="#">SPV</a></li>
+              <li><a href="#">Inverstor</a></li>
+              <li><a href="#" id="status"></a></li>
+              </ul>
+          </div>
+      </nav>
+      <br>
+      <div id="result">
 
-  <br>
-  <h1>Send MetaCoin</h1>
-  <br><label for="amount">Amount:</label><input type="text" id="amount" placeholder="e.g., 95"></input>
-  <br><label for="receiver">To Address:</label><input type="text" id="receiver" placeholder="e.g., 0x93e66d9baea28c17d9fc393b53e3fbdd76899dae"></input>
-  <br><br><button id="send" onclick="App.sendCoin()">Send MetaCoin</button>
-  <br><br>
-  <span id="status"></span>
-  <br>
-  <span class="hint"><strong>Hint:</strong> open the browser developer console to view any errors and warnings.</span>
-</body>
-</html>-->
-<!DOCTYPE html>
-<html>
-        <head><center></head>
-                <meta charset="utf-8">
-                <title>test</title>
-                <link rel="stylesheet" href="app/stylesheets/bootstrap.min.css">
-                <script src="app/javascript/jquery.min.js"></script>
-                 <script src="app/javascript/bootstrap.min.js"></script>
-             <style>
-            
-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 10%;
-    position: fixed;
-    bottom:750px;
-    left: 50%;
-    margin-left: -104.5px;
-}
-
-button:hover {
-    opacity: 0.8;
-}
-
-body{
-  background-image: url('app/images.png');
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: center; 
-}
-                </style>
-                <body onload="plug()" ><br><br><br>
-                  <center>
-                    
-                   <br><br><br>
-                  <b><h1>LOAN SECURITIZATION</h1></b><br><br><br>
-                  
-                 <form action="app/naviagtionbar.html">
-                    <!-- <button class="btn btn-success">START PROCESS</button> -->
-                    <input type="submit" class="btn btn-success" value="START PROCESS"  onclick="getNavigationPage();"/>
-                 </form>
-                 </center>
+      </div>
+     
+    </body
 <script>
 
-function plug()
-{
+    /*function plug()
+    {
 	 if (typeof web3 !== 'undefined')
         {
             web3 = new Web3(web3.currentProvider);
@@ -83,27 +60,193 @@ function plug()
 	       window.location.assign("https://metamask.io/")
                return;
         }
-}
-function check()
-{
+    }
+    function check()
+    {
 // Checking if Web3 has been injected by the browser (Mist/MetaMask)
 // Use Mist/MetaMask's provider
-window.web3 = new Web3(web3.currentProvider); 
-if (web3.currentProvider.isMetaMask === true) {
-if (typeof web3.eth.defaultAccount === 'undefined')
- {
+        window.web3 = new Web3(web3.currentProvider); 
+        if (web3.currentProvider.isMetaMask === true) {
+        if (typeof web3.eth.defaultAccount === 'undefined')
+        {
           alert('Oops! You Need to Unlock your Account');
- }
-else
- {
-      alert("Metamask is Unlocked");
-  }
+        }
+        else
+        {
+            alert("Metamask is Unlocked");
+        }
 }
-}
-
-function getNavigationPage(){
-  window.location("app/naviagtionbar.html");
-}
+}*/
+     
+     
+    //  function register(){
+    //     var bank;
+    //     Bank.deployed().then(function(instance) {
+    //         bank = Bank;
+    //         return instance.register(account,parseInt(1),parseInt(12));
+    //     });
+    //  }
 </script>
-</body>
+</html>
+
+
+<html>
+<head>
+    <title>new page for welcome page</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="./app.js"></script>
+</head>
+<body class="body">
+   <nav class="navbar navbar-inverse navbar-fixed">
+   <nav class="navbar navbar-expand-sm bg-success navbar-dark">
+        <div class="container-fluid">
+        <div class="navbar-header">
+        <a class="navbar-brand" href="#">LOAN SECURITIZATION</a>
+        </div>
+            <ul class="nav navbar-nav navbar-right">
+            <!--<li><a href="#">Loan Request</a></li>-->
+            <!--<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Loan Request<span class="caret"></span></a>-->
+                 <!--<ul class="dropdown-menu">
+                     <li><a href="#" id="select_fin">Select Financial insitution</a></li>
+                 </ul>
+            </li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Financial insitution<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                        <li><a href="#" id="Existing_fin">Existing Financial insitution</a></li>
+                        <li><a href="#" id="new_fin">Register</a></li>
+                </ul>
+            <li><a href="#" id="loan_pay">Loan Payment</a></li>
+            <li><a href="#" id="spv">SPV</a></li>
+            <li><a href="#" id="inverstor">Inverstor</a></li>
+            </ul>
+        </div>
+    </nav>
+    <br>
+
+    <div id="result" class="container">
+        
+    </div>
+    </body>
+</html>-->
+
+
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Loan-Securitization</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+  <script src="app.js"></script>
+  </head>
+  <body>
+  <nav class="navbar navbar-default">
+    
+      
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Loan-Securitization</a>
+        </div>
+        <ul class="nav navbar-nav"></ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li id="b_stack"></li>
+          <li><label for="account">Account<input type="text" class="form-control" id="account" readonly/></label></li>
+          <li><label for="balence">Balence in ETH<input type="text" class="form-control" id="balance" readonly/></span></label></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="col-sm-6">
+                <div id="bank-info"></div>
+                <div id="balance-address"></div>
+                
+                  
+                  <br>
+                  <div class="row" id="due_set">
+                      <div>
+                          <form>
+                          
+                              <div class="form-group col-sm-4">
+                                <label for="Loan_id">Monthly Payment</label>
+                                <input type="text" id="Loan_id" class="col-sm-4 form-control" placeholder="Loan ID" />
+                                <input class="btn btn-success form-control" id="due-bank" value="Pay Due" onclick="App.pay_due();" />
+                              </div>
+                          </form>
+                        </div>
+                 
+                         <div id="status"></div>
+                  </div>
+                  <div class="row" id="get_loan_hide">
+                      <div>
+                          <h2>Get Loan From Financial insitute</h2>
+                          
+                              <div class="form-group col-sm-8">
+                                  <input type="text" id="loan-address" class="form-control" placeholder="Bank Address" />
+                              </div>
+                               <div class="form-group col-sm-8">
+                                 <input type="text" id="loan-amount" class="form-control" placeholder="(specify No of Tokens)" />
+                               </div>
+                               <!-- <div class="form-group col-sm-8">
+                                  <input type="text" id="loan-time" class="form-control" placeholder="Loan time (specify yrs)" />
+                                </div> -->
+
+                                 <input type="button" class="btn btn-success" onclick="App.get_loan();"  id="loan-bank" value="Get Loan"/>
+                        </div>
+                 
+                         <div id="loan-status"></div>
+                  </div>    
+            </div>
+            <div class="col-sm-6" id="bank_list">
+
+            </div>    
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                
+                <div class="col-sm-4" id="lending_hide">
+                    <h2>Lending Loan Details</h2>
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Bank Address</th>
+                          <th>Total Amount</th>
+                          <th>Total Period</th>
+                        </tr>
+                      </thead>
+                      <tbody id="loan_list">
+
+                      </tbody>
+                  </table>
+                </div>
+                <div class="col-sm-8" id="borrrow_hide">
+                    <h2>Borrowing Loan Details</h2>
+                    <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>Loan Id</th>
+                            <th>Bank Address</th>
+                            <th>Total Amount</th>
+                            <th>Total Paid Ins.</th>
+                            <th>Last Paid</th>
+                            <th>Total Months</th>
+                            <th>Balance Loan</th>
+                            <th>Balance Installment</th>
+                          </tr>
+                        </thead>
+                        <tbody id="get_loan_list">
+  
+                        </tbody>
+                      </table>
+                  </div>  
+            </div>
+        </div>
+    </div>
+  </body>
 </html>
