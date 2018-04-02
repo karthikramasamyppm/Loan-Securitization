@@ -73,7 +73,6 @@ contract Financial is FinancialInstitution
         uint256 token;
     }
     
-    
      function Financial(string name,uint _loan_interst,uint256 _duration) public payable{
         bank[msg.sender].name=name;
         bank[msg.sender].loan_interst=_loan_interst;
@@ -85,37 +84,7 @@ contract Financial is FinancialInstitution
     mapping (address=>mapping(uint256=>borrower))public get_loan;
     mapping(address=>uint256)public get_loans_count;
     
-     address public spv_add;
-       address public investor_add;
-       struct spv_detail
-        {
-            
-            uint256 initial_spv_ether;
-            uint256[] spv_loan;
-            uint256 spv_send_ether;
-            uint256 available_pack;
-            uint256 send_pack;
-        }
-        
-        struct Investor
-        {
-            uint256 Investor_ether;
-            uint256 Investor_package;
-        }
-        mapping(address=>spv_detail)public spv_details;
-        mapping(address=>Investor)public investor_details;
-        
-   /* struct loan_provider
-    {
-        address bank_address;
-        uint256 amount;
-        uint time;
-        uint months;
-    }
-    
-    mapping (address=>mapping(uint256=>loan_provider))public loan_provide;
-    mapping(address=>uint256)public loan_provide_count;*/
-    
+  
     function borrow_money(address bank_address,uint256 tokenvalue) public payable
     {   
         uint256 amt = (tokenvalue * 80 / 100);
@@ -142,12 +111,7 @@ contract Financial is FinancialInstitution
         
         total_token.push(tokenvalue);
         
-       /* loan_provide[bank_address][loan_provide_count[bank_address]].bank_address = msg.sender;
-        loan_provide[bank_address][loan_provide_count[bank_address]].amount = amt*eth;
-        loan_provide[bank_address][loan_provide_count[bank_address]].months=12;
-        loan_provide[bank_address][loan_provide_count[bank_address]].time=now;
-        
-        loan_provide_count[bank_address]++;*/
+       
         get_loans_count[msg.sender]++;
 
         msg.sender.transfer(amt * 1 ether);
@@ -158,8 +122,8 @@ contract Financial is FinancialInstitution
         uint temp_count=get_loan[msg.sender][ln_id].count;
         uint temp_month=get_loan[msg.sender][ln_id].months;
         uint temp_bal_ln=get_loan[msg.sender][ln_id].borrower_balance;
-        uint temp_ins=get_loan[msg.sender][ln_id].monthly_payment;
-        uint temp_last=get_loan[msg.sender][ln_id].last_setl_time + 1 minutes;//30 days;
+        uint temp_ins=get_loan[msg.sender][get_loans_count[msg.sender]].monthly_payment;
+        uint temp_last=get_loan[msg.sender][get_loans_count[msg.sender]].last_setl_time + 1 minutes;//30 days;
         address temp_bank_address=get_loan[msg.sender][ln_id].bank_address;
         
         require(temp_count<temp_month);
@@ -173,33 +137,37 @@ contract Financial is FinancialInstitution
         //bank_d1[msg.sender].bal -= amont+temp_ins;
         bank[temp_bank_address].bal += amont+temp_ins;
         
-        get_loan[msg.sender][ln_id].last_setl_time = temp_last +1 minutes;//30 days;
+        get_loan[msg.sender][get_loans_count[msg.sender]].last_setl_time = temp_last +1 minutes;//30 days;
         get_loan[msg.sender][ln_id].borrower_balance-=temp_ins;
         bank[temp_bank_address].bal += amont;
         get_loan[msg.sender][ln_id].count++;
 
         temp_bank_address.transfer(amont * 1 ether);
-        
-        if(spv_details[spv_add].spv_loan.length != 0)
-        {
-        uint256 bank_take_interest=( amont*10)/100;
-       bank[reg_bank[0]].bal+=bank_take_interest;
-        
-       uint256 spv_take_interest=(( amont-bank_take_interest)*10)/100;
-        spv_details[spv_add].initial_spv_ether +=spv_take_interest;
-        }
-        
-        if(total_token.length /3 !=0)
-        {
-        uint256 balance_amount_investor=( amont-bank_take_interest)-spv_take_interest;
-        investor_details[investor_add].Investor_ether += balance_amount_investor;
-        }
        
     }
-  
-  // contract spv is Financial
- 
-      
+}  
+   contract spv is Financial
+   {
+       address public spv_add;
+       address public investor_add;
+       struct spv_detail
+        {
+            
+            uint256 initial_spv_ether;
+            uint256[] spv_loan;
+            uint256 spv_send_ether;
+            uint256 available_pack;
+            uint256 send_pack;
+        }
+        
+        struct Investor
+        {
+            uint256 Investor_ether;
+            uint256 Investor_package;
+        }
+        mapping(address=>spv_detail)public spv_details;
+        mapping(address=>Investor)public investor_details;
+        
          function SPV_ether()public payable
         {
          spv_add = msg.sender;
