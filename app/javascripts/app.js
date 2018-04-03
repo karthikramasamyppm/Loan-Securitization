@@ -1,5 +1,3 @@
-
-
 // Import the page's CSS. Webpack will know what to do with it.
 import "../stylesheets/app.css";
 
@@ -76,11 +74,11 @@ window.App = {
         $("#bank-info").html("This Financial Institute has registered");
       } else {
         $("#lending_hide").remove();
-       // $("#bank-info").html("This Financial Institute has not registered yet");
+        //$("#bank-info").html("This Financial Institute has not registered yet");
       }
       return bank.fetchBalance(account);
     }).then(function(val) {
-      $("#balance-address").html("Your balance is " + val);
+      $("#balance-address").html("This Financial Institute's balance is " + val);
     }).catch(function(e) {
       console.log(e);
     });
@@ -100,13 +98,13 @@ window.App = {
     }).then(function(val) {
        $.each(val,function(err,data){
         bank.bank_d1(data).then(function(result){
-          $("#body_bank").append('<tr><td>'+data+'</td><td>'+result[0]+'</td><td>'+result[1].toNumber()+'</td><td>'+result[3]+'</td></tr>')
+          $("#body_bank").append('<tr><td>'+data+'</td><td>'+result[0]+'</td><td>'+web3.fromWei(result[1].toNumber(), "ether")+'</td><td>'+result[3]+'</td></tr>')
         })
        })
       
     });
   },
-  
+ 
 get_loan : function(){
   var loan_amount  = parseInt($("#loan-amount").val().trim());
   var loan_address = $("#loan-address").val().trim();
@@ -125,6 +123,18 @@ get_loan : function(){
     $("#loan-status").html("Error in transaction; see log.");
   });
 },
+saleloan : function(){
+  var ether_amount  = parseInt($("#spv_ehter_value").val().trim());
+  
+  var self = this;
+  var bank;
+  Bank.deployed().then(function(instance) {
+    bank = instance;
+    bank.SPV_ether({from:account,value:web3.toWei(ether_amount,"ether"),gas: 6000000});
+  }).catch(function(e) {
+    console.log(e); 
+  });
+},
 
 loan_list:function(){
   var self = this;
@@ -136,7 +146,7 @@ loan_list:function(){
   }).then(function(val) {
       for(var i=0;i<val.toNumber();i++){
         bank.ln_pro(account,i).then(function(data,err){
-          $("#loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[1]+'</td><td>'+data[3]+'</td></tr>');
+          $("#loan_list").append('<tr><td>'+data[0]+'</td><td>'+web3.fromWei(data[1].toNumber(), "ether")+'</td><td>'+data[3]+'</td></tr>');
         });
       }
   });
@@ -152,7 +162,10 @@ get_loan_list:function(){
   }).then(function(val) {
       for(var i=0;i<val.toNumber();i++){
         bank.ln_get(account,i).then(function(data,err){
-          $("#get_loan_list").append('<tr><td>'+data[8]+'</td><td>'+data[0]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+data[5]+'</td><td>'+data[6]+'</td><td>'+data[7]+'</td></tr>');
+          var myDate = new Date( (data[3].toNumber()) *1000);
+          var a=(myDate.toLocaleString());
+
+          $("#get_loan_list").append('<tr><td>'+data[8]+'</td><td>'+data[0]+'</td><td>'+web3.fromWei(data[1].toNumber(), "ether")+'</td><td>'+data[2]+'</td><td>'+a.split(',')[0]+'</td><td>'+data[5]+'</td><td>'+web3.fromWei(data[6].toNumber(), "ether")+'</td><td>'+web3.fromWei(data[7].toNumber(), "ether")+'</td></tr>');
         });
       }
   });
@@ -161,11 +174,11 @@ get_loan_list:function(){
 pay_due:function(){
   var due = parseInt($("#Loan_id").val().trim());
   var self = this;
-  var bank;
+  var bank; 
   $("#status").html("Initiating transaction... (please wait)");
   Bank.deployed().then(function(instance) {
     bank = instance;
-    return bank.settlement(due,{from:account});
+    return bank.settlement(due,{from:account,gas: 6000000});
   }).then(function() {
     $("#status").html("Transaction complete!");
   }).catch(function(e) {

@@ -11,7 +11,6 @@ contract Register
     }
     
     mapping(address=>bank_Details) public bank_d1;
-    //mapping(uint=>address) public reg_user;
     address[] public reg_user;
     
   
@@ -53,7 +52,7 @@ contract FinancialInst is Register
         require(bank_d1[msg.sender].bal>msg.value);
         bank_d1[to].bal+=msg.value;
         bank_d1[msg.sender].bal-=msg.value;
-        //to.transfer(msg.value);
+    
     }
     
     function GetBalance() ch_register public constant returns (uint256)
@@ -73,8 +72,9 @@ contract FinancialInst is Register
 
 contract Financial is FinancialInst
 {
-    uint eth=1 ether;
-    //uint256 public ln_req_count=0;
+   
+    uint256 total_token_value;
+    uint256[] total_token;
     struct loan_get
     {
         address bank_address;
@@ -108,72 +108,145 @@ contract Financial is FinancialInst
         uint months;
     }
     
+     address public spv_add;
+     address public investor_add;
+     struct spv_detail
+        {
+            
+            uint256 initial_spv_ether;
+            uint256 spv_loan;
+            uint256 spv_send_ether;
+            uint256 available_pack;
+            uint256 send_pack;
+        }
+    
+     struct Investor
+        {
+            uint256 Investor_ether;
+            uint256 Investor_package;
+        }
     mapping (address=>mapping(uint256=>loan_pro))public ln_pro;
     mapping(address=>uint256)public ln_pro_count;
     
+     mapping(address=>spv_detail)public spv_details;
+     mapping(address=>Investor)public investor_details;
+    
     function req_loan(address bank_address,uint256 tokenvalue) public payable
     {   
-        uint256 amt = (tokenvalue * 80 / 100);
+        uint256 amt = ((tokenvalue * 1 ether)*80 / 100);
 
-        //require(bank_d1[msg.sender].time!=0);
         require(bank_d1[bank_address].time!=0);
         require(bank_address!=msg.sender);
         
-        require (bank_d1[bank_address].bal > amt *eth);
+        require (bank_d1[bank_address].bal > amt );
             
-        //bank_d1[msg.sender].bal += amt*eth;
-        bank_d1[bank_address].bal -= amt*eth;
+        bank_d1[bank_address].bal -= amt;
         
         
         
         ln_get[msg.sender][ln_get_count[msg.sender]].bank_address = bank_address;
-        ln_get[msg.sender][ln_get_count[msg.sender]].amount = amt*eth;
+        ln_get[msg.sender][ln_get_count[msg.sender]].amount = amt;
         ln_get[msg.sender][ln_get_count[msg.sender]].months=12;
         ln_get[msg.sender][ln_get_count[msg.sender]].time=now;
         ln_get[msg.sender][ln_get_count[msg.sender]].last_setl_time=now;
-        ln_get[msg.sender][ln_get_count[msg.sender]].installment=(amt*eth)/(12);
-        ln_get[msg.sender][ln_get_count[msg.sender]].bal_ln = amt*eth;
+        ln_get[msg.sender][ln_get_count[msg.sender]].installment=(amt)/(12);
+        ln_get[msg.sender][ln_get_count[msg.sender]].bal_ln = amt;
         ln_get[msg.sender][ln_get_count[msg.sender]].id = ln_get_count[msg.sender];
         ln_get[msg.sender][ln_get_count[msg.sender]].token = tokenvalue ;
         
+         total_token_value += tokenvalue;
+         total_token.push(ln_get[msg.sender][ln_get_count[msg.sender]].token);
+        
         ln_pro[bank_address][ln_pro_count[bank_address]].bank_address = msg.sender;
-        ln_pro[bank_address][ln_pro_count[bank_address]].amount = amt*eth;
+        ln_pro[bank_address][ln_pro_count[bank_address]].amount = amt;
         ln_pro[bank_address][ln_pro_count[bank_address]].months=12;
         ln_pro[bank_address][ln_pro_count[bank_address]].time=now;
         
         ln_pro_count[bank_address]++;
         ln_get_count[msg.sender]++;
 
-        msg.sender.transfer(amt * 1 ether);
+        msg.sender.transfer(amt * 1 wei);
     }
     
-   function settlement(uint ln_id) public
+    function settlement(uint ln_id) public
     {
         uint temp_count=ln_get[msg.sender][ln_id].count;
         uint temp_month=ln_get[msg.sender][ln_id].months;
         uint temp_bal_ln=ln_get[msg.sender][ln_id].bal_ln;
         uint temp_ins=ln_get[msg.sender][ln_id].installment;
-        //uint temp_last=ln_get[msg.sender][ln_id].last_setl_time + 1 minutes;//30 days; do
+        uint temp_last=ln_get[msg.sender][ln_id].last_setl_time + 1 minutes;//30 days;
         address temp_bank_address=ln_get[msg.sender][ln_id].bank_address;
         
         require(temp_count<temp_month);
-        //require((temp_last)<=now); do
+       
         
         uint intr=bank_d1[temp_bank_address].loan_interst;
-        //uint amont=( temp_bal_ln * (intr/100) ) /100;
-
-        uint amont=temp_ins + ( temp_bal_ln * (intr/100) ) ;
+        uint amont=( temp_bal_ln * (intr/100) ) /100;
         
-        require(amont+temp_ins<=bank_d1[msg.sender].bal);
         
-        //bank_d1[msg.sender].bal -= amont+temp_ins;
         bank_d1[temp_bank_address].bal += amont+temp_ins;
         
-        //ln_get[msg.sender][ln_id].last_setl_time = temp_last;//30 days; do
-        ln_get[msg.sender][ln_id].bal_ln = temp_bal_ln - temp_ins;
+        ln_get[msg.sender][ln_id].last_setl_time = temp_last +1 minutes;//30 days;
+        ln_get[msg.sender][ln_id].bal_ln-=temp_ins;
         ln_get[msg.sender][ln_id].count++;
 
-        temp_bank_address.transfer(amont * 1 ether);
+       
+        
+        
+         if(spv_details[spv_add].spv_loan > 0)
+        {
+        uint256 bank_take_interest=(amont *10)/100;
+        bank_d1[reg_user[0]].bal +=bank_take_interest;
+        
+        uint256 spv_take_interest=((amont-bank_take_interest)*10)/100;
+        spv_details[spv_add].initial_spv_ether +=spv_take_interest;
+        
+        if(total_token.length /1 !=0)
+        {
+        uint256 balance_investor_amount=amont- (bank_take_interest+spv_take_interest);
+        investor_details[investor_add].Investor_ether += balance_investor_amount;
+        }
+        }
+        
+        else
+        {
+             bank_d1[temp_bank_address].bal += amont;
+        }
     }
+    function SPV_ether()public payable
+        {
+         spv_add = msg.sender;
+         spv_details[spv_add].initial_spv_ether=msg.value;
+         
+        }
+    
+     function sell_loan()public payable
+        {
+       
+         spv_details[spv_add].spv_loan=total_token_value;
+         spv_details[spv_add].spv_send_ether = spv_details[spv_add].spv_loan;
+         bank_d1[reg_user[0]].bal += spv_details[spv_add].spv_send_ether;
+         spv_details[spv_add].initial_spv_ether -= spv_details[spv_add].spv_send_ether;
+        }
+    function Investor_ether()public payable
+        {
+         investor_add = msg.sender;
+         investor_details[investor_add].Investor_ether=msg.value;
+         
+        }
+        function avail_pack()public
+        {
+            spv_details[spv_add].available_pack = total_token.length / 1;
+        }
+        
+        function send_package(uint256 pack)public
+        {
+            spv_details[spv_add].send_pack += pack;
+            spv_details[spv_add].available_pack -= pack;
+            spv_details[spv_add].spv_loan -= pack * 3;
+            investor_details[investor_add].Investor_package += pack;
+            investor_details[investor_add].Investor_ether -= (pack * 3) * 10 ;
+            spv_details[spv_add].initial_spv_ether += (pack * 3) * 10 ;
+            
+        }
 }
-

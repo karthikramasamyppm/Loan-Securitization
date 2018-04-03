@@ -39,7 +39,7 @@
                               <div class="form-group col-sm-4">
                                 <label for="Loan_id">Monthly Payment</label>
                                 <input type="text" id="Loan_id" class="col-sm-4 form-control" placeholder="Loan ID" />
-                                <input class="btn btn-success form-control" id="due-bank" value="Pay Due" onclick="App.pay_due();" />
+                                <input class="btn btn-success form-control" id="due-bank" value="Payment" onclick="App.pay_due();" />
                               </div>
                           </form>
                         </div>
@@ -79,7 +79,7 @@
                     <table class="table table-striped">
                       <thead>
                         <tr>
-                          <th>Bank Address</th>
+                          <th>Barrower Address</th>
                           <th>Total Amount</th>
                           <th>Total Period</th>
                         </tr>
@@ -111,6 +111,17 @@
                   </div>  
             </div>
         </div>
-    </div>
+
+        <div class="row" id="get_loan_hide">
+        <div>
+
+            <div class="form-group col-sm-4">
+                <h3>SPV Details</h3>
+                <input type="text" id="spv_add" class="col-sm-4 form-control" placeholder="SPV Address" />
+                <input type="text" id="spv_ehter value" class="form-control" placeholder="SPV Ethers" />
+                <input class="btn btn-success form-control" id="salling" value="Saleloan" onclick="App.saleloan();" />
+            </div>
+                   
+          </div>
   </body>
 </html>
