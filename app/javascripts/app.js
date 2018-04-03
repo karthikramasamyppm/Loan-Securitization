@@ -71,10 +71,11 @@ window.App = {
         $("#borrrow_hide").remove();
         $('#due_set').remove();
         $('#get_loan_hide').remove();
+        $('#spv hide').remove();
         $("#bank-info").html("This Financial Institute has registered");
       } else {
         $("#lending_hide").remove();
-        //$("#bank-info").html("This Financial Institute has not registered yet");
+        $("#bank-info").html("This Financial Institute has not registered yet");
       }
       return bank.fetchBalance(account);
     }).then(function(val) {
@@ -90,7 +91,9 @@ window.App = {
     var bank;
 
     $("#bank_list").html('');
-    $("#bank_list").append('<table class="table table-striped"><thead><tr><th>Financial Institute Address</th><th>Bank Name</th><th>Balance</th><th>Fixed Int.</th></tr></thead><tbody id="body_bank"></tbody></table>');
+    $("#bank_list").append('<table class="table table-striped"><thead><tr><th>Financial Institute Address</th><th>Bank Name</th><th>Balance</th><th>Fixed Int.</th></tr></thead><tbody id="body_bank"></tbody></table>\
+    <input class="btn btn-success form-control" id="salling" value="Saleloan" onclick="App.sellloan();"/>\
+    ');
     
     Bank.deployed().then(function(instance) {
       bank = instance;
@@ -135,7 +138,17 @@ saleloan : function(){
     console.log(e); 
   });
 },
-
+sellloan : function(){
+ 
+    var self = this;
+  var bank;
+  Bank.deployed().then(function(instance) {
+    bank = instance;
+    bank.sell_loan({from:account,gas: 6000000});
+  }).catch(function(e) {
+    console.log(e); 
+  });
+},
 loan_list:function(){
   var self = this;
   var bank;
@@ -200,6 +213,6 @@ window.addEventListener('load', function() {
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     window.web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
   }
-
+  //App.start();
   App.start();
 });
