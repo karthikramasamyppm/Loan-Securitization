@@ -13,7 +13,23 @@ contract Register
     mapping(address=>bank_Details) public bank_d1;
     address[] public reg_user;
     
-  
+  function register(string name,uint _loan_interst,uint _time)public payable returns(string)
+    {
+        if(bank_d1[msg.sender].time == 0)
+        {
+            bank_d1[msg.sender].name = name;
+            bank_d1[msg.sender].loan_interst = _loan_interst;
+            bank_d1[msg.sender].bal = msg.value;
+            bank_d1[msg.sender].time = _time;
+            reg_user.push(msg.sender);
+            return "Successfully Registered";
+        }
+        else
+        {
+            return "Account Alreay Exist";
+        }
+    }
+
     function show_registers() public view returns(address[])
     {
         return reg_user;
@@ -89,17 +105,10 @@ contract Financial is FinancialInst
         uint256 token;
     }
     
-     function Financial(string name,uint _loan_interst,uint256 _time) public payable{
-        bank_d1[msg.sender].name=name;
-        bank_d1[msg.sender].loan_interst=_loan_interst;
-        bank_d1[msg.sender].bal=msg.value;
-        bank_d1[msg.sender].time=_time;
-        reg_user.push(msg.sender);
-    }
-    
     mapping (address=>mapping(uint256=>loan_get))public ln_get;
     mapping(address=>uint256)public ln_get_count;
-    
+        address[] public spv_reg;
+
     struct loan_pro
     {
         address bank_address;
@@ -133,7 +142,7 @@ contract Financial is FinancialInst
     
     function req_loan(address bank_address,uint256 tokenvalue) public payable
     {   
-        uint256 amt = ((tokenvalue * 1 ether)*80 / 100);
+        uint256 amt = (tokenvalue *80 / 100);
 
         require(bank_d1[bank_address].time!=0);
         require(bank_address!=msg.sender);
@@ -149,8 +158,8 @@ contract Financial is FinancialInst
         ln_get[msg.sender][ln_get_count[msg.sender]].months=12;
         ln_get[msg.sender][ln_get_count[msg.sender]].time=now;
         ln_get[msg.sender][ln_get_count[msg.sender]].last_setl_time=now;
-        ln_get[msg.sender][ln_get_count[msg.sender]].installment=(amt)/(12);
-        ln_get[msg.sender][ln_get_count[msg.sender]].bal_ln = amt;
+        ln_get[msg.sender][ln_get_count[msg.sender]].installment=(amt*1 ether)/(12);
+        ln_get[msg.sender][ln_get_count[msg.sender]].bal_ln = amt*1 ether;
         ln_get[msg.sender][ln_get_count[msg.sender]].id = ln_get_count[msg.sender];
         ln_get[msg.sender][ln_get_count[msg.sender]].token = tokenvalue ;
         
@@ -158,14 +167,14 @@ contract Financial is FinancialInst
          total_token.push(ln_get[msg.sender][ln_get_count[msg.sender]].token);
         
         ln_pro[bank_address][ln_pro_count[bank_address]].bank_address = msg.sender;
-        ln_pro[bank_address][ln_pro_count[bank_address]].amount = amt;
+        ln_pro[bank_address][ln_pro_count[bank_address]].amount = amt*1 ether;
         ln_pro[bank_address][ln_pro_count[bank_address]].months=12;
         ln_pro[bank_address][ln_pro_count[bank_address]].time=now;
         
         ln_pro_count[bank_address]++;
         ln_get_count[msg.sender]++;
 
-        msg.sender.transfer(amt * 1 wei);
+        msg.sender.transfer(amt);
     }
     
     function settlement(uint ln_id) public
@@ -213,13 +222,27 @@ contract Financial is FinancialInst
              bank_d1[temp_bank_address].bal += amont;
         }
     }
-    function SPV_ether()public payable
+    function SPV_ether()public payable returns(string)
+        {
+        if( spv_details[spv_add].initial_spv_ether == 0)
         {
          spv_add = msg.sender;
          spv_details[spv_add].initial_spv_ether=msg.value;
-         
+         spv_reg.push(msg.sender);
+         return "Account Registered";
         }
-    
+        else
+        {
+            return "Account Alreay Exist";
+        }
+        }
+      function spv_registers() public view returns(address[])
+    {
+        return spv_reg;
+    }
+    function spvRegistered(address _spvad) public constant returns (bool) {
+      return bank_d1[_spvad].time > 0;
+    }
      function sell_loan()public payable
         {
        
@@ -245,8 +268,8 @@ contract Financial is FinancialInst
             spv_details[spv_add].available_pack -= pack;
             spv_details[spv_add].spv_loan -= pack * 3;
             investor_details[investor_add].Investor_package += pack;
-            investor_details[investor_add].Investor_ether -= (pack * 3) * 10 ;
-            spv_details[spv_add].initial_spv_ether += (pack * 3) * 10 ;
+            investor_details[investor_add].Investor_ether -= (pack * 3) * 10 ether ;
+            spv_details[spv_add].initial_spv_ether += (pack * 3) * 10 ether;
             
         }
 }

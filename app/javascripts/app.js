@@ -41,6 +41,7 @@ window.App = {
 
       self.basicfunctions();
       self.bank_list();
+      self.spv_list();
       self.loan_list();
       self.get_loan_list();
     });
@@ -68,18 +69,48 @@ window.App = {
       console.log(val);
       if (val == true) {
         $("#reg_bank").html('');
-        $("#borrrow_hide").remove();
+        $('#due_set').remove();
         $('#due_set').remove();
         $('#get_loan_hide').remove();
-        $('#spv hide').remove();
+        $('#spv_hide').remove();
         $("#bank-info").html("This Financial Institute has registered");
       } else {
         $("#lending_hide").remove();
-        $("#bank-info").html("This Financial Institute has not registered yet");
+        $("#bank-info").html("This Financial Institute has registered");
       }
       return bank.fetchBalance(account);
     }).then(function(val) {
-      $("#balance-address").html("This Financial Institute's balance is " + val);
+      $("#balance-address").html("This Financial Institute's balance is " +web3.fromWei(val.toNumber(), "ether"));
+    }).catch(function(e) {
+      console.log(e);
+    });
+  },
+ 
+  showspv: function() {
+    var self = this;
+
+    var bank;
+    
+    Bank.deployed().then(function(instance) {
+      bank = instance;
+      return instance.spvRegistered(account);
+    }).then(function(val) {
+      console.log(val);
+      if (val == true) {
+        $("#reg_bank").html('');
+        $("#borrrow_hide").remove();
+        $('#due_set').remove();
+        $('#get_loan_hide').remove();
+        $('#spv_hide').remove();
+        $("#bank-info").html("This spv Institute has registered");
+      } else {
+        $("#lending_hide").remove();
+        $("#spvdetail_hide").remove();
+        $("#bank-info").html("This spv Institute has not registered yet");
+      }
+      return bank.fetchBalance(account);
+    }).then(function(val) {
+      $("#balance-address").html("This spv Institute's balance is " +web3.fromWei(val.toNumber(), "ether"));
     }).catch(function(e) {
       console.log(e);
     });
@@ -107,7 +138,25 @@ window.App = {
       
     });
   },
- 
+  spv_list : function(){
+    var self = this;
+
+    var bank;
+
+    $("#spv_list").html('');
+    
+    Bank.deployed().then(function(instance) {
+      bank = instance;
+      return instance.spv_registers();
+    }).then(function(val) {
+       $.each(val,function(err,data){
+        bank.spv_details(data).then(function(result){
+          $("#spv_list").append('<tr><td>'+data+'</td><td>'+web3.fromWei(result[0].toNumber(), "ether")+'</td></tr>')
+        })
+       })
+      
+    });
+  },
 get_loan : function(){
   var loan_amount  = parseInt($("#loan-amount").val().trim());
   var loan_address = $("#loan-address").val().trim();
@@ -126,7 +175,7 @@ get_loan : function(){
     $("#loan-status").html("Error in transaction; see log.");
   });
 },
-saleloan : function(){
+sale_loan : function(){
   var ether_amount  = parseInt($("#spv_ehter_value").val().trim());
   
   var self = this;
@@ -134,8 +183,12 @@ saleloan : function(){
   Bank.deployed().then(function(instance) {
     bank = instance;
     bank.SPV_ether({from:account,value:web3.toWei(ether_amount,"ether"),gas: 6000000});
+  }).then(function() {
+    $("#status").html("Transaction complete!");
+    App.showspv();
   }).catch(function(e) {
-    console.log(e); 
+    console.log(e);
+    $("#status").html("Error in transaction; see log.");
   });
 },
 sellloan : function(){
@@ -162,6 +215,27 @@ loan_list:function(){
           $("#loan_list").append('<tr><td>'+data[0]+'</td><td>'+web3.fromWei(data[1].toNumber(), "ether")+'</td><td>'+data[3]+'</td></tr>');
         });
       }
+  });
+},
+register_bank:function() {
+
+  var self = this;
+
+  var duration = parseInt((document.getElementById("duration").value));
+  var loan_interest = parseInt((document.getElementById("loan-interest").value));
+  var deposit_Amount = parseInt((document.getElementById("deposit-amount").value));
+  var bank_name = document.getElementById("bank-name").value;
+
+  $("#status").html("Initiating transaction... (please wait)");
+
+  Bank.deployed().then(function(instance) {
+    return instance.register(bank_name, loan_interest,duration, {from:account,value:web3.toWei(deposit_Amount,"ether"),gas: 6000000});
+  }).then(function() {
+    $("#status").html("Transaction complete!");
+    App.showBalance();
+  }).catch(function(e) {
+    console.log(e);
+    $("#status").html("Error in transaction; see log.");
   });
 },
 
@@ -213,6 +287,6 @@ window.addEventListener('load', function() {
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     window.web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
   }
-  //App.start();
+
   App.start();
 });

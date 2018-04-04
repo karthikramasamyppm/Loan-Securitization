@@ -15,7 +15,12 @@
         <div class="navbar-header">
           <a class="navbar-brand" href="#">Loan-Securitization</a>
         </div>
-        <ul class="nav navbar-nav"></ul>
+        <ul class="nav navbar-nav">
+          <li><a href="#">Financial Institution</a></li>
+          <li><a href="#">Barrower</a></li>
+          <li><a href="#">SPV</a></li>
+          <li><a href="#">Inverster</a></li>
+        </ul>
         <ul class="nav navbar-nav navbar-right">
             <li id="b_stack"></li>
           <li><label for="account">Account<input type="text" class="form-control" id="account" readonly/></label></li>
@@ -23,12 +28,21 @@
         </ul>
       </div>
     </nav>
+    
     <div class="container-fluid">
         <div class="row">
           <div class="col-sm-12">
             <div class="col-sm-6">
                 <div id="bank-info"></div>
                 <div id="balance-address"></div>
+                <div id="reg_bank">
+                    <h2>Register bank</h2>
+                    <input type="text" id="bank-name" placeholder="Bank Name" />
+                    <input type="text" id="loan-interest" placeholder="Loan Interest" />
+                    <input type="text" id="deposit-amount" placeholder="Deposit Amount" />
+                    <input type="text" id="duration" placeholder="Duration" />
+                    <a href="#" class="btn btn-success" onclick="App.register_bank();">Register</a>
+                  </div>
                 
                   
                   <br>
@@ -59,8 +73,9 @@
                                <!-- <div class="form-group col-sm-8">
                                   <input type="text" id="loan-time" class="form-control" placeholder="Loan time (specify yrs)" />
                                 </div> -->
-
-                                 <input type="button" class="btn btn-success" onclick="App.get_loan();"  id="loan-bank" value="Get Loan"/>
+                                <div class="form-group col-sm-8">
+                                 <input type="button" class="btn btn-success col-sm-2" onclick="App.get_loan();"  id="loan-bank" value="Get Loan"/>
+                                </div>
                         </div>
                  
                          <div id="loan-status"></div>
@@ -79,7 +94,7 @@
                     <table class="table table-striped">
                       <thead>
                         <tr>
-                          <th>Barrower Address</th>
+                          <th>Borrower Address</th>
                           <th>Total Amount</th>
                           <th>Total Period</th>
                         </tr>
@@ -89,6 +104,23 @@
                       </tbody>
                   </table>
                 </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                      
+                      <div class="col-sm-4" id="spvdetail_hide">
+                          <h2>SPV Details</h2>
+                          <table class="table table-striped">
+                            <thead>
+                              <tr>
+                                <th>SPV Address</th>
+                                <th>Total Amount</th>
+                               </tr>
+                            </thead>
+                            <tbody id="spv_list">
+      
+                            </tbody>
+                        </table>
+                      </div>
                 <div class="col-sm-8" id="borrrow_hide">
                     <h2>Borrowing Loan Details</h2>
                     <table class="table table-striped">
@@ -111,16 +143,17 @@
                   </div>  
             </div>
         </div>
-        <!--<div class="row" id="get_loan_hide" id="spv hide"></div>-->
-        <div class="row" id="get_loan_hide" id="spv hide">
+       
+        <div class="row"  id="spv_hide">
         <div>
 
             <div class="form-group col-sm-4">
                 <h3>SPV Details</h3>
                 <input type="text" id="spv_ehter_value" class="form-control" placeholder="SPV Ethers" />
-                <input class="btn btn-success form-control" id="salling" value="spvreg" onclick="App.saleloan();" />
+                <input class="btn btn-success form-control" id="salling" value="SPV Register" onclick="App.sale_loan();" />
             </div>
                    
           </div>
+          
   </body>
 </html>
