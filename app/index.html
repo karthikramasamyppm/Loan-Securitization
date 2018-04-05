@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -7,7 +8,7 @@
   <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
   <script src="app.js"></script>
   </head>
-  <body>
+  <body onload="App.totalhide()">
   <nav class="navbar navbar-default">
     
       
@@ -16,9 +17,9 @@
           <a class="navbar-brand" href="#">Loan-Securitization</a>
         </div>
         <ul class="nav navbar-nav">
-          <li><a href="#">Financial Institution</a></li>
-          <li><a href="#">Barrower</a></li>
-          <li><a href="#">SPV</a></li>
+          <li><a href="#" onclick="App.show_Balance()">Financial Institution</a></li>
+          <li><a href="#" onclick="App.borrower()">Borrower</a></li>
+          <li><a href="#" onclick="App.showspv()">SPV</a></li>
           <li><a href="#">Inverster</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -70,9 +71,9 @@
                                <div class="form-group col-sm-8">
                                  <input type="text" id="loan-amount" class="form-control" placeholder="(specify No of Tokens)" />
                                </div>
-                               <!-- <div class="form-group col-sm-8">
-                                  <input type="text" id="loan-time" class="form-control" placeholder="Loan time (specify yrs)" />
-                                </div> -->
+                                <div class="form-group col-sm-8">
+                                  <input type="text" id="token-name" class="form-control" placeholder="Token Name" />
+                                </div> 
                                 <div class="form-group col-sm-8">
                                  <input type="button" class="btn btn-success col-sm-2" onclick="App.get_loan();"  id="loan-bank" value="Get Loan"/>
                                 </div>
@@ -94,7 +95,7 @@
                     <table class="table table-striped">
                       <thead>
                         <tr>
-                          <th>Borrower Address</th>
+                          <th>Barrower Address</th>
                           <th>Total Amount</th>
                           <th>Total Period</th>
                         </tr>
@@ -104,6 +105,14 @@
                       </tbody>
                   </table>
                 </div>
+                <div class="form-group col-sm-4" id="purchase_set">
+                  <label for="Loan_id">Purchase Loan</label>
+                  <input type="text" id="spvLoan_id" class="col-sm-4 form-control" placeholder="Loan ID" />
+                  <input type="text" id="borrow_ad" class="col-sm-4 form-control" placeholder="Borrower Ad" />
+                  <input class="btn btn-success form-control" id="purchase-bank" value="submit" onclick="App.purchase_ln();" />
+                </div>
+            </form>
+          </div>
                 <div class="row">
                   <div class="col-sm-12">
                       
@@ -114,6 +123,9 @@
                               <tr>
                                 <th>SPV Address</th>
                                 <th>Total Amount</th>
+                                <th>Total Loan</th>
+                                <th>Available pack</th>
+                                <th>Saled pack</th>
                                </tr>
                             </thead>
                             <tbody id="spv_list">
@@ -121,9 +133,37 @@
                             </tbody>
                         </table>
                       </div>
+                      <div class="col-sm-4" id="spvloan_hide">
+                          <h2>SPV Loan Details</h2>
+                          <table class="table table-striped">
+                            <thead>
+                              <tr>
+                                <th>Borrower Address</th>
+                                <th>Token value</th>
+                               </tr>
+                            </thead>
+                            <tbody id="spvdetail_list">
+      
+                            </tbody>
+                        </table>
+                      </div>
+                      <div class="col-sm-4" id="fidetail_hide">
+                          <h2>Financial Institute Details</h2>
+                          <table class="table table-striped">
+                            <thead>
+                              <tr>
+                                <th>Financial Institute Address</th>
+                                <th>Bank Name</th><th>Balance</th>
+                                <th>Fixed Int.</th>
+                              </tr>
+                            </thead>
+                            <tbody id="body_bank">
+                             </tbody>
+                            </table>
+                      </div>
                 <div class="col-sm-8" id="borrrow_hide">
                     <h2>Borrowing Loan Details</h2>
-                    <table class="table table-striped">
+                    <table class="table table-striped" id=mon_th>
                         <thead>
                           <tr>
                             <th>Loan Id</th>
@@ -145,7 +185,7 @@
         </div>
        
         <div class="row"  id="spv_hide">
-        <div>
+       
 
             <div class="form-group col-sm-4">
                 <h3>SPV Details</h3>
@@ -154,6 +194,6 @@
             </div>
                    
           </div>
-          
+       
   </body>
 </html>
