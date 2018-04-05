@@ -39,13 +39,13 @@ window.App = {
       accounts = accs;
       account = accounts[0];
 
-      self.basicfunctions();
+     self.basicfunctions();
       self.bank_list();
       self.spv_list();
-      self.loan_list();
-      self.get_loan_list();
+    self.loan_list();
+     self.get_loan_list();
     });
-    this.showBalance();
+   // this.showBalance();
   },
 
   basicfunctions : function(){
@@ -57,7 +57,7 @@ window.App = {
     });
   },
 
-  showBalance: function() {
+  show_Balance: function() {
     var self = this;
 
     var bank;
@@ -68,23 +68,84 @@ window.App = {
     }).then(function(val) {
       console.log(val);
       if (val == true) {
-        $("#reg_bank").html('');
-        $('#due_set').remove();
-        $('#due_set').remove();
-        $('#get_loan_hide').remove();
-        $('#spv_hide').remove();
+        $("#lending_hide").show();
+        $("#reg_bank").hide();
+        $('#due_set').hide();
+        $('#spvdetail_hide').hide();
+        $('#get_loan_hide').hide();
+        $('#spv_hide').hide();
+        $('#borrrow_hide').hide();
+        $('#fidetail_hide').show();
+        $('#spvloan_hide').hide();
+        $("#bank-info").show();
+        $("#balance-address").show();
         $("#bank-info").html("This Financial Institute has registered");
       } else {
-        $("#lending_hide").remove();
-        $("#bank-info").html("This Financial Institute has registered");
+        $("#lending_hide").hide();
+        $("#reg_bank").show();
+        $('#due_set').hide();
+        $('#spvdetail_hide').hide();
+        $('#get_loan_hide').hide();
+        $('#spv_hide').hide();
+        $('#borrrow_hide').hide();
+        $('#fidetail_hide').hide();
+        $('#spvloan_hide').hide();
+        $("#bank-info").show();
+        $("#balance-address").show();
+        $("#bank-info").html("This Financial Institute has not registered");
       }
       return bank.fetchBalance(account);
     }).then(function(val) {
-      $("#balance-address").html("This Financial Institute's balance is " +web3.fromWei(val.toNumber(), "ether"));
+     $("#balance-address").html("This Financial Institute's balance is " +web3.fromWei(val.toNumber(), "ether"));
     }).catch(function(e) {
       console.log(e);
     });
   },
+  borrower: function() {
+    var self = this;
+
+    var bank;
+    
+    Bank.deployed().then(function(instance) {
+      bank = instance;
+     
+    })
+        $("#lending_hide").hide();
+        $("#reg_bank").hide();
+        $('#due_set').show();
+        $('#spvdetail_hide').hide();
+        $('#get_loan_hide').show();
+        $('#spv_hide').hide();
+        $('#borrrow_hide').show();
+        $('#purchase_set').hide();
+        $('#fidetail_hide').show();
+        $('#spvloan_hide').hide();
+        $("#bank-info").hide();
+        $("#balance-address").hide();
+    },
+    totalhide: function() {
+      var self = this;
+  
+      var bank;
+      
+      Bank.deployed().then(function(instance) {
+        bank = instance;
+       
+      })
+          $("#lending_hide").hide();
+          $("#reg_bank").hide();
+          $('#due_set').hide();
+          $('#spvdetail_hide').hide();
+          $('#get_loan_hide').hide();
+          $('#spv_hide').hide();
+          $('#borrrow_hide').hide();
+          $('#fidetail_hide').hide();
+          $('#spvloan_hide').hide();
+          $("#bank-info").hide();
+          $("#balance-address").hide();
+          $("#purchase_set").hide();
+      },
+ 
  
   showspv: function() {
     var self = this;
@@ -97,18 +158,34 @@ window.App = {
     }).then(function(val) {
       console.log(val);
       if (val == true) {
-        $("#reg_bank").html('');
-        $("#borrrow_hide").remove();
-        $('#due_set').remove();
-        $('#get_loan_hide').remove();
-        $('#spv_hide').remove();
+        $("#lending_hide").hide();
+        $("#reg_bank").hide();
+        $('#due_set').hide();
+        $('#spvdetail_hide').show();
+        $('#get_loan_hide').hide();
+        $('#spv_hide').hide();
+        $('#borrrow_hide').show();
+        $('#fidetail_hide').show();
+        $('#spvloan_hide').show();
+        $("#bank-info").show();
+        $("#balance-address").show();
+        $("#purchase_set").show();
         $("#bank-info").html("This spv Institute has registered");
       } else {
-        $("#lending_hide").remove();
-        $("#spvdetail_hide").remove();
+        $("#lending_hide").hide();
+        $("#reg_bank").hide();
+        $('#due_set').hide();
+        $('#spvdetail_hide').hide();
+        $('#get_loan_hide').hide();
+        $('#spv_hide').show();
+        $('#borrrow_hide').hide();
+        $('#fidetail_hide').hide();
+        $('#spvloan_hide').hide();
+        $("#bank-info").show();
+        $("#balance-address").show();
         $("#bank-info").html("This spv Institute has not registered yet");
       }
-      return bank.fetchBalance(account);
+      return bank.spvBalance(account);
     }).then(function(val) {
       $("#balance-address").html("This spv Institute's balance is " +web3.fromWei(val.toNumber(), "ether"));
     }).catch(function(e) {
@@ -122,9 +199,7 @@ window.App = {
     var bank;
 
     $("#bank_list").html('');
-    $("#bank_list").append('<table class="table table-striped"><thead><tr><th>Financial Institute Address</th><th>Bank Name</th><th>Balance</th><th>Fixed Int.</th></tr></thead><tbody id="body_bank"></tbody></table>\
-    <input class="btn btn-success form-control" id="salling" value="Saleloan" onclick="App.sellloan();"/>\
-    ');
+   
     
     Bank.deployed().then(function(instance) {
       bank = instance;
@@ -151,7 +226,7 @@ window.App = {
     }).then(function(val) {
        $.each(val,function(err,data){
         bank.spv_details(data).then(function(result){
-          $("#spv_list").append('<tr><td>'+data+'</td><td>'+web3.fromWei(result[0].toNumber(), "ether")+'</td></tr>')
+          $("#spv_list").append('<tr><td>'+data+'</td><td>'+web3.fromWei(result[0].toNumber(), "ether")+'</td><tr><td>'+result[1]+'</td><tr><td>'+result[2]+'</td><tr><td>'+result[3]+'</td></tr>')
         })
        })
       
@@ -160,14 +235,14 @@ window.App = {
 get_loan : function(){
   var loan_amount  = parseInt($("#loan-amount").val().trim());
   var loan_address = $("#loan-address").val().trim();
-
+var token_name=$("#token-name").val().trim();
   $("#loan-status").html("Initiating transaction... (please wait)");
   
   var self = this;
   var bank;
   Bank.deployed().then(function(instance) {
     bank = instance;
-    return bank.req_loan(loan_address,loan_amount,{from:account,gas: 6000000});
+    return bank.req_loan(loan_address,loan_amount,token_name,{from:account,gas: 6000000});
   }).then(function(val) {
     $("#loan-status").html("Transaction complete!");
   }).catch(function(e) {
@@ -191,13 +266,20 @@ sale_loan : function(){
     $("#status").html("Error in transaction; see log.");
   });
 },
-sellloan : function(){
+purchase_ln: function(){
  
     var self = this;
   var bank;
   Bank.deployed().then(function(instance) {
     bank = instance;
-    bank.sell_loan({from:account,gas: 6000000});
+    var loanid=$("#spvLoan_id").val().trim();
+    var purid=bank.purchase_loan(loanid);
+    alert(loanid);
+    var brrow_add=$("#borrow_ad").val().trim();
+    alert(brrow_add);
+    return bank.purchase_loan(loanid,brrow_add,{from:account,gas: 6000000});
+  }).then(function(val) {
+      console.log(val);
   }).catch(function(e) {
     console.log(e); 
   });
@@ -232,7 +314,7 @@ register_bank:function() {
     return instance.register(bank_name, loan_interest,duration, {from:account,value:web3.toWei(deposit_Amount,"ether"),gas: 6000000});
   }).then(function() {
     $("#status").html("Transaction complete!");
-    App.showBalance();
+    App.show_Balance();
   }).catch(function(e) {
     console.log(e);
     $("#status").html("Error in transaction; see log.");
@@ -245,14 +327,14 @@ get_loan_list:function(){
   $("#get_loan_list").html('')
   Bank.deployed().then(function(instance) {
     bank = instance;
-    return bank.ln_get_count(account);
+    return bank.ln_get_id(account);
   }).then(function(val) {
       for(var i=0;i<val.toNumber();i++){
         bank.ln_get(account,i).then(function(data,err){
           var myDate = new Date( (data[3].toNumber()) *1000);
           var a=(myDate.toLocaleString());
 
-          $("#get_loan_list").append('<tr><td>'+data[8]+'</td><td>'+data[0]+'</td><td>'+web3.fromWei(data[1].toNumber(), "ether")+'</td><td>'+data[2]+'</td><td>'+a.split(',')[0]+'</td><td>'+data[5]+'</td><td>'+web3.fromWei(data[6].toNumber(), "ether")+'</td><td>'+web3.fromWei(data[7].toNumber(), "ether")+'</td></tr>');
+          $("#get_loan_list").append('<tr><td>'+data[8]+'</td><td>'+data[0]+'</td><td>'+web3.fromWei(data[1].toNumber(), "ether")+'</td><td>'+data[2]+'</td><td>'+a.split(',')[0]+'</td><td>'+data[5]+'</td><td>'+web3.fromWei(data[6].toNumber(), "ether")+'</td><td id="month_ins">'+web3.fromWei(data[7].toNumber(), "ether")+'</td></tr>');
         });
       }
   });
@@ -262,6 +344,8 @@ pay_due:function(){
   var due = parseInt($("#Loan_id").val().trim());
   var self = this;
   var bank; 
+  var mon_ins=$("#mon_th#month_ins").val();
+  alert(mon_ins);
   $("#status").html("Initiating transaction... (please wait)");
   Bank.deployed().then(function(instance) {
     bank = instance;
