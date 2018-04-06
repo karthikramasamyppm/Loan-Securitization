@@ -42,8 +42,8 @@ window.App = {
      self.basicfunctions();
       self.bank_list();
       self.spv_list();
-      self.loan_list();
-      self.get_loan_list();
+    self.loan_list();
+     self.get_loan_list();
     });
    // this.showBalance();
   },

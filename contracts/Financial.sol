@@ -34,6 +34,9 @@ contract Register
     {
         return reg_user;
     }
+    function isRegistered(address _bank) public constant returns (bool) {
+      return bank_d1[_bank].time > 0;
+    }
     function show_bank_detail(uint index,uint intr_type)public view returns(string bank_name,address tem_add,uint intr)
     {
         tem_add=reg_user[index];
@@ -132,6 +135,7 @@ contract Financial is FinancialInst
         {
             
             uint256 initial_spv_ether;
+            
             uint256 spv_loan;
             uint256 spv_send_ether;
             uint256 available_pack;
