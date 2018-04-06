@@ -91,9 +91,14 @@ contract Financial is FinancialInst
    
     uint256 total_token_value;
     uint256[] total_token;
+    uint256 public loan_id = 0;
     struct loan_get
-    {
+    {   
+        uint256 id;
+        uint256 token;
+        string token_symbol;
         address bank_address;
+        address borr_address;
         uint256 amount;
         uint256 count;
         uint last_setl_time;
@@ -101,14 +106,13 @@ contract Financial is FinancialInst
         uint months;
         uint bal_ln;
         uint installment;
-        uint256 id;
-        uint256 token;
+        bool sold;
     }
     
-     
     mapping (address=>mapping(uint256=>loan_get))public ln_get;
-    mapping(address=>uint256)public ln_get_count;
-     address[] public spv_reg;
+    mapping(address=>uint256)public ln_get_id;
+    mapping(uint256=>address) loanDetais;
+    address[] public spv_reg;
 
     struct loan_pro
     {
@@ -120,6 +124,10 @@ contract Financial is FinancialInst
     
      address public spv_add;
      address public investor_add;
+     address[] public spv_borrow_address;
+     
+     uint256[] public spv_loanid;
+     mapping(uint256=>uint256) public spv_token;
      struct spv_detail
         {
             
@@ -128,52 +136,72 @@ contract Financial is FinancialInst
             uint256 spv_send_ether;
             uint256 available_pack;
             uint256 send_pack;
-            // address[] cust;
-            // mapping(address=>uint256)tknValue;
+           
         }
     
      struct Investor
         {
             uint256 Investor_ether;
-            uint256 Investor_package;
+            uint256 package_count;
+            uint256[] package_id;
+            uint256[] package_token;
+           // mapping(uint256=>);
             mapping(address=>bool) investorsList;
         }
     mapping (address=>mapping(uint256=>loan_pro))public ln_pro;
     mapping(address=>uint256)public ln_pro_count;
     
      mapping(address=>spv_detail)public spv_details;
+     uint256 spv_loan_count;
      mapping(address=>Investor)public investor_details;
-    
-    address[] cust;
+
+    address[] public cust;
+    mapping(address=>bool) borr;
     mapping(address=>uint256) tknValue;
-    uint256[] public values;
+    uint256[] public Token_count;
+    
+    uint256[] pa;
+    mapping(uint256=>mapping(uint256=>uint256[]))public packing;
+    uint256 packIndex=1;
     uint256[] public pack;
+    mapping(uint256=>uint256) public packCost;
+    mapping(uint256=>address) public packOwner;
+    mapping(uint256=>bool) public spv_send_pack;
         
-    function req_loan(address bank_address,uint256 tokenvalue) public payable
+    function req_loan(address bank_address,uint256 tokenvalue,string tokensymbol) public payable   // add token_symbol
     {   
-        uint256 amt = ((tokenvalue * 1 ether)*80 / 100);
+        
+         
+        uint256 amt = ((tokenvalue * 1000000000000000000 wei)*80 / 100);
 
         require(bank_d1[bank_address].time!=0);
         require(bank_address!=msg.sender);
         
         require (bank_d1[bank_address].bal > amt );
-            
+    
         bank_d1[bank_address].bal -= amt;
         
+         loan_id++;
+         ln_get_id[msg.sender] = loan_id;
         
         
-        ln_get[msg.sender][ln_get_count[msg.sender]].bank_address = bank_address;
-        ln_get[msg.sender][ln_get_count[msg.sender]].amount = amt;
-        ln_get[msg.sender][ln_get_count[msg.sender]].months=12;
-        ln_get[msg.sender][ln_get_count[msg.sender]].time=now;
-        ln_get[msg.sender][ln_get_count[msg.sender]].last_setl_time=now;
-        ln_get[msg.sender][ln_get_count[msg.sender]].installment=(amt)/(12);
-        ln_get[msg.sender][ln_get_count[msg.sender]].bal_ln = amt;
-        ln_get[msg.sender][ln_get_count[msg.sender]].id = ln_get_count[msg.sender];
-        ln_get[msg.sender][ln_get_count[msg.sender]].token = tokenvalue;
+        ln_get[msg.sender][ln_get_id[msg.sender]].bank_address = bank_address;
+        ln_get[msg.sender][ln_get_id[msg.sender]].amount = amt;
+        ln_get[msg.sender][ln_get_id[msg.sender]].months=12;
+        ln_get[msg.sender][ln_get_id[msg.sender]].time=now;
+        ln_get[msg.sender][ln_get_id[msg.sender]].last_setl_time=now;
+        ln_get[msg.sender][ln_get_id[msg.sender]].installment=(amt)/(12);
+        ln_get[msg.sender][ln_get_id[msg.sender]].bal_ln = amt;
+        ln_get[msg.sender][ln_get_id[msg.sender]].id = ln_get_id[msg.sender];
+        loanDetais[ln_get_id[msg.sender]]=msg.sender;
+       
+        ln_get[msg.sender][ln_get_id[msg.sender]].token = tokenvalue;
+        ln_get[msg.sender][ln_get_id[msg.sender]].token_symbol = tokensymbol;
+        ln_get[msg.sender][ln_get_id[msg.sender]].sold=false;
+        ln_get[msg.sender][ln_get_id[msg.sender]].borr_address=msg.sender;
         
          total_token_value += tokenvalue;
-         total_token.push(ln_get[msg.sender][ln_get_count[msg.sender]].token);
+         total_token.push(ln_get[msg.sender][ln_get_id[msg.sender]].token);
         
         ln_pro[bank_address][ln_pro_count[bank_address]].bank_address = msg.sender;
         ln_pro[bank_address][ln_pro_count[bank_address]].amount = amt;
@@ -181,15 +209,23 @@ contract Financial is FinancialInst
         ln_pro[bank_address][ln_pro_count[bank_address]].time=now;
         
         ln_pro_count[bank_address]++;
-        ln_get_count[msg.sender]++;
+        
 
-        msg.sender.transfer(amt * 1 wei);
-       
-        cust.push(msg.sender);
+        msg.sender.transfer(amt);
+        
+        if(!borr[msg.sender])
+        {
+            cust.push(msg.sender);
+            borr[msg.sender]=true;
+        }
         tknValue[msg.sender]=tokenvalue;
     }
+    function borrowertotal()public view returns(uint256)
+    {
+        return cust.length;
+    }
     
-    function settlement(uint ln_id) public
+    function settlement(uint ln_id) public payable
     {
         uint temp_count=ln_get[msg.sender][ln_id].count;
         uint temp_month=ln_get[msg.sender][ln_id].months;
@@ -211,10 +247,8 @@ contract Financial is FinancialInst
         ln_get[msg.sender][ln_id].bal_ln-=temp_ins;
         ln_get[msg.sender][ln_id].count++;
 
-       
         
-        
-        if(bank_d1[reg_user[0]].spvList[spv_add])//(spv_details[spv_add].spv_loan > 0)
+        if(bank_d1[reg_user[0]].spvList[spv_add])
         {
         uint256 bank_take_interest=(amont *10)/100;
         bank_d1[reg_user[0]].bal +=bank_take_interest;
@@ -222,7 +256,7 @@ contract Financial is FinancialInst
         uint256 spv_take_interest=((amont-bank_take_interest)*10)/100;
         spv_details[spv_add].initial_spv_ether +=spv_take_interest;
         
-        //if(investor_details.investorsList[investor_add])//(total_token.length /1 !=0)
+        
         if(investor_details[investor_add].investorsList[investor_add])
         {
         uint256 balance_investor_amount=amont- (bank_take_interest+spv_take_interest);
@@ -234,14 +268,19 @@ contract Financial is FinancialInst
         {
              bank_d1[temp_bank_address].bal += amont;
         }
+        
+        
     }
     function SPV_ether()public payable returns(string)
         {
+            spv_add = msg.sender;
         if( spv_details[spv_add].initial_spv_ether == 0)
         {
-         spv_add = msg.sender;
+         
          spv_details[spv_add].initial_spv_ether=msg.value;
+         spv_details[spv_add].spv_send_ether=0;
          spv_reg.push(msg.sender);
+         spv_details[spv_add].available_pack=0;
          return "Account Registered";
         }
         else
@@ -253,18 +292,39 @@ contract Financial is FinancialInst
     {
         return spv_reg;
     }
-    function spvRegistered(address _spvad) public constant returns (bool) {
-      return bank_d1[_spvad].time > 0;
+    function spvRegistered() public constant returns (bool) {
+      return spv_details[msg.sender].initial_spv_ether > 0;
     }
-
-     function sell_loan()public payable
+    function spvBalance(address _spv) public constant returns (uint256)
+    {
+        return spv_details[_spv].initial_spv_ether;
+    }
+    
+     function purchase_loan(uint256[] loanId)public returns(bool)    //purchase_loan(uint256 loan_id[])
         {
-       
-         spv_details[spv_add].spv_loan=total_token_value;
-         spv_details[spv_add].spv_send_ether = spv_details[spv_add].spv_loan*1 ether;
-         bank_d1[reg_user[0]].bal += spv_details[spv_add].spv_send_ether;
-         bank_d1[reg_user[0]].spvList[spv_add]=true;
-         spv_details[spv_add].initial_spv_ether -= spv_details[spv_add].spv_send_ether;
+             require(spv_reg[0]==msg.sender);
+            uint256 _loanId=0;
+            address _borrower=0;
+            //if(loanId.length!=borrower.length)
+              //  return false;
+        
+            for(uint256 a=0;a<loanId.length;a++)
+            {
+                _loanId=loanId[a];
+                _borrower=loanDetais[_loanId];
+            uint256 TKN_Amount=ln_get[_borrower][_loanId].token;
+            spv_loanid.push(_loanId);
+            spv_details[spv_add].initial_spv_ether-=TKN_Amount;
+            spv_details[spv_add].spv_send_ether+=TKN_Amount;
+            bank_d1[reg_user[0]].bal+=TKN_Amount;
+            reg_user[0].transfer(TKN_Amount);
+            spv_details[spv_add].spv_loan++;
+            ln_get[msg.sender][ln_get_id[msg.sender]].sold=true;
+            spv_borrow_address.push(_borrower);
+            spv_token[_loanId]=(ln_get[_borrower][_loanId].token);
+            }
+            return true;
+    
         }
     function Investor_ether()public payable
         {
@@ -272,33 +332,89 @@ contract Financial is FinancialInst
          investor_details[investor_add].Investor_ether=msg.value;
          investor_details[investor_add].investorsList[investor_add]=true;
         }
-        function avail_pack(uint256 i,uint256 j)public  //01
+      /*  function pack()public  
         {
-            uint256 v=values[i]+values[j];
-            pack.push(v);//values[i]+values[j]);
-            spv_details[spv_add].available_pack += 1;
-            //spv_details[spv_add].available_pack = total_token.length / 1;
-            //return values[i]+values[j];
-        }
-        
-        function send_package(uint256 index)public
-        {
-            investor_details[investor_add].Investor_package += 1;
-            investor_details[investor_add].Investor_ether -=pack[index];// * 3) * 10 ;
-            spv_details[spv_add].initial_spv_ether += pack[index];// * 3) * 10 ;
-            spv_details[spv_add].spv_loan -= pack[index];
-            spv_details[spv_add].available_pack -= 1;
-            spv_details[spv_add].send_pack += 1;
-        }
-        function spvloanDetails()public returns(address[],uint256[])
-        {
-            //  values.push(100);
-            //  values.push(200);
-            for(uint256 b=0;b<cust.length;b++)
+            require(spv_add==msg.sender);
+            uint256 c=spv_loanid.length;
+            uint256 packing=0;
+            if((c%2)==0)
             {
-                values.push(tknValue[cust[b]]);
+                c=c/2;
             }
-            return (cust,values);
+            else
+            {
+                c=(c-1)/2;
+            }
+            for(uint256 a=0;a<c;a++)
+            {
+                packs[a][0]=spv_token[packing];
+                packing++;
+                packs[a][1]=spv_token[packing];
+                packing++;
+            }
+            
+            
+    
         }
+        */
+        
+        // function send_package(uint256 index)public
+        // {
+        //     investor_details[investor_add].Investor_package += 1;
+        //     investor_details[investor_add].Investor_ether -=pack[index];
+        //     spv_details[spv_add].initial_spv_ether += pack[index];
+        //     spv_details[spv_add].spv_loan -= pack[index];
+        //     spv_details[spv_add].available_pack -= 1;
+        //     spv_details[spv_add].send_pack += 1;
+        // }
+        function get_spv_details()public view returns(address,uint256[],address[],uint256[])
+        {
+            uint256[] _tokens;
+            for(uint256 a=0;a<spv_loanid.length;a++)
+            {
+                _tokens.push(spv_token[a]);
+            }
+            require(spv_reg[0]==msg.sender);
+            return (spv_add,spv_loanid,spv_borrow_address,_tokens);
+        }
+        function createPacking(uint256[] _loanId)public //returns(uint256[])
+        {
+            uint256 totalTokenCost=0;
+            for(uint256 a=0;a<_loanId.length;a++)
+            {
+                totalTokenCost+=spv_token[_loanId[a]];
+            }
+            packing[packIndex][totalTokenCost]=_loanId;
+            packCost[packIndex]=totalTokenCost;
+            spv_details[spv_add].available_pack+=1;
+            packOwner[packIndex]=spv_add;
+            spv_send_pack[packIndex]=true;
+            packIndex++;
+            
+            //return(packing[packIndex][totalTokenCost]);
+        }
+        function get_pack(uint256 _pack_index)public view returns(uint256[],uint256)
+        {
+            return (packing[_pack_index][packCost[_pack_index]],packCost[_pack_index]);
+        }
+        function purchase_pack(uint256 _packindex)public
+        {
+            investor_details[investor_add].Investor_ether-=packCost[_packindex];
+            spv_details[spv_add].initial_spv_ether+=packCost[_packindex];
+            investor_details[investor_add].package_count+=1;
+            investor_details[investor_add].package_token.push(packCost[_packindex]);
+            spv_details[spv_add].send_pack+=1;
+            packOwner[_packindex]=investor_add;
+            spv_send_pack[packIndex]=false;
+        }
+        // function spvloanDetails()public returns(address[],uint256[])
+        // 
+            
+        //     for(uint256 b=0;b<cust.length;b++)
+        //     {
+        //         Token_count.push(tknValue[cust[b]]);
+        //     }
+        //     return (cust,Token_count);
+        // }
         
 }
