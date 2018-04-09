@@ -257,7 +257,7 @@ contract Financial is FinancialInst
         uint amont=( temp_bal_ln * (intr/100) ) /100;
         
         
-        bank_d1[temp_bank_address].bal += amont+temp_ins;
+        
         
         ln_get[msg.sender][ln_id].last_setl_time = temp_last +1 minutes;//30 days;
         filn_get[fiaddress][ln_id].last_setl_time = temp_last +1 minutes;//30 days;
@@ -265,7 +265,7 @@ contract Financial is FinancialInst
         filn_get[fiaddress][ln_id].bal_ln-=temp_ins;
         ln_get[msg.sender][ln_id].count++;
         filn_get[fiaddress][ln_id].count++;
-         bank_d1[temp_bank_address].bal += amont;
+        bank_d1[temp_bank_address].bal += amont+temp_ins;
        /* if(bank_d1[reg_user[0]].spvList[spv_add])
         {
         uint256 bank_take_interest=(amont *10)/100;
@@ -324,8 +324,8 @@ function choosefinanceinstute(address choosefi)public
      function purchase_loan(uint256[] loanId)public returns(bool)    //purchase_loan(uint256 loan_id[])
         {
              require(spv_reg[0]==msg.sender);
-            uint256 _loanId=0;
-            address _borrower=0;
+            //uint256 _loanId=0;
+            //address _borrower=0;
             //if(loanId.length!=borrower.length)
               //  return false;
         
@@ -372,7 +372,7 @@ function choosefinanceinstute(address choosefi)public
     {
         return investor_details[_invest].Investor_ether;
     }
-        function choosespv(address choose_spv)public view return(address)
+        function choosespv(address choose_spv)public 
           {
              choosespvadd=choose_spv;
               }
@@ -388,7 +388,7 @@ function choosefinanceinstute(address choosefi)public
             packageid++;
            spvpackid[msg.sender]=packageid;
             spv_details[spv_add].available_pack=packageid;
-           spvpackage[msg.sender][spvpackid[msg.sender]].package_id=temppackid;
+           spvpackage[msg.sender][spvpackid[msg.sender]].package_id=spvpackid[msg.sender];
            spvpackage[msg.sender][spvpackid[msg.sender]].totalvalue=totalTokenCost;
           
             
@@ -405,7 +405,7 @@ function choosefinanceinstute(address choosefi)public
             investerpackid[msg.sender]=invespackid;
             investerpackage[msg.sender][investerpackid[msg.sender]].package_id=investerpackid[msg.sender];
             investerpackage[msg.sender][investerpackid[msg.sender]].totalvalue=totalpackagevalue;
-            spv_details[msg.sender].initial_spv_ether+=investerpackage[msg.sender][investerpackid[msg.sender]].totalvalue;
+            spv_details[choosespvadd].initial_spv_ether+=investerpackage[msg.sender][investerpackid[msg.sender]].totalvalue;
             investor_details[msg.sender].Investor_ether-=investerpackage[msg.sender][investerpackid[msg.sender]].totalvalue;
              investor_details[msg.sender].Investor_package=invespackid;
             

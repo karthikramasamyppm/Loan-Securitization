@@ -42,14 +42,17 @@ window.App = {
      self.basicfunctions();
       self.bank_list();
       self.bank1_list();
+      
       self.spv_list();
+      self.spv_list1();
+      self.invesdetail_tbody();
       self.loan_list();
       self.get_loan_list();
       self.fi_loan_list();
-      self.spvloan_tbody();
+      // self.spvloan_tbody();
       self.spv_tbody();
       self.spvpack_body();
-      self.spvpackdetail_body();
+     // self.spvpackdetail_body();
       self.inverstorpack_body();
     });
    // this.showBalance();
@@ -73,7 +76,7 @@ window.App = {
       bank = instance;
       return instance.isRegistered(account);
     }).then(function(val) {
-      console.log(val);
+      //console.log(val);
       if (val == true) {
         $("#lending_hide").show();
         $("#reg_bank").hide();
@@ -141,6 +144,7 @@ window.App = {
           $("#reg_bank").hide();
           $('#due_set').hide();
           $('#spvdetail_hide').hide();
+          $('#spvdetail_hide1').hide();
           $('#get_loan_hide').hide();
           $('#spv_hide').hide();
           $('#borrrow_hide').hide();
@@ -176,7 +180,7 @@ window.App = {
       return instance.spvRegistered(account);
     
     }).then(function(val) {
-      console.log(val);
+      //console.log(val);
       if (val == true) {
         $("#lending_hide").hide();
         $("#reg_bank").hide();
@@ -187,7 +191,7 @@ window.App = {
         $('#spv_pack').show();
         $('#spv_loan_detail').show();
         $('#spv_deta').show();
-        $('#borrrow_hide').show();
+        $('#borrrow_hide').hide();
         $('#create_pack').show();
         $('#choosefi').show();
         $('#fidetail_hide1').show();
@@ -226,12 +230,12 @@ window.App = {
       return instance.investerRegistered(account);
     
     }).then(function(val) {
-      console.log(val);
+      //console.log(val);
       if (val == true) {
         $("#lending_hide").hide();
         $("#reg_bank").hide();
         $('#due_set').hide();
-        $('#spvdetail_hide').show();
+        $('#spvdetail_hide1').show();
         $('#get_loan_hide').hide();
         $('#borrrow_hide').hide();
         $('#fidetail_hide').hide();
@@ -296,14 +300,15 @@ window.App = {
 
     $("#bank1_list").html('');
    
-    
+    let gen_id = 0;
     Bank.deployed().then(function(instance) {
       bank = instance;
       return instance.show_registers();
     }).then(function(val) {
        $.each(val,function(err,data){
         bank.bank_d1(data).then(function(result){
-          $("#body1_bank").append('<tr><td>'+data+'</td><td>'+result[0]+'</td><td>'+web3.fromWei(result[1].toNumber(), "ether")+'</td><td>'+result[3]+'</td><td><input class="btn btn-success form-control" id="bank-de" value="Choose FI" onclick="App.spvloan_tbody('+data[0]+');"></td></tr>')
+          $("#body1_bank").append('<tr><td id=b'+gen_id+'>'+data+'</td><td>'+result[0]+'</td><td>'+web3.fromWei(result[1].toNumber(), "ether")+'</td><td>'+result[3]+'</td><td><input type="button" class="btn btn-success form-control" id="bank-de" value="Choose FI" onclick=App.spvloan_tbody("#b'+gen_id+'");></td></tr>')
+          gen_id ++;
         })
        })
       
@@ -322,7 +327,27 @@ window.App = {
     }).then(function(val) {
        $.each(val,function(err,data){
         bank.spv_details(data).then(function(result){
-          $("#spv_list").append('<tr><td>'+data+'</td><td>'+web3.fromWei(result[0].toNumber(), "ether")+'</td><td>'+result[1]+'</td><td>'+result[2]+'</td><td>'+result[3]+'</td></tr>')
+          $("#spv_list").append('<tr><td>'+data+'</td><td>'+web3.fromWei(result[0].toNumber(), "ether")+'</td><td>'+result[1]+'</td><td>'+result[3]+'</td></tr>')
+        })
+       })
+      
+    });
+  },
+  spv_list1 : function(){
+    var self = this;
+
+    var bank;
+
+    $("#spv_list1").html('');
+    let gen1_id = 0;
+    Bank.deployed().then(function(instance) {
+      bank = instance;
+      return instance.spv_registers();
+    }).then(function(val) {
+       $.each(val,function(err,data){
+        bank.spv_details(data).then(function(result){
+          $("#spv_list1").append('<tr><td id=b1'+gen1_id+'>'+data+'</td><td>'+web3.fromWei(result[0].toNumber(), "ether")+'</td><td>'+result[1]+'</td><td>'+result[3]+'</td><td><input type="button" class="btn btn-success form-control" id="bank1-de" value="Choose SPV" onclick=App.spvpackdetail_body("#b1'+gen1_id+'");></td></tr>')
+          gen1_id ++;
         })
        })
       
@@ -393,7 +418,7 @@ purchase_ln: function(){
     
     return bank.purchase_loan(loanid,{from:account,gas: 6000000});
   }).then(function(val) {
-      console.log(val);
+      //console.log(val);
   }).catch(function(e) {
     console.log(e); 
   });
@@ -412,7 +437,7 @@ create_pack: function(){
     
     return bank.createPacking(spvid,{from:account,gas: 6000000});
   }).then(function(val) {
-      console.log(val);
+      //console.log(val);
   }).catch(function(e) {
     console.log(e); 
   });
@@ -431,7 +456,7 @@ purchase_pack: function(){
     
     return bank.purchase_pack(invesid,{from:account,gas: 6000000});
   }).then(function(val) {
-      console.log(val);
+      //console.log(val);
   }).catch(function(e) {
     console.log(e); 
   });
@@ -474,7 +499,7 @@ register_bank:function() {
     $("#status").html("Error in transaction; see log.");
   });
 },
-choose_fi:function() {
+/*choose_fi:function() {
 
   var self = this;
 
@@ -492,8 +517,8 @@ choose_fi:function() {
     console.log(e);
     $("#status").html("Error in transaction; see log.");
   });
-},
-choose_spv:function() {
+},*/
+/*choose_spv:function() {
 
   var self = this;
 
@@ -511,7 +536,7 @@ choose_spv:function() {
     console.log(e);
     $("#status").html("Error in transaction; see log.");
   });
-},
+},*/
 
 get_loan_list:function(){
   var self = this;
@@ -523,11 +548,10 @@ get_loan_list:function(){
   }).then(function(val) {
       for(var i=1;i<=val.toNumber();i++){
         bank.ln_get(account,i).then(function(data,err){
-          console.log(data[0])
           var myDate = new Date( (data[7].toNumber()) *1000);
           var a=(myDate.toLocaleString());
 
-          $("#get_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+data[4]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td>'+data[6]+'</td><td>'+a.split(',')[0]+'</td><td>'+data[9]+'</td><td>'+web3.fromWei(data[10].toNumber(), "ether")+'</td><td id="month_ins">'+web3.fromWei(data[11].toNumber(), "ether")+'</td><td><input class="btn btn-success form-control" id="due-bank" value="Payment" onclick="App.pay_due('+data[0]+','+data[3]+','+web3.fromWei(data[11].toNumber(), "ether")+');"></td></tr>');
+          $("#get_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td id='+data[0]+'>'+data[3]+'</td><td>'+data[4]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td>'+data[6]+'</td><td>'+a.split(',')[0]+'</td><td>'+data[9]+'</td><td>'+web3.fromWei(data[10].toNumber(), "ether")+'</td><td id="month_ins">'+web3.fromWei(data[11].toNumber(), "ether")+'</td><td><input class="btn btn-success form-control" id="due-bank" value="Payment" onclick="App.pay_due('+data[0]+','+web3.fromWei(data[11].toNumber(), "ether")+');"></td></tr>');
         });
       }
   });
@@ -546,27 +570,31 @@ invesdetail_tbody : function(){
   }).then(function(val) {
      
       bank.investor_details(account).then(function(result){
-        $("#invesdetail_tbody").append('<tr><td>'+account+'</td><td>'+result[0]+'</td><td>'+web3.fromWei(result[1].toNumber(), "ether")+'</td></tr>')
+        $("#invesdetail_tbody").append('<tr><td>'+account+'</td><td>'+web3.fromWei(result[0].toNumber(), "ether")+'</td><td>'+result[1]+'</td></tr>')
      
      })
     
   });
 },
-spvloan_tbody:function(fii_add){
+spvloan_tbody:function(fi){
+  
+  let address = $(fi.trim()).text().trim();
   var self = this;
   var bank;
    $("#spvloan_tbody").html('')
   Bank.deployed().then(function(instance) {
     bank = instance;
-    return bank. ln_get_id(fii_add);
+    return bank.filn_get_id(address);
   }).then(function(val) {
       for(var i=1;i<=val.toNumber();i++){
-        bank.ln_get(fii_add,i).then(function(data,err){
-          
+        bank.filn_get(address,i).then(function(data,err){
           $("#spvloan_tbody").append('<tr><td>'+data[0]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td></tr>');
         });
       }
+  }).then(function(val) {
+    return bank.choosefinanceinstute(address,{from:account,gas: 6000000});
   });
+  
 },
 spv_tbody:function(){
   var self = this;
@@ -600,22 +628,27 @@ spvpack_body:function(){
       }
   });
 },
-spvpackdetail_body:function(){
+spvpackdetail_body:function(fii){
+  let address = $(fii.trim()).text().trim();
   var self = this;
   var bank;
-  var spvpack_add = document.getElementById("choose_spv").value;
+  
   $("#spvpackdetail_body").html('')
   Bank.deployed().then(function(instance) {
     bank = instance;
-    return bank. spvpackid(spvpack_add);
+    return bank. spvpackid(address);
   }).then(function(val) {
       for(var i=1;i<=val.toNumber();i++){
-        bank.spvpackage(spvpack_add,i).then(function(data,err){
+        bank.spvpackage(address,i).then(function(data,err){
           
-          $("#spvpackdetail_body").append('<tr><td>'+data[0]+'</td><td>'+data[0]+'</td><td>'+web3.fromWei(data[1].toNumber(), "ether")+'</td></tr>');
+          $("#spvpackdetail_body").append('<tr><td>'+data[0]+'</td><td>'+web3.fromWei(data[1].toNumber(), "ether")+'</td></tr>');
         });
       }
+  }).then(function(val) {
+    return bank.choosespv(address,{from:account,gas: 6000000});
   });
+
+
 },
 
 inverstorpack_body:function(){
@@ -629,7 +662,7 @@ inverstorpack_body:function(){
       for(var i=1;i<=val.toNumber();i++){
         bank.investerpackage(account,i).then(function(data,err){
           
-          $("#inverstorpack_body").append('<tr><td>'+data[0]+'</td><td>'+data[0]+'</td><td>'+web3.fromWei(data[1].toNumber(), "ether")+'</td></tr>');
+          $("#inverstorpack_body").append('<tr><td>'+data[0]+'</td><td>'+web3.fromWei(data[1].toNumber(), "ether")+'</td></tr>');
         });
       }
   });
@@ -641,11 +674,12 @@ fi_loan_list:function(){
   $("#fi_loan_list").html('')
   Bank.deployed().then(function(instance) {
     bank = instance;
-    return bank. filn_get_id(account);
+    return bank.filn_get_id(account);
   }).then(function(val) {
+    console.log(val.toNumber())
       for(var i=1;i<=val.toNumber();i++){
         bank.filn_get(account,i).then(function(data,err){
-          console.log(data[0])
+          //console.log(data[0])
           var myDate = new Date( (data[7].toNumber()) *1000);
           var a=(myDate.toLocaleString());
 
@@ -655,7 +689,8 @@ fi_loan_list:function(){
   });
 },
 
-pay_due:function(id,address,amount){
+pay_due:function(id,amount){
+  var address = $("#"+id).text().trim();
   console.log(id,address,amount)
   var self = this;
   var bank; 

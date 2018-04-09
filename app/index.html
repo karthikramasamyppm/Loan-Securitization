@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -101,6 +102,25 @@
                             </tbody>
                         </table>
                       </div>
+                      <div class="row">
+                        <div class="col-sm-12">
+                            
+                            <div class="col-sm-4" id="spvdetail_hide1">
+                                <h2>SPV Details</h2>
+                                <table class="table table-striped">
+                                  <thead>
+                                    <tr>
+                                      <th>SPV Address</th>
+                                      <th>Total Amount</th>
+                                      <th>Total Loan</th>
+                                      <th>Available pack</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody id="spv_list1">
+            
+                                  </tbody>
+                              </table>
+                            </div>
                      
                       <div class="col-sm-4" id="fidetail_hide">
                           <h2>Financial Institute Details</h2>
@@ -305,16 +325,7 @@
                     <input type="text" id="invester_ether_value" class="form-control" placeholder="Invester Ethers"/>
                     <input class="btn btn-success form-control" id="Investor" value="Register" onclick="App.Register();" />
                 </div>
-                <div class="form-group col-sm-4" id="choosefi">
-                  <h3>Choose Financial Instution</h3>
-                  <input type="text" id="choose_FI" class="form-control" placeholder="FI Address"/>
-                  <input class="btn btn-success form-control" id="Investor" value="submit" onclick="App.choose_fi();" />
-              </div>
-              <div class="form-group col-sm-4" id="choosespv">
-                <h3>Choose SPV</h3>
-                <input type="text" id="choose_spv" class="form-control" placeholder="SPV Address"/>
-                <input class="btn btn-success form-control" id="Investor" value="submit" onclick="App.choose_spv();" />
-            </div>
+               
             <div class="form-group col-sm-4" id="create_pack">
               <h3>Create Pack</h3>
               <input type="text" id="spv_id" class="form-control" placeholder="SPV Id"/>
