@@ -8,16 +8,20 @@ contract Register
         uint256 bal;
         uint256 time;
         uint256 loan_interst;
-        mapping(address=>bool) spvList;
+       // mapping(address=>bool) spvList;
     }
     
     mapping(address=>bank_Details) public bank_d1;
     address[] public reg_user;
+    uint256 public sefi=0;
+    uint256 public sespv=0;
+    uint256 public seinv=0;
     
   function register(string name,uint _loan_interst,uint _time)public payable returns(string)
     {
         if(bank_d1[msg.sender].time == 0)
         {
+            sefi=1;
             bank_d1[msg.sender].name = name;
             bank_d1[msg.sender].loan_interst = _loan_interst;
             bank_d1[msg.sender].bal = msg.value;
@@ -47,36 +51,7 @@ contract Register
 
 contract FinancialInst is Register
 {
-    modifier ch_register()
-    {
-        require(bank_d1[msg.sender].time !=0);
-        _;
-    }
-   
-   
-    function withdraw() ch_register public payable
-    {
-        require(bank_d1[msg.sender].bal>msg.value);
-        bank_d1[msg.sender].bal-=msg.value;
-        
-        address me=msg.sender;
-        me.transfer(msg.value);
-    }
-   
-    function transfer(address to) ch_register public payable
-    {  
-        require(bank_d1[msg.sender].bal>msg.value);
-        bank_d1[to].bal+=msg.value;
-        bank_d1[msg.sender].bal-=msg.value;
-    
-    }
-    
-    function GetBalance() ch_register public constant returns (uint256)
-    {
-        return bank_d1[msg.sender].bal;
-    }
-
-    function fetchBalance(address _banker) public constant returns (uint256)
+  function fetchBalance(address _banker) public constant returns (uint256)
     {
         return bank_d1[_banker].bal;
     }
@@ -131,10 +106,10 @@ contract Financial is FinancialInst
     
      address public spv_add;
      address public investor_add;
-     address[] public spv_borrow_address;
+     //address[] public spv_borrow_address;
      uint256 public spvloanid=0;
-     uint256[] public spv_loanid;
-     uint256[] public spv_token;
+     //uint256[] public spv_loanid;
+     //uint256[] public spv_token;
      struct spv_detail
         {
             
@@ -152,25 +127,25 @@ contract Financial is FinancialInst
         }
         uint256 public packageid=0;
         uint256 public invespackid=0;
-        uint256 public temppackid;
+        
          mapping (address=>mapping(uint256=>package))public spvpackage;
          mapping (address=>mapping(uint256=>package))public investerpackage;
      struct Investor
         {
             uint256 Investor_ether;
             uint256 Investor_package;
+            //mapping(address=>bool)investorsList;
         }
-        mapping(address=>bool) investorsList;
-    mapping (address=>mapping(uint256=>loan_pro))public ln_pro;
-    mapping(address=>uint256)public ln_pro_count;
+       // mapping(address=>bool) investorsList;
+    
     
      mapping(address=>spv_detail)public spv_details;
      uint256 spv_loan_count;
      mapping(address=>Investor)public investor_details;
      address public choosefiadd;
      address public choosespvadd;
-    address[] cust;
-    mapping(address=>uint256) tknValue;
+   // address[] cust;
+    //mapping(address=>uint256) tknValue;
     uint256[] public Token_count;
     mapping(uint256=>mapping(uint256=>uint256))public packs;
     uint256[] public pack;
@@ -204,7 +179,7 @@ contract Financial is FinancialInst
        
         ln_get[msg.sender][ln_get_id[msg.sender]].token = tokenvalue;
         ln_get[msg.sender][ln_get_id[msg.sender]].token_symbol = tokensymbol;
-       // ln_get[msg.sender][ln_get_id[msg.sender]].sold=false;
+     
         ln_get[msg.sender][ln_get_id[msg.sender]].borr_address=msg.sender;
         
         
@@ -220,27 +195,20 @@ contract Financial is FinancialInst
        
         filn_get[bank_address][filn_get_id[bank_address]].token = tokenvalue;
         filn_get[bank_address][filn_get_id[bank_address]].token_symbol = tokensymbol;
-       // ln_get[msg.sender][filn_get_id[msg.sender]].sold=false;
+      
         filn_get[bank_address][filn_get_id[bank_address]].borr_address=msg.sender;
         
         
          total_token_value += tokenvalue;
          total_token.push(ln_get[msg.sender][ln_get_id[msg.sender]].token);
-        
-        /*ln_pro[bank_address][ln_pro_count[bank_address]].bank_address = msg.sender;
-        ln_pro[bank_address][ln_pro_count[bank_address]].amount = amt;
-        ln_pro[bank_address][ln_pro_count[bank_address]].months=12;
-        ln_pro[bank_address][ln_pro_count[bank_address]].time=now;*/
-        
-        ln_pro_count[bank_address]++;
-        
-
-        msg.sender.transfer(amt * 1 wei);
-       
-        cust.push(msg.sender);
-        tknValue[msg.sender]=tokenvalue;
+         msg.sender.transfer(amt * 1 wei);
+        // cust.push(msg.sender);
+        //tknValue[msg.sender]=tokenvalue;
     }
     
+    uint256 public bank_take_interest;
+    uint256 public spv_take_interest;
+    uint256 public spvamount;
     function settlement(uint ln_id,address fiaddress) public payable
     {
         uint temp_count=ln_get[msg.sender][ln_id].count;
@@ -249,54 +217,51 @@ contract Financial is FinancialInst
         uint temp_ins=ln_get[msg.sender][ln_id].installment;
         uint temp_last=ln_get[msg.sender][ln_id].last_setl_time + 1 minutes;//30 days;
         address temp_bank_address=ln_get[msg.sender][ln_id].bank_address;
-        
         require(temp_count<temp_month);
-       
-        
-        uint intr=bank_d1[temp_bank_address].loan_interst;
-        uint amont=( temp_bal_ln * (intr/100) ) /100;
-        
-        
-        
-        
+       uint intr=bank_d1[temp_bank_address].loan_interst;
+        uint amt=( temp_bal_ln * (intr/100) ) ;
+       uint256 amont=temp_ins+amt;
         ln_get[msg.sender][ln_id].last_setl_time = temp_last +1 minutes;//30 days;
         filn_get[fiaddress][ln_id].last_setl_time = temp_last +1 minutes;//30 days;
         ln_get[msg.sender][ln_id].bal_ln-=temp_ins;
         filn_get[fiaddress][ln_id].bal_ln-=temp_ins;
         ln_get[msg.sender][ln_id].count++;
         filn_get[fiaddress][ln_id].count++;
-        bank_d1[temp_bank_address].bal += amont+temp_ins;
-       /* if(bank_d1[reg_user[0]].spvList[spv_add])
+       if(sefi==1&&sespv==1&&seinv==0)
         {
-        uint256 bank_take_interest=(amont *10)/100;
+        bank_take_interest=(amont *10)/100;
+        bank_d1[reg_user[0]].bal +=bank_take_interest;
+        spvamount=amont-bank_take_interest;
+       
+        spv_details[spv_add].initial_spv_ether +=spvamount;
+        }
+       
+        if(sefi==1&&sespv==1&&seinv==1)
+        {
+            bank_take_interest=(amont *10)/100;
         bank_d1[reg_user[0]].bal +=bank_take_interest;
         
-        uint256 spv_take_interest=((amont-bank_take_interest)*10)/100;
+        spv_take_interest=((amont-bank_take_interest)*10)/100;
         spv_details[spv_add].initial_spv_ether +=spv_take_interest;
-        
-        
-        if(investor_details[investor_add].investorsList[investor_add])
-        {
         uint256 balance_investor_amount=amont- (bank_take_interest+spv_take_interest);
         investor_details[investor_add].Investor_ether += balance_investor_amount;
         }
-        }
         
-        else
+       if(sefi==1&&sespv==0&&seinv==0)
         {
-             bank_d1[temp_bank_address].bal += amont;
-        }*/
-        
-        
-    }
+           
+              bank_d1[temp_bank_address].bal +=amont;
+        }
+         }
     function SPV_ether()public payable returns(string)
         {
             spv_add = msg.sender;
         if( spv_details[spv_add].initial_spv_ether == 0)
         {
-         
+                  sespv=1;
          spv_details[spv_add].initial_spv_ether=msg.value;
          spv_details[spv_add].spv_send_ether=0;
+       
          spv_reg.push(msg.sender);
          return "Account Registered";
         }
@@ -324,15 +289,11 @@ function choosefinanceinstute(address choosefi)public
      function purchase_loan(uint256[] loanId)public returns(bool)    //purchase_loan(uint256 loan_id[])
         {
              require(spv_reg[0]==msg.sender);
-            //uint256 _loanId=0;
-            //address _borrower=0;
-            //if(loanId.length!=borrower.length)
-              //  return false;
+           
         
             for(uint256 a=0;a<loanId.length;a++)
             {
-               // _loanId=loanId[a];
-               // _borrower=loanDetais[_loanId];
+             
                 spvloanid++;
                 spvln_get_id[msg.sender] = spvloanid;
         spvln_get[msg.sender][spvln_get_id[msg.sender]].spvid=spvln_get_id[msg.sender];
@@ -361,9 +322,10 @@ function choosefinanceinstute(address choosefi)public
         }
     function Investor_ether()public payable
         {
+            seinv=1;
          investor_add = msg.sender;
          investor_details[investor_add].Investor_ether=msg.value;
-         
+       
         }
         function investerRegistered(address _investadd) public constant returns (bool) {
       return investor_details[_investadd].Investor_ether > 0;
