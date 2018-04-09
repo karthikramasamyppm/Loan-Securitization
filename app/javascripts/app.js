@@ -551,7 +551,11 @@ get_loan_list:function(){
           var myDate = new Date( (data[7].toNumber()) *1000);
           var a=(myDate.toLocaleString());
 
-          $("#get_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td id='+data[0]+'>'+data[3]+'</td><td>'+data[4]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td>'+data[6]+'</td><td>'+a.split(',')[0]+'</td><td>'+data[9]+'</td><td>'+web3.fromWei(data[10].toNumber(), "ether")+'</td><td id="month_ins">'+web3.fromWei(data[11].toNumber(), "ether")+'</td><td><input class="btn btn-success form-control" id="due-bank" value="Payment" onclick="App.pay_due('+data[0]+','+web3.fromWei(data[11].toNumber(), "ether")+');"></td></tr>');
+          if(data[0]>0)
+          {
+              $("#get_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td id='+data[0]+'>'+data[3]+'</td><td>'+data[4]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td>'+data[6]+'</td><td>'+a.split(',')[0]+'</td><td>'+data[9]+'</td><td>'+web3.fromWei(data[10].toNumber(), "ether")+'</td><td id="month_ins">'+web3.fromWei(data[11].toNumber(), "ether")+'</td><td><input class="btn btn-success form-control" id="due-bank" value="Payment" onclick="App.pay_due('+data[0]+','+web3.fromWei(data[11].toNumber(), "ether")+');"></td></tr>');
+          }
+
         });
       }
   });
