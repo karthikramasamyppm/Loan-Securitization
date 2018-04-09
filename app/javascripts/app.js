@@ -720,5 +720,6 @@ window.addEventListener('load', function() {
     window.web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
   }
 
+  //App.start();
   App.start();
 });
