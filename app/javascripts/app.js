@@ -46,7 +46,7 @@ window.App = {
       self.spv_list();
       self.spv_list1();
       self.invesdetail_tbody();
-      self.loan_list();
+
       self.get_loan_list();
       self.fi_loan_list();
       // self.spvloan_tbody();
@@ -333,7 +333,7 @@ window.App = {
       
     });
   },
-  spv_list1 : function(){
+spv_list1 : function(){
     var self = this;
 
     var bank;
@@ -403,12 +403,12 @@ Register: function(){
     $("#status").html("Error in transaction; see log.");
   });
 },
-
 purchase_ln: function(){
   let loanid = [];
   var tmp;
   var self = this;
   var bank;
+  var financ_add = document.getElementById("finance_add").value;
   Bank.deployed().then(function(instance) {
     bank = instance;
     tmp = $("#spvLoan_id").val().trim().split(",");
@@ -416,7 +416,7 @@ purchase_ln: function(){
       loanid.push(parseInt(tmp[i]))
     }
     
-    return bank.purchase_loan(loanid,{from:account,gas: 6000000});
+    return bank.purchase_loan(loanid,financ_add,{from:account,gas: 6000000});
   }).then(function(val) {
       //console.log(val);
   }).catch(function(e) {
@@ -447,6 +447,7 @@ purchase_pack: function(){
   var tmp;
   var self = this;
   var bank;
+  var spvadd = document.getElementById("spv_add").value;
   Bank.deployed().then(function(instance) {
     bank = instance;
     tmp = $("#pack_id").val().trim().split(",");
@@ -454,30 +455,13 @@ purchase_pack: function(){
       invesid.push(parseInt(tmp[i]))
     }
     
-    return bank.purchase_pack(invesid,{from:account,gas: 6000000});
+    return bank.purchase_pack(invesid,spvadd,{from:account,gas: 6000000});
   }).then(function(val) {
       //console.log(val);
   }).catch(function(e) {
     console.log(e); 
   });
 },
-
-loan_list:function(){
-  var self = this;
-  var bank;
-  $("#loan_list").html('')
-  Bank.deployed().then(function(instance) {
-    bank = instance;
-    return bank.ln_pro_count(account);
-  }).then(function(val) {
-      for(var i=0;i<val.toNumber();i++){
-        bank.ln_pro(account,i).then(function(data,err){
-          $("#loan_list").append('<tr><td>'+data[0]+'</td><td>'+web3.fromWei(data[1].toNumber(), "ether")+'</td><td>'+data[3]+'</td></tr>');
-        });
-      }
-  });
-},
-
 register_bank:function() {
 
   var self = this;
@@ -550,8 +534,10 @@ get_loan_list:function(){
         bank.ln_get(account,i).then(function(data,err){
           var myDate = new Date( (data[7].toNumber()) *1000);
           var a=(myDate.toLocaleString());
-
+              if(data[0]>0)
+               {
           $("#get_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td id='+data[0]+'>'+data[3]+'</td><td>'+data[4]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td>'+data[6]+'</td><td>'+a.split(',')[0]+'</td><td>'+data[9]+'</td><td>'+web3.fromWei(data[10].toNumber(), "ether")+'</td><td id="month_ins">'+web3.fromWei(data[11].toNumber(), "ether")+'</td><td><input class="btn btn-success form-control" id="due-bank" value="Payment" onclick="App.pay_due('+data[0]+','+web3.fromWei(data[11].toNumber(), "ether")+');"></td></tr>');
+                }
         });
       }
   });
@@ -591,11 +577,8 @@ spvloan_tbody:function(fi){
           $("#spvloan_tbody").append('<tr><td>'+data[0]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td></tr>');
         });
       }
-  }).then(function(val) {
-    return bank.choosefinanceinstute(address,{from:account,gas: 6000000});
   });
-  
-},
+  },
 spv_tbody:function(){
   var self = this;
   var bank;
@@ -644,11 +627,7 @@ spvpackdetail_body:function(fii){
           $("#spvpackdetail_body").append('<tr><td>'+data[0]+'</td><td>'+web3.fromWei(data[1].toNumber(), "ether")+'</td></tr>');
         });
       }
-  }).then(function(val) {
-    return bank.choosespv(address,{from:account,gas: 6000000});
   });
-
-
 },
 
 inverstorpack_body:function(){
@@ -720,6 +699,5 @@ window.addEventListener('load', function() {
     window.web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
   }
 
-  //App.start();
   App.start();
 });
