@@ -146,7 +146,7 @@ contract Financial is FinancialInst
         
         require (bank_d1[bank_address].bal > amt );
         
-        Token(_token).transferFrom(msg.sender,bank_address,tokenvalue);
+        ERC20(_token).transferFrom(msg.sender,bank_address,tokenvalue);
     
         bank_d1[bank_address].bal -= amt;
         
