@@ -7,10 +7,10 @@ import { default as contract } from 'truffle-contract'
 
 // Import our contract artifacts and turn them into usable abstractions.
 import bank_artifacts from '../../build/contracts/Financial.json'
-
+import bank_artifacts1 from '../../build/contracts/LoanToken.json'
 // MetaCoin is our usable abstraction, which we'll use through the code below.
 var Bank = contract(bank_artifacts);
-
+var Bank1=contract(bank_artifacts1);
 // The following code is simple to show off interacting with your contracts.
 // As your needs grow you will likely need to change its form and structure.
 // For application bootstrapping, check out window.addEventListener below.
@@ -128,8 +128,13 @@ window.App = {
         $("#balance-address").hide();
         $("#spv_reg").hide();
         $('#inves_hide').hide();
-        self.get_loan_list();
+        /*Bank.deployed().then(function(instance) {
+          //bank = instance;
+          return Bank1.getLoanContract(account).then(function(addr){ $("Token-address").value=addr;
+        });
+      });*/
         
+        self.get_loan_list();
     },
     totalhide: function() {
       var self = this;
@@ -354,6 +359,7 @@ spv_list1 : function(){
     });
   },
 get_loan : function(){
+  var Token_add=$("#Token-address").val().trim();
   var loan_amount  = parseInt($("#loan-amount").val().trim());
   var loan_address = $("#loan-address").val().trim();
   var token_name=$("#token-name").val().trim();
@@ -363,7 +369,7 @@ get_loan : function(){
   var bank;
   Bank.deployed().then(function(instance) {
     bank = instance;
-    return bank.req_loan(loan_address,loan_amount,token_name,{from:account,gas: 6000000});
+    return bank.req_loan(Token_add,loan_address,loan_amount,token_name,{from:account,gas: 6000000});
   }).then(function(val) {
     $("#loan-status").html("Transaction complete!");
   }).catch(function(e) {
@@ -532,11 +538,12 @@ get_loan_list:function(){
   }).then(function(val) {
       for(var i=1;i<=val.toNumber();i++){
         bank.ln_get(account,i).then(function(data,err){
+          console.log(data)
           var myDate = new Date( (data[7].toNumber()) *1000);
           var a=(myDate.toLocaleString());
               if(data[0]>0)
                {
-          $("#get_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td id='+data[0]+'>'+data[3]+'</td><td>'+data[4]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td>'+data[6]+'</td><td>'+a.split(',')[0]+'</td><td>'+data[9]+'</td><td>'+web3.fromWei(data[10].toNumber(), "ether")+'</td><td id="month_ins">'+web3.fromWei(data[11].toNumber(), "ether")+'</td><td><input class="btn btn-success form-control" id="due-bank" value="Payment" onclick="App.pay_due('+data[0]+','+web3.fromWei(data[11].toNumber(), "ether")+');"></td></tr>');
+          $("#get_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[13]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td id='+data[0]+'>'+data[3]+'</td><td>'+data[4]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td>'+data[6]+'</td><td>'+a.split(',')[0]+'</td><td>'+data[9]+'</td><td>'+web3.fromWei(data[10].toNumber(), "ether")+'</td><td id="month_ins">'+web3.fromWei(data[11].toNumber(), "ether")+'</td><td><input class="btn btn-success form-control" id="due-bank" value="Payment" onclick="App.pay_due('+data[0]+','+web3.fromWei(data[11].toNumber(), "ether")+');"></td></tr>');
                 }
         });
       }
@@ -574,7 +581,7 @@ spvloan_tbody:function(fi){
   }).then(function(val) {
       for(var i=1;i<=val.toNumber();i++){
         bank.filn_get(address,i).then(function(data,err){
-          $("#spvloan_tbody").append('<tr><td>'+data[0]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td></tr>');
+          $("#spvloan_tbody").append('<tr><td>'+data[0]+'</td><td>'+data[13]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td></tr>');
         });
       }
   });
@@ -590,7 +597,7 @@ spv_tbody:function(){
       for(var i=1;i<=val.toNumber();i++){
         bank.spvln_get(account,i).then(function(data,err){
           
-          $("#spv_tbody").append('<tr><td>'+data[12]+'</td><td>'+data[0]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td></tr>');
+          $("#spv_tbody").append('<tr><td>'+data[12]+'</td><td>'+data[0]+'</td><td>'+data[13]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td></tr>');
         });
       }
   });
@@ -662,7 +669,7 @@ fi_loan_list:function(){
           var myDate = new Date( (data[7].toNumber()) *1000);
           var a=(myDate.toLocaleString());
 
-          $("#fi_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+data[4]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td>'+data[6]+'</td><td>'+a.split(',')[0]+'</td><td>'+data[9]+'</td><td>'+web3.fromWei(data[10].toNumber(), "ether")+'</td><td id="month_ins">'+web3.fromWei(data[11].toNumber(), "ether")+'</td></tr>');
+          $("#fi_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[13]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+data[4]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td>'+data[6]+'</td><td>'+a.split(',')[0]+'</td><td>'+data[9]+'</td><td>'+web3.fromWei(data[10].toNumber(), "ether")+'</td><td id="month_ins">'+web3.fromWei(data[11].toNumber(), "ether")+'</td></tr>');
         });
       }
   });
