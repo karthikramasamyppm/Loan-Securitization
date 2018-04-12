@@ -7,10 +7,10 @@ import { default as contract } from 'truffle-contract'
 
 // Import our contract artifacts and turn them into usable abstractions.
 import bank_artifacts from '../../build/contracts/Financial.json'
-import bank_artifacts1 from '../../build/contracts/LoanToken.json'
+
 // MetaCoin is our usable abstraction, which we'll use through the code below.
 var Bank = contract(bank_artifacts);
-var Bank1=contract(bank_artifacts1);
+
 // The following code is simple to show off interacting with your contracts.
 // As your needs grow you will likely need to change its form and structure.
 // For application bootstrapping, check out window.addEventListener below.
@@ -78,32 +78,59 @@ window.App = {
     }).then(function(val) {
       //console.log(val);
       if (val == true) {
-        $("#lending_hide").show();
+        $("#lending_hide").hide();
         $("#reg_bank").hide();
         $('#due_set').hide();
         $('#spvdetail_hide').hide();
+        $('#spvdetail_hide1').hide();
         $('#get_loan_hide').hide();
         $('#spv_hide').hide();
         $('#borrrow_hide').hide();
-        $('#fi_hide').show();
         $('#fidetail_hide').show();
         $("#bank-info").show();
         $("#balance-address").show();
+        $("#purchase_set").hide();
+        $("#fi_hide").show();
+        $("#inves_hide").hide();
+        $("#spvdetail").hide();
+        $("#create_pack").hide();
+        $("#purchase_pack").hide();
+        $("#invester_pack_details").hide();
+        $("#spv_pack").hide();
+        $("#spv_loan_detail").hide();
+        $("#investor_detail").hide();
+        $("#spv_deta").hide();
+        $("#spv_reg").hide();
+        $("#spv_packdetail").hide();
+        $("#fidetail_hide1").hide();
         self.fi_loan_list();
         $("#bank-info").html("This Financial Institute has registered");
       } else {
         $("#lending_hide").hide();
-        $("#reg_bank").show();
-        $('#due_set').hide();
-        $('#spvdetail_hide').hide();
-        $('#get_loan_hide').hide();
-        $('#spv_hide').hide();
-        $('#borrrow_hide').hide();
-        $('#fidetail_hide').hide();
-        $("#bank-info").show();
-        $("#balance-address").show();
-        $("#bank-info").html("This Financial Institute has not registered");
-      }
+          $("#reg_bank").show();
+          $('#due_set').hide();
+          $('#spvdetail_hide').hide();
+          $('#spvdetail_hide1').hide();
+          $('#get_loan_hide').hide();
+          $('#spv_hide').hide();
+          $('#borrrow_hide').hide();
+          $('#fidetail_hide').hide();
+          $("#bank-info").show();
+          $("#balance-address").show();
+          $("#purchase_set").hide();
+          $("#fi_hide").hide();
+          $("#inves_hide").hide();
+          $("#spvdetail").hide();
+          $("#create_pack").hide();
+          $("#purchase_pack").hide();
+          $("#invester_pack_details").hide();
+          $("#spv_pack").hide();
+          $("#spv_loan_detail").hide();
+          $("#investor_detail").hide();
+          $("#spv_deta").hide();
+          $("#spv_reg").hide();
+          $("#spv_packdetail").hide();
+          $("#fidetail_hide1").hide();      }
       return bank.fetchBalance(account);
     }).then(function(val) {
      $("#balance-address").html("This Financial Institute's balance is " +web3.fromWei(val.toNumber(), "ether"));
@@ -116,25 +143,32 @@ window.App = {
         var self = this;
     
         $("#lending_hide").hide();
-        $("#reg_bank").hide();
-        $('#due_set').show();
-        $('#spvdetail_hide').remove();
-        $('#get_loan_hide').show();
-        $('#spv_hide').hide();
-        $('#borrrow_hide').show();
-        $('#purchase_set').hide();
-        $('#fidetail_hide').show();
-        $("#bank-info").hide();
-        $("#balance-address").hide();
-        $("#spv_reg").hide();
-        $('#inves_hide').hide();
-        /*Bank.deployed().then(function(instance) {
-          //bank = instance;
-          return Bank1.getLoanContract(account).then(function(addr){ $("Token-address").value=addr;
-        });
-      });*/
-        
+          $("#reg_bank").hide();
+          $('#due_set').show();
+          $('#spvdetail_hide').hide();
+          $('#spvdetail_hide1').hide();
+          $('#get_loan_hide').show();
+          $('#spv_hide').hide();
+          $('#borrrow_hide').show();
+          $('#fidetail_hide').show();
+          $("#bank-info").hide();
+          $("#balance-address").hide();
+          $("#purchase_set").hide();
+          $("#fi_hide").hide();
+          $("#inves_hide").hide();
+          $("#spvdetail").hide();
+          $("#create_pack").hide();
+          $("#purchase_pack").hide();
+          $("#invester_pack_details").hide();
+          $("#spv_pack").hide();
+          $("#spv_loan_detail").hide();
+          $("#investor_detail").hide();
+          $("#spv_deta").hide();
+          $("#spv_reg").hide();
+          $("#spv_packdetail").hide();
+          $("#fidetail_hide1").hide();
         self.get_loan_list();
+        
     },
     totalhide: function() {
       var self = this;
@@ -160,8 +194,6 @@ window.App = {
           $("#fi_hide").hide();
           $("#inves_hide").hide();
           $("#spvdetail").hide();
-          $("#choosefi").hide();
-          $("#choosespv").hide();
           $("#create_pack").hide();
           $("#purchase_pack").hide();
           $("#invester_pack_details").hide();
@@ -191,32 +223,54 @@ window.App = {
         $("#reg_bank").hide();
         $('#due_set').hide();
         $('#spvdetail_hide').show();
+        $('#spvdetail_hide1').hide();
         $('#get_loan_hide').hide();
         $('#spv_hide').hide();
-        $('#spv_pack').show();
-        $('#spv_loan_detail').show();
-        $('#spv_deta').show();
         $('#borrrow_hide').hide();
-        $('#create_pack').show();
-        $('#choosefi').show();
-        $('#fidetail_hide1').show();
+        $('#fidetail_hide').hide();
         $("#bank-info").show();
         $("#balance-address").show();
         $("#purchase_set").show();
+        $("#fi_hide").hide();
+        $("#inves_hide").hide();
+        $("#spvdetail").hide();
+        $("#create_pack").show();
+        $("#purchase_pack").hide();
+        $("#invester_pack_details").hide();
+        $("#spv_pack").show();
+        $("#spv_loan_detail").show();
+        $("#investor_detail").hide();
+        $("#spv_deta").show();
+        $("#spv_reg").hide();
+        $("#spv_packdetail").hide();
+        $("#fidetail_hide1").show();
         $("#bank-info").html("This spv has registered");
       } else {
         $("#lending_hide").hide();
         $("#reg_bank").hide();
         $('#due_set').hide();
         $('#spvdetail_hide').hide();
+        $('#spvdetail_hide1').hide();
         $('#get_loan_hide').hide();
         $('#spv_hide').hide();
         $('#borrrow_hide').hide();
         $('#fidetail_hide').hide();
-        $("#spv_reg").show();
         $("#bank-info").show();
         $("#balance-address").show();
-        $("#bank-info").html("This spv has not registered yet");
+        $("#purchase_set").hide();
+        $("#fi_hide").hide();
+        $("#inves_hide").hide();
+        $("#spvdetail").hide();
+        $("#create_pack").hide();
+        $("#purchase_pack").hide();
+        $("#invester_pack_details").hide();
+        $("#spv_pack").hide();
+        $("#spv_loan_detail").hide();
+        $("#investor_detail").hide();
+        $("#spv_deta").hide();
+        $("#spv_reg").show();
+        $("#spv_packdetail").hide();
+        $("#fidetail_hide1").hide();        $("#bank-info").html("This spv has not registered yet");
       }
       return bank.spvBalance(account);
     }).then(function(val) {
@@ -240,34 +294,54 @@ window.App = {
         $("#lending_hide").hide();
         $("#reg_bank").hide();
         $('#due_set').hide();
+        $('#spvdetail_hide').hide();
         $('#spvdetail_hide1').show();
         $('#get_loan_hide').hide();
+        $('#spv_hide').hide();
         $('#borrrow_hide').hide();
         $('#fidetail_hide').hide();
-        $('#purchase_pack').show();
-        $('#investor_detail').show();
-        $('#invester_pack_details').show();
-        $('#choosespv').show();
         $("#bank-info").show();
-        $("#choosespv").show();
         $("#balance-address").show();
         $("#purchase_set").hide();
+        $("#fi_hide").hide();
+        $("#inves_hide").hide();
+        $("#spvdetail").hide();
+        $("#create_pack").hide();
+        $("#purchase_pack").show();
+        $("#invester_pack_details").show();
+        $("#spv_pack").hide();
+        $("#spv_loan_detail").hide();
+        $("#investor_detail").show();
+        $("#spv_deta").hide();
         $("#spv_reg").hide();
         $("#spv_packdetail").show();
-        $("#bank-info").html("This Investor has registered");
+        $("#fidetail_hide1").hide();        $("#bank-info").html("This Investor has registered");
       } else {
         $("#lending_hide").hide();
         $("#reg_bank").hide();
         $('#due_set').hide();
         $('#spvdetail_hide').hide();
+        $('#spvdetail_hide1').hide();
         $('#get_loan_hide').hide();
+        $('#spv_hide').hide();
         $('#borrrow_hide').hide();
         $('#fidetail_hide').hide();
-        $("#spv_reg").hide();
-        $('#inves_hide').show();
         $("#bank-info").show();
-        $("#spv_packdetail").hide();
         $("#balance-address").show();
+        $("#purchase_set").hide();
+        $("#fi_hide").hide();
+        $("#inves_hide").show();
+        $("#spvdetail").hide();
+        $("#create_pack").hide();
+        $("#purchase_pack").hide();
+        $("#invester_pack_details").hide();
+        $("#spv_pack").hide();
+        $("#spv_loan_detail").hide();
+        $("#investor_detail").hide();
+        $("#spv_deta").hide();
+        $("#spv_reg").hide();
+        $("#spv_packdetail").hide();
+        $("#fidetail_hide1").hide();
         $("#bank-info").html("This Investor has not registered yet");
       }
       return bank.investerBalance(account);
@@ -543,7 +617,7 @@ get_loan_list:function(){
           var a=(myDate.toLocaleString());
               if(data[0]>0)
                {
-          $("#get_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[13]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td id='+data[0]+'>'+data[3]+'</td><td>'+data[4]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td>'+data[6]+'</td><td>'+a.split(',')[0]+'</td><td>'+data[9]+'</td><td>'+web3.fromWei(data[10].toNumber(), "ether")+'</td><td id="month_ins">'+web3.fromWei(data[11].toNumber(), "ether")+'</td><td><input class="btn btn-success form-control" id="due-bank" value="Payment" onclick="App.pay_due('+data[0]+','+web3.fromWei(data[11].toNumber(), "ether")+');"></td></tr>');
+          $("#get_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[13]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td id='+data[0]+'>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td>'+data[6]+'</td><td>'+a.split(',')[0]+'</td><td>'+data[9]+'</td><td>'+web3.fromWei(data[10].toNumber(), "ether")+'</td><td id="month_ins">'+web3.fromWei(data[11].toNumber(), "ether")+'</td><td><input class="btn btn-success form-control" id="due-bank" value="Payment" onclick="App.pay_due('+data[0]+','+web3.fromWei(data[11].toNumber(), "ether")+');"></td></tr>');
                 }
         });
       }
@@ -580,7 +654,7 @@ spvloan_tbody:function(fi){
     return bank.filn_get_id(address);
   }).then(function(val) {
       for(var i=1;i<=val.toNumber();i++){
-        bank.filn_get(address,i).then(function(data,err){
+        bank.ln_get(address,i).then(function(data,err){
           $("#spvloan_tbody").append('<tr><td>'+data[0]+'</td><td>'+data[13]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td></tr>');
         });
       }
@@ -595,7 +669,7 @@ spv_tbody:function(){
     return bank. spvln_get_id(account);
   }).then(function(val) {
       for(var i=1;i<=val.toNumber();i++){
-        bank.spvln_get(account,i).then(function(data,err){
+        bank.ln_get(account,i).then(function(data,err){
           
           $("#spv_tbody").append('<tr><td>'+data[12]+'</td><td>'+data[0]+'</td><td>'+data[13]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td></tr>');
         });
@@ -611,7 +685,7 @@ spvpack_body:function(){
     return bank. spvpackid(account);
   }).then(function(val) {
       for(var i=1;i<=val.toNumber();i++){
-        bank.spvpackage(account,i).then(function(data,err){
+        bank.packagedetail(account,i).then(function(data,err){
           
           $("#spvpack_body").append('<tr><td>'+data[0]+'</td><td>'+web3.fromWei(data[1].toNumber(), "ether")+'</td></tr>');
         });
@@ -629,7 +703,7 @@ spvpackdetail_body:function(fii){
     return bank. spvpackid(address);
   }).then(function(val) {
       for(var i=1;i<=val.toNumber();i++){
-        bank.spvpackage(address,i).then(function(data,err){
+        bank.packagedetail(address,i).then(function(data,err){
           
           $("#spvpackdetail_body").append('<tr><td>'+data[0]+'</td><td>'+web3.fromWei(data[1].toNumber(), "ether")+'</td></tr>');
         });
@@ -646,7 +720,7 @@ inverstorpack_body:function(){
     return bank. investerpackid(account);
   }).then(function(val) {
       for(var i=1;i<=val.toNumber();i++){
-        bank.investerpackage(account,i).then(function(data,err){
+        bank.packagedetail(account,i).then(function(data,err){
           
           $("#inverstorpack_body").append('<tr><td>'+data[0]+'</td><td>'+web3.fromWei(data[1].toNumber(), "ether")+'</td></tr>');
         });
@@ -664,7 +738,7 @@ fi_loan_list:function(){
   }).then(function(val) {
     console.log(val.toNumber())
       for(var i=1;i<=val.toNumber();i++){
-        bank.filn_get(account,i).then(function(data,err){
+        bank.ln_get(account,i).then(function(data,err){
           //console.log(data[0])
           var myDate = new Date( (data[7].toNumber()) *1000);
           var a=(myDate.toLocaleString());

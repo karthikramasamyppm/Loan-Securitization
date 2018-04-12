@@ -1,348 +1,389 @@
-
-<!DOCTYPE html>
 <html>
-  <head>
-    <title>Loan-Securitization</title>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
-  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
-  <script src="app.js"></script>
-  </head>
-  <body onload="App.totalhide()">
-  <nav class="navbar navbar-default">
+<head>
+
+      <title>Loan-Securitization</title>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+        <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+      <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+      <script src="app.js"></script>
+      <script src="particles.min.js"></script>
+      
+<style>
+#particle 
+{
+    background-color: #008080 ;
+    position:fixed;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    z-index:0; 
+}
+
+h2,h3,th
+{
+  color: whitesmoke;
+}
+
+#balance-address,#bank-info
+{
+  color: whitesmoke;
+}
+
+
+
+#overlay 
+{
+  position: relative;
+}
+</style>
+</head>
+<body onload="App.totalhide()">
+<div id="particle"></div>
+<div id="overlay">
+
+    <nav class="navbar navbar-default">
     
+      
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">Loan-Securitization</a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li><a href="#" onclick="App.show_Balance()">Financial Institution</a></li>
+            <li><a href="#" onclick="App.borrower()">Borrower</a></li>
+            <li><a href="#" onclick="App.showspv()">SPV</a></li>
+            <li><a href="#" onclick="App.showinvester()">Inverster</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+              <li id="b_stack"></li>
+            <li><label for="account">Account<input type="text" class="form-control" id="account" readonly/></label></li>
+            <li><label for="balence">Balence in ETH<input type="text" class="form-control" id="balance" readonly/></span></label></li>
+          </ul>
+        </div>
+      </nav>
       
       <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">Loan-Securitization</a>
-        </div>
-        <ul class="nav navbar-nav">
-          <li><a href="#" onclick="App.show_Balance()">Financial Institution</a></li>
-          <li><a href="#" onclick="App.borrower()">Borrower</a></li>
-          <li><a href="#" onclick="App.showspv()">SPV</a></li>
-          <li><a href="#" onclick="App.showinvester()">Inverster</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li id="b_stack"></li>
-          <li><label for="account">Account<input type="text" class="form-control" id="account" readonly/></label></li>
-          <li><label for="balence">Balence in ETH<input type="text" class="form-control" id="balance" readonly/></span></label></li>
-        </ul>
-      </div>
-    </nav>
-    
-    <div class="container-fluid">
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="col-sm-6">
-                <div id="bank-info"></div>
-                <div id="balance-address"></div>
-                <div id="reg_bank">
-                    <h2>Register bank</h2>
-                    <input type="text" id="bank-name" placeholder="Bank Name" />
-                    <input type="text" id="loan-interest" placeholder="Loan Interest" />
-                    <input type="text" id="deposit-amount" placeholder="Deposit Amount" />
-                    <input type="text" id="duration" placeholder="Duration" />
-                    <a href="#" class="btn btn-success" onclick="App.register_bank();">Register</a>
-                  </div>
-                
-                  
-                  <br>
-                 
-                  <div class="row" id="get_loan_hide">
-                      <div>
-                          <h2>Get Loan From Financial insitute</h2>
-                          <div class="form-group col-sm-8">
-                            <input type="text" id="Token-address" class="form-control" placeholder="Token Address" />
-                        </div>
-                              <div class="form-group col-sm-8">
-                                  <input type="text" id="loan-address" class="form-control" placeholder="Bank Address" />
-                              </div>
-                               <div class="form-group col-sm-8">
-                                 <input type="text" id="loan-amount" class="form-control" placeholder="(specify No of Tokens)" />
-                               </div>
-                                <div class="form-group col-sm-8">
-                                  <input type="text" id="token-name" class="form-control" placeholder="Token Name" />
-                                </div> 
-                                <div class="form-group col-sm-8">
-                                 <input type="button" class="btn btn-success col-sm-2" onclick="App.get_loan();"  id="loan-bank" value="Get Loan"/>
-                                </div>
-                        </div>
-                 
-                         <div id="loan-status"></div>
-                  </div>    
-            </div>
-            <div class="col-sm-6" id="bank_list">
-
-            </div>    
-          </div>
-        </div>
-        <div class="row">
+          <div class="row">
             <div class="col-sm-12">
-               <div class="form-group col-sm-4" id="purchase_set">
-                  <label for="Loan_id">Purchase Loan</label>
-                  <input type="text" id="finance_add" class="col-sm-4 form-control" placeholder="Finance Address" />
-                  <input type="text" id="spvLoan_id" class="col-sm-4 form-control" placeholder="Loan ID" />
-                  <input class="btn btn-success form-control" id="purchase-bank" value="submit" onclick="App.purchase_ln();" />
-                </div>
-            </form>
+              <div class="col-sm-6">
+                  <div id="bank-info"></div>
+                  <div id="balance-address"></div>
+                  <div id="reg_bank">
+                      <h2>Register Financial insitute</h2>
+                      <input type="text" id="bank-name" placeholder="Bank Name" class="form-control"/>
+                      <input type="text" id="loan-interest" placeholder="Loan Interest" class="form-control"/>
+                      <input type="text" id="deposit-amount" placeholder="Deposit Amount" class="form-control"/>
+                      <input type="text" id="duration" placeholder="Duration" class="form-control"/>
+                      <a href="#" class="btn btn-success" onclick="App.register_bank();">Register</a>
+                    </div>
+                  
+                    
+                    <br>
+                   
+                    <div class="row" id="get_loan_hide">
+                        <div>
+                            <h2>Get Loan From Financial insitute</h2>
+                            <div class="form-group col-sm-8">
+                              <input type="text" id="Token-address" class="form-control" placeholder="Token Address" />
+                          </div>
+                                <div class="form-group col-sm-8">
+                                    <input type="text" id="loan-address" class="form-control" placeholder="Bank Address" />
+                                </div>
+                                 <div class="form-group col-sm-8">
+                                   <input type="text" id="loan-amount" class="form-control" placeholder="(specify No of Tokens)" />
+                                 </div>
+                                  <div class="form-group col-sm-8">
+                                    <input type="text" id="token-name" class="form-control" placeholder="Token Name" />
+                                  </div> 
+                                  <div class="form-group col-sm-8">
+                                   <input type="button" class="btn btn-success col-sm-2" onclick="App.get_loan();"  id="loan-bank" value="Get Loan"/>
+                                  </div>
+                          </div>
+                   
+                           <div id="loan-status"></div>
+                    </div>    
+              </div>
+              <div class="col-sm-6" id="bank_list">
+  
+              </div>    
+            </div>
           </div>
-                <div class="row">
-                  <div class="col-sm-12">
-                      
-                      <div class="col-sm-4" id="spvdetail_hide">
-                          <h2>SPV Details</h2>
-                          <table class="table table-striped">
-                            <thead>
-                              <tr>
-                                <th>SPV Address</th>
-                                <th>Total Amount</th>
-                                <th>Total Loan</th>
-                                <th>Available pack</th>
-                              </tr>
-                            </thead>
-                            <tbody id="spv_list">
-      
-                            </tbody>
-                        </table>
-                      </div>
-                      <div class="row">
-                        <div class="col-sm-12">
-                            
-                            <div class="col-sm-4" id="spvdetail_hide1">
-                                <h2>SPV Details</h2>
-                                <table class="table table-striped">
-                                  <thead>
-                                    <tr>
-                                      <th>SPV Address</th>
-                                      <th>Total Amount</th>
-                                      <th>Total Loan</th>
-                                      <th>Available pack</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody id="spv_list1">
-            
-                                  </tbody>
-                              </table>
-                            </div>
-                     
-                      <div class="col-sm-4" id="fidetail_hide">
-                          <h2>Financial Institute Details</h2>
-                          <table class="table table-striped">
-                            <thead>
-                              <tr>
-                                <th>Financial Institute Address</th>
-                                <th>Bank Name</th><th>Balance</th>
-                                <th>Fixed Int.</th>
-                              </tr>
-                            </thead>
-                            <tbody id="body_bank">
-                             </tbody>
-                            </table>
-                      </div>
+          <div class="row">
+              <div class="col-sm-12">
+                 <div class="form-group col-sm-4" id="purchase_set">
+                    <h3>Purchase Loan</h3>
+                    <input type="text" id="finance_add" class="col-sm-4 form-control" placeholder="Finance Address" />
+                    <input type="text" id="spvLoan_id" class="col-sm-4 form-control" placeholder="Loan ID" />
+                    <input class="btn btn-success form-control" id="purchase-bank" value="submit" onclick="App.purchase_ln();" />
+                  </div>
+              </form>
             </div>
-        </div>
-        <div class="col-sm-4" id="fidetail_hide1">
-          <h2>Financial Institute Details</h2>
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Financial Institute Address</th>
-                <th>Bank Name</th><th>Balance</th>
-                <th>Fixed Int.</th>
-              </tr>
-            </thead>
-            <tbody id="body1_bank">
-             </tbody>
-            </table>
-      </div>
-</div>
-</div>
-        <div class="row">
-          <div class="col-sm-12" id="borrrow_hide">
-            <h2>Borrowing Loan Details</h2>
-            <table class="table table-striped" id=mon_th>
-                <thead>
-                  <tr>
-                    <th>Loan Id</th>
-                    <th>Token Address</th>
-                    <th>token value</th>
-                    <th>token name</th>
-                    <th>Bank Address</th>
-                    <th>Borrower Address</th>
-                    <th>Total Amount</th>
-                    <th>Total Paid Ins.</th>
-                    <th>Last Paid</th>
-                    <th>Total Months</th>
-                    <th>Balance Loan</th>
-                    <th>Balance Installment</th>
-                  </tr>
-                </thead>
-                <tbody id="get_loan_list">
-
-                </tbody>
-              </table>
-          </div>  
-        </div>
-        <div class="row">
-          <div class="col-sm-12" id="fi_hide">
-            <h2>Fi Loan Details</h2>
-            <table class="table table-striped" id=mon_th>
-                <thead>
-                  <tr>
-                    <th>Loan Id</th>
-                    <th>Token Address</th>
-                    <th>token value</th>
-                    <th>token name</th>
-                    <th>Bank Address</th>
-                    <th>Borrower Address</th>
-                    <th>Total Amount</th>
-                    <th>Total Paid Ins.</th>
-                    <th>Last Paid</th>
-                    <th>Total Months</th>
-                    <th>Balance Loan</th>
-                    <th>Balance Installment</th>
-                  </tr>
-                </thead>
-                <tbody id="fi_loan_list">
-
-                </tbody>
-              </table>
-          </div>  
-        </div>
-
+                  <div class="row">
+                    <div class="col-sm-12">
+                        
+                        <div class="col-sm-4" id="spvdetail_hide">
+                            <h2>SPV Details</h2>
+                            <table class="table table-hover">
+                              <thead>
+                                <tr>
+                                  <th>SPV Address</th>
+                                  <th>Total Amount</th>
+                                  <th>Total Loan</th>
+                                  <th>Available pack</th>
+                                </tr>
+                              </thead>
+                              <tbody id="spv_list">
         
-       
-
-            <div class="form-group col-sm-4" id="spv_reg">
-                <h3>SPV Details</h3>
-                <input type="text" id="spv_ehter_value" class="form-control" placeholder="SPV Ethers" />
-                <input class="btn btn-success form-control" id="salling" value="SPV Register" onclick="App.sale_loan();" />
-            </div>
-            <div class="row">
-              <div class="col-sm-4" id="spv_deta">
-                <h2>SPV  Details</h2>
-                <table class="table table-striped" id="spvloan_table">
-                    <thead>
-                      <tr>
-                        <th>Loan Id</th>
-                        <th>token address</th>
-                        <th>token value</th>
-                        <th>token name</th>
-                        <th>Bank Address</th>
-                        <th>Total Amount</th>
-                      </tr>
-                    </thead>
-                    <tbody id="spvloan_tbody">
-    
-                    </tbody>
-                  </table>
-              </div>  
-            </div>
-            <div class="row">
-              <div class="col-sm-4" id="investor_detail">
-                <h2>Investor  Details</h2>
-                <table class="table table-striped" id="invesdetai_table">
-                    <thead>
-                      <tr>
-                        <th>Investor Address</th>
-                        <th>Total Amount</th>
-                        <th>Package</th>
-                      </tr>
-                    </thead>
-                    <tbody id="invesdetail_tbody">
-    
-                    </tbody>
-                  </table>
-              </div>  
-            </div>
-            <div class="row">
-              <div class="col-sm-4" id="spv_loan_detail">
-                <h2>SPV Loan Details</h2>
-                <table class="table table-striped" id="spv_table1">
-                    <thead>
-                      <tr>
-                        <th>SPV id</th>
-                        <th>Loan Id</th>
-                        <th>token address</th>
-                        <th>token value</th>
-                        <th>token name</th>
-                        <th>Bank Address</th>
-                        <th>Total Amount</th>
-                      </tr>
-                    </thead>
-                    <tbody id="spv_tbody">
-    
-                    </tbody>
-                  </table>
-              </div>  
-            </div>
-
-            <div class="row">
-                <div class="col-sm-4" id="spv_pack">
-                  <h2>SPV package details</h2>
-                  <table class="table table-striped" id="invester_cls">
-                      <thead>
-                        <tr>
-                          <th>Package Id</th>
-                          <th>token value</th>
-                        </tr>
-                      </thead>
-                      <tbody id="spvpack_body">
-      
-                      </tbody>
-                    </table>
-                </div>  
-              </div>
-              <div class="row">
-                <div class="col-sm-4" id="spv_packdetail">
-                  <h2>SPV package details</h2>
-                  <table class="table table-striped" id="invester_cls">
-                      <thead>
-                        <tr>
-                          <th>Package</th>
-                          <th>token value</th>
-                        </tr>
-                      </thead>
-                      <tbody id="spvpackdetail_body">
-      
-                      </tbody>
-                    </table>
-                </div>  
-              </div>
+                              </tbody>
+                          </table>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-12">
+                              
+                              <div class="col-sm-4" id="spvdetail_hide1">
+                                  <h2>SPV Details</h2>
+                                  <table class="table table-hover">
+                                    <thead>
+                                      <tr>
+                                        <th>SPV Address</th>
+                                        <th>Total Amount</th>
+                                        <th>Total Loan</th>
+                                        <th>Available pack</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="spv_list1">
               
+                                    </tbody>
+                                </table>
+                              </div>
+                       
+                        <div class="col-sm-4" id="fidetail_hide">
+                            <h2>Financial Institute Details</h2>
+                            <table class="table table-hover">
+                              <thead>
+                                <tr>
+                                  <th>Financial Institute Address</th>
+                                  <th>Bank Name</th><th>Balance</th>
+                                  <th>Fixed Int.</th>
+                                </tr>
+                              </thead>
+                              <tbody id="body_bank">
+                               </tbody>
+                              </table>
+                        </div>
+              </div>
+          </div>
+          <div class="col-sm-4" id="fidetail_hide1">
+            <h2>Financial Institute Details</h2>
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Financial Institute Address</th>
+                  <th>Bank Name</th><th>Balance</th>
+                  <th>Fixed Int.</th>
+                </tr>
+              </thead>
+              <tbody id="body1_bank">
+               </tbody>
+              </table>
+        </div>
+  </div>
+  </div>
+          <div class="row">
+            <div class="col-sm-12" id="borrrow_hide">
+              <h2>Borrowing Loan Details</h2>
+              <table class="table table-hover" id=mon_th>
+                  <thead>
+                    <tr>
+                      <th>Loan Id</th>
+                      <th>Token Address</th>
+                      <th>Token value</th>
+                      <th>Token name</th>
+                      <th>Bank Address</th>
+                      <!-- <th>Borrower Address</th> -->
+                      <th>Total Amount</th>
+                      <th>Total Paid Ins.</th>
+                      <th>Last Paid</th>
+                      <th>Total Months</th>
+                      <th>Balance Loan</th>
+                      <th>Balance Installment</th>
+                    </tr>
+                  </thead>
+                  <tbody id="get_loan_list">
+  
+                  </tbody>
+                </table>
+            </div>  
+          </div>
+          <div class="row">
+            <div class="col-sm-12" id="fi_hide">
+              <h2>Financial Institute Loan Details</h2>
+              <table class="table table-hover" id=mon_th>
+                  <thead>
+                    <tr>
+                      <th>Loan Id</th>
+                      <th>Token Address</th>
+                      <th>token value</th>
+                      <th>token name</th>
+                      <th>Bank Address</th>
+                      <th>Borrower Address</th>
+                      <th>Total Amount</th>
+                      <th>Total Paid Ins.</th>
+                      <th>Last Paid</th>
+                      <th>Total Months</th>
+                      <th>Balance Loan</th>
+                      <th>Balance Installment</th>
+                    </tr>
+                  </thead>
+                  <tbody id="fi_loan_list">
+  
+                  </tbody>
+                </table>
+            </div>  
+          </div>
+  
+          
+         
+  
+              <div class="form-group col-sm-4" id="spv_reg">
+                  <h3>SPV Details</h3>
+                  <input type="text" id="spv_ehter_value" class="form-control" placeholder="SPV Ethers" />
+                  <input class="btn btn-success form-control" id="salling" value="SPV Register" onclick="App.sale_loan();" />
+              </div>
               <div class="row">
-                  <div class="col-sm-4" id="invester_pack_details">
-                    <h2>Inverster Package Details</h2>
-                    <table class="table table-striped" id="inves_loan_table">
+                <div class="col-sm-4" id="spv_deta">
+                  <h2>FI Loan Details</h2>
+                  <table class="table table-hover" id="spvloan_table">
+                      <thead>
+                        <tr>
+                          <th>Loan Id</th>
+                          <th>token address</th>
+                          <th>Token Value</th>
+                          <th>Token Name</th>
+                          <th>Bank Address</th>
+                          <th>Total Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody id="spvloan_tbody">
+      
+                      </tbody>
+                    </table>
+                </div>  
+              </div>
+              <div class="row">
+                <div class="col-sm-4" id="investor_detail">
+                  <h2>Investor  Details</h2>
+                  <table class="table table-hover" id="invesdetai_table">
+                      <thead>
+                        <tr>
+                          <th>Investor Address</th>
+                          <th>Total Amount</th>
+                          <th>Package</th>
+                        </tr>
+                      </thead>
+                      <tbody id="invesdetail_tbody">
+      
+                      </tbody>
+                    </table>
+                </div>  
+              </div>
+              <div class="row">
+                <div class="col-sm-4" id="spv_loan_detail">
+                  <h2>SPV Loan Details</h2>
+                  <table class="table table-hover" id="spv_table1">
+                      <thead>
+                        <tr>
+                          <th>SPV id</th>
+                          <th>Loan Id</th>
+                          <th>Token address</th>
+                          <th>Token value</th>
+                          <th>Token name</th>
+                          <th>Bank Address</th>
+                          <th>Total Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody id="spv_tbody">
+      
+                      </tbody>
+                    </table>
+                </div>  
+              </div>
+  
+              <div class="row">
+                  <div class="col-sm-4" id="spv_pack">
+                    <h2>SPV package details</h2>
+                    <table class="table table-hover" id="invester_cls">
+                        <thead>
+                          <tr>
+                            <th>Package Id</th>
+                            <th>token value</th>
+                          </tr>
+                        </thead>
+                        <tbody id="spvpack_body">
+        
+                        </tbody>
+                      </table>
+                  </div>  
+                </div>
+                <div class="row">
+                  <div class="col-sm-4" id="spv_packdetail">
+                    <h2>SPV package details</h2>
+                    <table class="table table-hover" id="invester_cls">
                         <thead>
                           <tr>
                             <th>Package</th>
-                            <th>token value</th>            
+                            <th>Token value</th>
                           </tr>
                         </thead>
-                        <tbody id="inverstorpack_body">
+                        <tbody id="spvpackdetail_body">
         
                         </tbody>
                       </table>
                   </div>  
                 </div>
                 
-                <div class="form-group col-sm-4"id="inves_hide">
-                    <h3>Investor details</h3>
-                    <input type="text" id="invester_ether_value" class="form-control" placeholder="Invester Ethers"/>
-                    <input class="btn btn-success form-control" id="Investor" value="Register" onclick="App.Register();" />
-                </div>
-               
-            <div class="form-group col-sm-4" id="create_pack">
-              <h3>Create Pack</h3>
-              <input type="text" id="spv_id" class="form-control" placeholder="SPV Id"/>
-              <input class="btn btn-success form-control" id="Investor" value="Submit" onclick="App.create_pack();" />
+                <div class="row">
+                    <div class="col-sm-4" id="invester_pack_details">
+                      <h2>Inverster Package Details</h2>
+                      <table class="table table-hover" id="inves_loan_table">
+                          <thead>
+                            <tr>
+                              <th>Package</th>
+                              <th>token value</th>            
+                            </tr>
+                          </thead>
+                          <tbody id="inverstorpack_body">
+          
+                          </tbody>
+                        </table>
+                    </div>  
+                  </div>
+                  
+                  <div class="form-group col-sm-4"id="inves_hide">
+                      <h3>Investor details</h3>
+                      <input type="text" id="invester_ether_value" class="form-control" placeholder="Invester Ethers"/>
+                      <input class="btn btn-success form-control" id="Investor" value="Register" onclick="App.Register();" />
+                  </div>
+                 
+              <div class="form-group col-sm-4" id="create_pack">
+                <h3>Create Pack</h3>
+                <input type="text" id="spv_id" class="form-control" placeholder="SPV Id"/>
+                <input class="btn btn-success form-control" id="Investor" value="Submit" onclick="App.create_pack();" />
+            </div>
+            <div class="form-group col-sm-4" id="purchase_pack">
+              <h3>Purchase Pack</h3>
+              <input type="text" id="spv_add" class="form-control" placeholder="SPV Adress"/>
+              <input type="text" id="pack_id" class="form-control" placeholder="Pack Id"/>
+              <input class="btn btn-success form-control" id="Investor" value="Submit" onclick="App.purchase_pack();" />
           </div>
-          <div class="form-group col-sm-4" id="purchase_pack">
-            <h3>Purshase Pack</h3>
-            <input type="text" id="spv_add" class="form-control" placeholder="SPV Adress"/>
-            <input type="text" id="pack_id" class="form-control" placeholder="Pack Id"/>
-            <input class="btn btn-success form-control" id="Investor" value="Submit" onclick="App.purchase_pack();" />
-        </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+  var options = {"particles":{"number":{"value":99,"density":{"enable":true,"value_area":552.4033491425909}},"color":{"value":"#ffffff"},"shape":{"type":"circle","stroke":{"width":0,"color":"#000000"},"polygon":{"nb_sides":3},"image":{"src":"img/github.svg","width":70,"height":100}},"opacity":{"value":1,"random":true,"anim":{"enable":false,"speed":1,"opacity_min":0.1,"sync":false}},"size":{"value":2,"random":true,"anim":{"enable":false,"speed":40,"size_min":0.1,"sync":false}},"line_linked":{"enable":false,"distance":150,"color":"#ffffff","opacity":0.4,"width":1},"move":{"enable":true,"speed":1.5782952832645452,"direction":"none","random":true,"straight":false,"out_mode":"out","bounce":false,"attract":{"enable":false,"rotateX":600,"rotateY":1200}}},"interactivity":{"detect_on":"canvas","events":{"onhover":{"enable":false,"mode":"repulse"},"onclick":{"enable":true,"mode":"repulse"},"resize":true},"modes":{"grab":{"distance":400,"line_linked":{"opacity":1}},"bubble":{"distance":400,"size":40,"duration":2,"opacity":8,"speed":3},"repulse":{"distance":200,"duration":0.4},"push":{"particles_nb":4},"remove":{"particles_nb":2}}},"retina_detect":false};
+particlesJS("particle", options);
+</script>
 </body>
 </html>

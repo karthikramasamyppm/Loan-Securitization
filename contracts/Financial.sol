@@ -1,4 +1,4 @@
-pragma solidity ^0.4.0;
+pragma solidity ^0.4.13;
 import "./LoanToken.sol";
 contract Register
 {
@@ -8,7 +8,7 @@ contract Register
         uint256 bal;
         uint256 time;
         uint256 loan_interst;
-       // mapping(address=>bool) spvList;
+   
     }
     
     mapping(address=>bank_Details) public bank_d1;
@@ -63,12 +63,6 @@ contract FinancialInst is Register
 
 contract Financial is FinancialInst
 {
-   function Financial()public payable
-   {
-
-   }
-   // uint256 total_token_value;
-    //uint256[] total_token;
     uint256 public loan_id = 0;
     struct loan_get
     { 
@@ -89,8 +83,7 @@ contract Financial is FinancialInst
     }
     
     mapping (address=>mapping(uint256=>loan_get))public ln_get;
-    mapping (address=>mapping(uint256=>loan_get))public spvln_get;
-    mapping (address=>mapping(uint256=>loan_get))public filn_get;
+   
     mapping(address=>uint256)public ln_get_id;
     mapping(address=>uint256)public filn_get_id;
     mapping(address=>uint256)public spvln_get_id;
@@ -109,10 +102,9 @@ contract Financial is FinancialInst
     
      address public spv_add;
      address public investor_add;
-     //address[] public spv_borrow_address;
+    
      uint256 public spvloanid=0;
-     //uint256[] public spv_loanid;
-     //uint256[] public spv_token;
+     
      struct spv_detail
         {
             
@@ -127,31 +119,26 @@ contract Financial is FinancialInst
         {
         uint256 package_id;
         uint256 totalvalue;
+        uint256 totalloan;
         }
         uint256 public packageid=0;
         uint256 public invespackid=0;
         
-         mapping (address=>mapping(uint256=>package))public spvpackage;
-         mapping (address=>mapping(uint256=>package))public investerpackage;
+         mapping (address=>mapping(uint256=>package))public packagedetail;
+        
     struct Investor
         {
             uint256 Investor_ether;
             uint256 Investor_package;
-            //mapping(address=>bool)investorsList;
+            
         }
-       // mapping(address=>bool) investorsList;
+      
     
     
      mapping(address=>spv_detail)public spv_details;
      uint256 spv_loan_count;
      mapping(address=>Investor)public investor_details;
-     //address public FI;
-    // address public choosespvadd;
-   // address[] cust;
-    //mapping(address=>uint256) tknValue;
-   // uint256[] public Token_count;
-   // mapping(uint256=>mapping(uint256=>uint256))public packs;
-    //uint256[] public pack;
+    
         
     function req_loan(address _token,address bank_address,uint256 tokenvalue,string tokensymbol) public payable   // add token_symbol
     {   
@@ -190,28 +177,26 @@ contract Financial is FinancialInst
         ln_get[msg.sender][ln_get_id[msg.sender]].borr_address=msg.sender;
         
         
-        filn_get[bank_address][filn_get_id[bank_address]].bank_address = bank_address;
-        filn_get[bank_address][filn_get_id[bank_address]].amount = amt;
-        filn_get[bank_address][filn_get_id[bank_address]].months=12;
-        filn_get[bank_address][filn_get_id[bank_address]].time=now;
-        filn_get[bank_address][filn_get_id[bank_address]].last_setl_time=now;
-        filn_get[bank_address][filn_get_id[bank_address]].installment=(amt)/(12);
-        filn_get[bank_address][filn_get_id[bank_address]].bal_ln = amt;
-        filn_get[bank_address][filn_get_id[bank_address]].id = ln_get_id[msg.sender];
+       ln_get[bank_address][filn_get_id[bank_address]].bank_address = bank_address;
+        ln_get[bank_address][filn_get_id[bank_address]].amount = amt;
+        ln_get[bank_address][filn_get_id[bank_address]].months=12;
+        ln_get[bank_address][filn_get_id[bank_address]].time=now;
+        ln_get[bank_address][filn_get_id[bank_address]].last_setl_time=now;
+        ln_get[bank_address][filn_get_id[bank_address]].installment=(amt)/(12);
+        ln_get[bank_address][filn_get_id[bank_address]].bal_ln = amt;
+        ln_get[bank_address][filn_get_id[bank_address]].id = ln_get_id[msg.sender];
         loanDetais[ln_get_id[msg.sender]]=msg.sender;
        
-        filn_get[bank_address][filn_get_id[bank_address]].token = tokenvalue;
-        filn_get[bank_address][filn_get_id[bank_address]].token_symbol = tokensymbol;
-        filn_get[bank_address][filn_get_id[bank_address]].token_address = _token;
+        ln_get[bank_address][filn_get_id[bank_address]].token = tokenvalue;
+        ln_get[bank_address][filn_get_id[bank_address]].token_symbol = tokensymbol;
+        ln_get[bank_address][filn_get_id[bank_address]].token_address = _token;
       
-        filn_get[bank_address][filn_get_id[bank_address]].borr_address=msg.sender;
+        ln_get[bank_address][filn_get_id[bank_address]].borr_address=msg.sender;
         
         
-         //total_token_value += tokenvalue;
-        // total_token.push(ln_get[msg.sender][ln_get_id[msg.sender]].token);
+      
          msg.sender.transfer(amt * 1 wei);
-        // cust.push(msg.sender);
-        //tknValue[msg.sender]=tokenvalue;
+       
     }
     
      function balanceOftoken(address _token) public view returns(uint){
@@ -234,11 +219,11 @@ contract Financial is FinancialInst
         uint amt=( temp_bal_ln * (intr/100) ) ;
        uint256 amont=temp_ins+amt;
         ln_get[msg.sender][ln_id].last_setl_time = temp_last +1 minutes;//30 days;
-        filn_get[fiaddress][ln_id].last_setl_time = temp_last +1 minutes;//30 days;
+        ln_get[fiaddress][ln_id].last_setl_time = temp_last +1 minutes;//30 days;
         ln_get[msg.sender][ln_id].bal_ln-=temp_ins;
-        filn_get[fiaddress][ln_id].bal_ln-=temp_ins;
+        ln_get[fiaddress][ln_id].bal_ln-=temp_ins;
         ln_get[msg.sender][ln_id].count++;
-        filn_get[fiaddress][ln_id].count++;
+        ln_get[fiaddress][ln_id].count++;
        if(sefi==1&&sespv==1&&seinv==0)
         {
         bank_take_interest=(amont *10)/100;
@@ -266,7 +251,7 @@ contract Financial is FinancialInst
         }
          }
          
-         
+         mapping(uint256 => mapping(uint256 =>uint256))packageivd;
     function SPV_ether()public payable returns(string)
         {
             spv_add = msg.sender;
@@ -296,10 +281,7 @@ contract Financial is FinancialInst
         return spv_details[_spv].initial_spv_ether;
     }
 
-/*function choosefinanceinstute(address choosefi)public
-{
-    FI=choosefi;
-}*/
+
      function purchase_loan(uint256[] loanId,address FI)public payable returns(bool)    //purchase_loan(uint256 loan_id[])
         {
              require(spv_reg[0]==msg.sender);
@@ -310,27 +292,26 @@ contract Financial is FinancialInst
              
                 spvloanid++;
                 spvln_get_id[msg.sender] = spvloanid;
-        spvln_get[msg.sender][spvln_get_id[msg.sender]].spvid=spvln_get_id[msg.sender];
-        spvln_get[msg.sender][spvln_get_id[msg.sender]].bank_address = filn_get[FI][loanId[a]].bank_address;
-        spvln_get[msg.sender][spvln_get_id[msg.sender]].amount = filn_get[FI][loanId[a]].amount;
-        spvln_get[msg.sender][spvln_get_id[msg.sender]].months=filn_get[FI][loanId[a]].months;
-        spvln_get[msg.sender][spvln_get_id[msg.sender]].time=filn_get[FI][loanId[a]].time;
-        spvln_get[msg.sender][spvln_get_id[msg.sender]].last_setl_time=filn_get[FI][loanId[a]].last_setl_time;
-        spvln_get[msg.sender][spvln_get_id[msg.sender]].installment=filn_get[FI][loanId[a]].installment;
-        spvln_get[msg.sender][spvln_get_id[msg.sender]].bal_ln = filn_get[FI][loanId[a]].bal_ln;
-        spvln_get[msg.sender][spvln_get_id[msg.sender]].id =filn_get[FI][loanId[a]].id;
+        ln_get[msg.sender][spvln_get_id[msg.sender]].spvid=spvln_get_id[msg.sender];
+        ln_get[msg.sender][spvln_get_id[msg.sender]].bank_address = ln_get[FI][loanId[a]].bank_address;
+        ln_get[msg.sender][spvln_get_id[msg.sender]].amount = ln_get[FI][loanId[a]].amount;
+        ln_get[msg.sender][spvln_get_id[msg.sender]].months=ln_get[FI][loanId[a]].months;
+        ln_get[msg.sender][spvln_get_id[msg.sender]].time=ln_get[FI][loanId[a]].time;
+        ln_get[msg.sender][spvln_get_id[msg.sender]].last_setl_time=ln_get[FI][loanId[a]].last_setl_time;
+        ln_get[msg.sender][spvln_get_id[msg.sender]].installment=ln_get[FI][loanId[a]].installment;
+        ln_get[msg.sender][spvln_get_id[msg.sender]].bal_ln = ln_get[FI][loanId[a]].bal_ln;
+        ln_get[msg.sender][spvln_get_id[msg.sender]].id =ln_get[FI][loanId[a]].id;
         loanDetais[ln_get_id[msg.sender]]=msg.sender;
-        spvln_get[msg.sender][spvln_get_id[msg.sender]].token_address =filn_get[FI][loanId[a]].token_address;
-        spvln_get[msg.sender][spvln_get_id[msg.sender]].token =filn_get[FI][loanId[a]].token;
-        spvln_get[msg.sender][spvln_get_id[msg.sender]].token_symbol =filn_get[FI][loanId[a]].token_symbol;
-        spvln_get[msg.sender][spvln_get_id[msg.sender]].token_address =filn_get[FI][loanId[a]].token_address;
-        spvln_get[msg.sender][spvln_get_id[msg.sender]].borr_address=filn_get[FI][loanId[a]].borr_address;
+        ln_get[msg.sender][spvln_get_id[msg.sender]].token_address =ln_get[FI][loanId[a]].token_address;
+        ln_get[msg.sender][spvln_get_id[msg.sender]].token =ln_get[FI][loanId[a]].token;
+        ln_get[msg.sender][spvln_get_id[msg.sender]].token_symbol =ln_get[FI][loanId[a]].token_symbol;
+        ln_get[msg.sender][spvln_get_id[msg.sender]].token_address =ln_get[FI][loanId[a]].token_address;
+        ln_get[msg.sender][spvln_get_id[msg.sender]].borr_address=ln_get[FI][loanId[a]].borr_address;
            
-        spv_details[msg.sender].initial_spv_ether-=filn_get[FI][loanId[a]].amount;
+        spv_details[msg.sender].initial_spv_ether-=ln_get[FI][loanId[a]].amount;
          
-        bank_d1[FI].bal+=filn_get[FI][loanId[a]].amount;
-            
-      // ERC20(spvln_get[msg.sender][spvln_get_id[msg.sender]].token_address).transferFrom(FI,msg.sender, spvln_get[msg.sender][spvln_get_id[msg.sender]].token);
+        bank_d1[FI].bal+=ln_get[FI][loanId[a]].amount;
+           LoanToken(ln_get[FI][loanId[a]].token_address).transferFrom(FI,msg.sender,ln_get[FI][loanId[a]].token);  
     
           
         }
@@ -352,39 +333,41 @@ contract Financial is FinancialInst
     {
         return investor_details[_invest].Investor_ether;
     }
-       /* function choosespv(address choose_spv)public 
-          {
-             choosespvadd=choose_spv;
-              }*/
+       
 
         function createPacking(uint256[] _loanId)public //returns(uint256[])
         {
             uint256 totalTokenCost=0;
+             packageid++;
+           spvpackid[msg.sender]=packageid;
             for(uint256 a=0;a<_loanId.length;a++)
             {
-                totalTokenCost+=spvln_get[msg.sender][_loanId[a]].amount;
+                totalTokenCost+=ln_get[msg.sender][_loanId[a]].amount;
+                packageivd[packageid][a]=_loanId[a];
             }
             
-            packageid++;
-           spvpackid[msg.sender]=packageid;
             spv_details[spv_add].available_pack=packageid;
-           spvpackage[msg.sender][spvpackid[msg.sender]].package_id=spvpackid[msg.sender];
-           spvpackage[msg.sender][spvpackid[msg.sender]].totalvalue=totalTokenCost;
-          
+           packagedetail[msg.sender][spvpackid[msg.sender]].package_id=spvpackid[msg.sender];
+           packagedetail[msg.sender][spvpackid[msg.sender]].totalvalue=totalTokenCost;
+          packagedetail[msg.sender][spvpackid[msg.sender]].totalloan=_loanId.length;
             }
         function purchase_pack(uint256[] _packindex,address choosespvadd)public
         {
                  uint256 totalpackagevalue=0;
             for(uint256 a=0;a<_packindex.length;a++)
             {
-                totalpackagevalue+=spvpackage[choosespvadd][_packindex[a]].totalvalue;
+                for(uint256 b=0;b<packagedetail[choosespvadd][_packindex[a]].totalloan;b++)
+                {
+                    LoanToken(ln_get[choosespvadd][packageivd[_packindex[a]][b]].token_address).transferFrom(choosespvadd,msg.sender, ln_get[choosespvadd][packageivd[_packindex[a]][b]].token);
+                }
+                totalpackagevalue+=packagedetail[choosespvadd][_packindex[a]].totalvalue;
             }
             invespackid++;
             investerpackid[msg.sender]=invespackid;
-            investerpackage[msg.sender][investerpackid[msg.sender]].package_id=investerpackid[msg.sender];
-            investerpackage[msg.sender][investerpackid[msg.sender]].totalvalue=totalpackagevalue;
-            spv_details[choosespvadd].initial_spv_ether+=investerpackage[msg.sender][investerpackid[msg.sender]].totalvalue;
-            investor_details[msg.sender].Investor_ether-=investerpackage[msg.sender][investerpackid[msg.sender]].totalvalue;
+            packagedetail[msg.sender][investerpackid[msg.sender]].package_id=investerpackid[msg.sender];
+            packagedetail[msg.sender][investerpackid[msg.sender]].totalvalue=totalpackagevalue;
+            spv_details[choosespvadd].initial_spv_ether+=packagedetail[msg.sender][investerpackid[msg.sender]].totalvalue;
+            investor_details[msg.sender].Investor_ether-=packagedetail[msg.sender][investerpackid[msg.sender]].totalvalue;
              investor_details[msg.sender].Investor_package=invespackid;
         }
 }

@@ -1,6 +1,5 @@
 pragma solidity ^0.4.0;
-contract ERC20  
-{
+contract ERC20  {
  
   function allowance(address owner, address spender) public view returns (uint256);
   function transferFrom(address from, address to, uint256 value) public returns (bool);
@@ -26,7 +25,7 @@ contract LoanToken
     {
         totalsupply=10000;
         balanceOf[msg.sender]=totalsupply;
-        symbol="LS-4";
+        symbol="LS-5";
         name="newtoken";
         //initialallowed=500;
         decimals=0;
@@ -81,9 +80,4 @@ contract LoanToken
     {
         return balanceOf[_addr];
     }
-    /*function getLoanContract() public returns(address)
-    {
-        address add=address(this);
-        return add;
-    }*/
 }
