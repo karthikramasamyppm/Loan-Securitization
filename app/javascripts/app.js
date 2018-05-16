@@ -86,12 +86,14 @@ window.App = {
         $("#borrower").hide();
         $('#spv_registered').hide();
         $('#invester_register').hide();
+        $("#container").hide();
         $("#a1").show();
         $("#a2").show();
         $("#a3").show();
         $("#bank-info").val("This Financial Institute has registered");
       } else {
         $("#bank-info").val("This Financial Institute has not registered");
+        $("#container").hide();
           $('#myModal').modal('show');
             }
       return bank.bank_d1(account);
@@ -114,6 +116,7 @@ window.App = {
       bank = instance;
      
     })
+        $("#container").show();
         $("#fi_registered").hide();
         $("#borrower").hide();
         $('#spv_registered').hide();
@@ -140,6 +143,7 @@ window.App = {
             $("#borrower").show();
             $('#spv_registered').hide();
             $('#invester_register').hide();
+            $("#container").hide();
             $("#a1").show();
             $("#a2").show();
             $("#a3").hide();  
@@ -156,22 +160,35 @@ window.App = {
           $("#inv").removeClass("active");
       Bank.deployed().then(function(instance) {
       bank = instance;
-      return instance.spv_details(account);
+      return instance.show_registers();
     }).then(function(val) {
-      //console.log(val);
-      if (val[0]>0) {
+      console.log(val[1].length)
+      if(val[1].length>0)
+      {
+       $.each(val[1],function(err,data){
+       // alert(val[1])
+      if (data==account) {
         $("#fi_registered").hide();
         $("#borrower").hide();
         $('#spv_registered').show();
         $('#invester_register').hide();
+        $("#container").hide();
         $("#a1").show();
         $("#a2").show();
         $("#a3").show();
         $("#bank-info").val("This SPV has registered");
       } else {
         $("#bank-info").val("This SPV has not registered");
+        $("#container").hide();
           $('#myModal1').modal('show');
             }
+          })
+        }
+        else {
+          $("#bank-info").val("This SPV has not registered");
+          $("#container").hide();
+            $('#myModal1').modal('show');
+              }
       return bank.spv_details(account);
     }).then(function(val) {
      $("#balance-address").val("This SPV balance is " +web3.fromWei(val[0].toNumber(), "ether"));
@@ -189,13 +206,17 @@ investerregister: function() {
             $("#inv").addClass("active");
   Bank.deployed().then(function(instance) {
       bank = instance;
-      return instance.spv_details(account);
+      return instance.show_registers();
     }).then(function(val) {
-      //console.log(val);
-      if (val[0]>0) {
+      console.log(val[2].length)
+      if(val[2].length>0)
+      {
+       $.each(val[2],function(err,data){
+      if (data==account) {
         $("#fi_registered").hide();
         $("#borrower").hide();
         $('#spv_registered').hide();
+        $("#container").hide();
         $('#invester_register').show();
         $("#a1").show();
         $("#a2").show();
@@ -203,8 +224,16 @@ investerregister: function() {
         $("#bank-info").val("This Investor has registered");
       } else {
         $("#bank-info").val("This Investor has not registered");
+        $("#container").hide();
           $('#myModal2').modal('show');
             }
+          })
+        }
+        else {
+          $("#bank-info").val("This Investor has not registered");
+          $("#container").hide();
+            $('#myModal2').modal('show');
+              }
       return bank.spv_details(account);
     }).then(function(val) {
      $("#balance-address").val("This Invester balance is " +web3.fromWei(val[0].toNumber(), "ether"));
@@ -219,7 +248,14 @@ investerregister: function() {
     Bank.deployed().then(function(instance) {
       bank = instance;
         bank.bank_d1(account).then(function(result){
-          $("#body_bank").append('<tr><td>'+account+'</td><td>'+result[0]+'</td><td>'+web3.fromWei(result[1].toNumber(), "ether")+'</td><td>'+result[3]+'</td></tr>')
+          var a=result[0];
+          var s = '';
+          for (var k = 0; k < a.length; k += 2) 
+    {
+      s+= String.fromCharCode(parseInt(a.substr(k, 2), 16));
+
+    }
+          $("#body_bank").append('<tr><td>'+account+'</td><td>'+s+'</td><td>'+web3.fromWei(result[1].toNumber(), "ether")+'</td><td>'+result[3]+'</td></tr>')
         }) 
     });
   },
@@ -232,9 +268,16 @@ investerregister: function() {
       bank = instance;
       return instance.show_registers();
     }).then(function(val) {
-       $.each(val,function(err,data){
+       $.each(val[0],function(err,data){
         bank.bank_d1(data).then(function(result){
-          $("#body_bank1").append('<tr><td id=b'+gen_id+'>'+data+'</td><td>'+result[0]+'</td><td>'+web3.fromWei(result[1].toNumber(), "ether")+'</td><td>'+result[3]+'</td><td><input type="button" class="btn btn-primary form-control" id="bank-de" value="Choose FI" onclick=App.getloan("#b'+gen_id+'");></td></tr>')
+          var a=result[0];
+          var s = '';
+          for (var k = 0; k < a.length; k += 2) 
+    {
+      s+= String.fromCharCode(parseInt(a.substr(k, 2), 16));
+
+    }
+          $("#body_bank1").append('<tr><td id=b'+gen_id+'>'+data+'</td><td>'+s+'</td><td>'+web3.fromWei(result[1].toNumber(), "ether")+'</td><td>'+result[3]+'</td><td><input type="button" class="btn btn-primary form-control" id="bank-de" value="Choose FI" onclick=App.getloan("#b'+gen_id+'");></td></tr>')
           gen_id ++;
         })
        })
@@ -286,9 +329,16 @@ investerregister: function() {
       bank = instance;
       return instance.show_registers();
     }).then(function(val) {
-       $.each(val,function(err,data){
+       $.each(val[0],function(err,data){
         bank.bank_d1(data).then(function(result){
-          $("#body1_bank").append('<tr><td id=b'+gen_id+'>'+data+'</td><td>'+result[0]+'</td><td>'+web3.fromWei(result[1].toNumber(), "ether")+'</td><td>'+result[3]+'</td><td><input type="button" class="btn btn-primary form-control" id="bank-de" value="Choose FI" onclick=App.spvloan_tbody("#b'+gen_id+'");></td></tr>')
+          var a=result[0];
+          var s = '';
+          for (var k = 0; k < a.length; k += 2) 
+    {
+      s+= String.fromCharCode(parseInt(a.substr(k, 2), 16));
+
+    }
+          $("#body1_bank").append('<tr><td id=b'+gen_id+'>'+data+'</td><td>'+s+'</td><td>'+web3.fromWei(result[1].toNumber(), "ether")+'</td><td>'+result[3]+'</td><td><input type="button" class="btn btn-primary form-control" id="bank-de" value="Choose FI" onclick=App.spvloan_tbody("#b'+gen_id+'");></td></tr>')
           gen_id ++;
         })
        })
@@ -308,9 +358,7 @@ investerregister: function() {
   },
 spv_list1 : function(){
     var self = this;
-
     var bank;
-
     $("#spv_list1").html('');
     let gen1_id = 0;
     Bank.deployed().then(function(instance) {
@@ -319,8 +367,11 @@ spv_list1 : function(){
     }).then(function(val) {
        $.each(val,function(err,data){
         bank.spv_details(data).then(function(result){
+          if(result[0]>0)
+          {
           $("#spv_list1").append('<tr><td id=b1'+gen1_id+'>'+data+'</td><td>'+web3.fromWei(result[0].toNumber(), "ether")+'</td><td>'+result[1]+'</td><td>'+result[2]+'</td><td><input type="button" class="btn btn-primary form-control" id="bank1-de" value="Choose SPV" onclick=App.spvpackdetail_body("#b1'+gen1_id+'");></td></tr>')
           gen1_id ++;
+          }
         })
       })
         });
@@ -380,7 +431,26 @@ Register: function(){
     $("#status").html("Error in transaction; see log.");
   });
 },
-  purchase_ln: function(){
+
+purchase_ln: function(id){
+  //let loanid = [];
+  var financ_add = $("#"+id).text().trim();
+  var tmp;
+  var self = this;
+  var bank;
+  $("#status").html("Initiating transaction... (please wait)");
+  Bank.deployed().then(function(instance) {
+    bank = instance;
+    bank.purchase_loan(id,financ_add,{from:account,gas: 6000000});
+  }).then(function(val) {
+    $("#status").html("Transaction complete!");
+  }).catch(function(e) {
+    console.log(e); 
+    $("#status").html("Error in transaction; see log.");
+  });
+},
+
+ /* purchase_ln: function(){
   //let loanid = [];
   let loanid;
   var tmp;
@@ -403,7 +473,7 @@ Register: function(){
     console.log(e); 
     $("#status").html("Error in transaction; see log.");
   });
-},
+},*/
 /*purchase_ln: function(){
   //let loanid = [];
   let loanid;
@@ -528,23 +598,24 @@ register_bank:function() {
     $("#status").html("Error in transaction; see log.");
   });
 },
-get_loan_list : function(){
+/*get_loan_list : function(){
   var self = this;
-
   var bank;
-
   $("#get_loan_list").html('');
- 
   let gen_id = 0;
   Bank.deployed().then(function(instance) {
     bank = instance;
-    return instance.storefi(account);
+    //alert('val')
+    return instance.show({from:account});
   }).then(function(val) {
-    $.each(val,function(err,data1){
-        bank.bank_d1(data1).then(function(val2){
-          for(var i=val2[4].toNumber();i<=val2[5].toNumber();i++){
-            bank.ln_get(data1,i).then(function(data,err){
-                  if(account==data[4]&&data[0]>0)
+    //alert(val)
+    for(var i=0;i<val.toNumber();i++)
+    {
+    bank.storefi(account,i).then(function(val1){
+        bank.bank_d1(val1).then(function(val2){
+          for(var j=val2[5].toNumber();j<val2[4].toNumber();j++){
+            bank.ln_get(val1,j).then(function(data,err){
+                  if(account==data[4])
                    {
               $("#get_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[11]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td id='+data[0]+'>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td>'+data[6]+'</td><td>'+data[7]+'</td><td>'+web3.fromWei(data[8].toNumber(), "ether")+'</td><td id="month_ins">'+web3.fromWei(data[9].toNumber(), "ether")+'</td><td><input type="button" class="btn btn-primary form-control" id="due-bank" value="Payment" onclick="App.pay_due('+data[0]+','+web3.fromWei(data[9].toNumber(), "ether")+');"></td></tr>');
                  gen_id ++;   
@@ -553,8 +624,47 @@ get_loan_list : function(){
           }
       }) 
     })
+  }
+  });
+},*/
+get_loan_list : function(){
+  var self = this;
+  var bank;
+  $("#get_loan_list").html('');
+  let gen_id = 0;
+  Bank.deployed().then(function(instance) {
+    bank = instance;
+   // alert('val')
+    return instance.show_registers();
+  }).then(function(val) {
+     $.each(val[0],function(err,val1){
+        bank.bank_d1(val1).then(function(val2){
+          for(var j=val2[5].toNumber();j<val2[4].toNumber();j++){
+            bank.ln_get(val1,j).then(function(data,err){
+              var e=data[5]/12;
+              var b=e/1000000000000000000;
+              var d=web3.fromWei(data[5].toNumber(), "ether")
+              var f=data[7]-data[6];
+              var c=b*f
+              var a=data[2];
+              var s = '';
+              for (var k = 0; k < a.length; k += 2) 
+        {
+          s+= String.fromCharCode(parseInt(a.substr(k, 2), 16));
+    
+        }
+                  if(account==data[4])
+                   {
+              $("#get_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[9]+'</td><td>'+data[1]+'</td><td>'+s+'</td><td id='+data[0]+'>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td>'+data[6]+'</td><td>'+data[7]+'</td><td>'+c+'</td><td id="month_ins">'+b+'</td><td><input type="button" class="btn btn-primary form-control" id="due-bank" value="Payment" onclick="App.pay_due('+data[0]+','+b+');"></td></tr>');
+                 gen_id ++;   
+                  }
+            })
+          }
+      }) 
+    })
   });
 },
+
 
 /*get_loan_list:function(){
   var self = this;
@@ -592,7 +702,6 @@ invesdetail_tbody : function(){
   });
 },
 spvloan_tbody:function(fi){
-  
   let address = $(fi.trim()).text().trim();
   $("#finance_add").val(address);
   var self = this;
@@ -603,9 +712,26 @@ spvloan_tbody:function(fi){
     return bank.bank_d1(address);
   }).then(function(val) {
       for(var i=val[5].toNumber();i<val[4].toNumber();i++){
-        bank.ln_get(address,i).then(function(data,err){
-          $("#spvloan_tbody").append('<tr><td>'+data[0]+'</td><td>'+data[13]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td></tr>');
-        });
+        let a=i;
+        bank.ln_get(address,a).then(function(data,err){
+          var a=data[2];
+          var s = '';
+          for (var k = 0; k < a.length; k += 2) 
+    {
+      s+= String.fromCharCode(parseInt(a.substr(k, 2), 16));
+
+    }
+          bank.loanadd(a).then(function(data2,err){
+            if(account==data2[0]&&data[0]>0)
+            {
+          $("#spvloan_tbody").append('<tr><td>'+data[0]+'</td><td>'+data[9]+'</td><td>'+data[1]+'</td><td>'+s+'</td><td id='+data[0]+'>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td></tr>');
+           } 
+           else
+           {
+            $("#spvloan_tbody").append('<tr><td>'+data[0]+'</td><td>'+data[9]+'</td><td>'+data[1]+'</td><td>'+s+'</td><td id='+data[0]+'>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td><input type="button" class="btn btn-primary form-control" id="due-bank" value="Buy" onclick="App.purchase_ln('+data[0]+');"></td></tr>');
+           }
+          });
+      });
       }
   });
   },
@@ -621,9 +747,16 @@ spvloan_tbody:function(fi){
       bank = instance;
       return instance.show_registers();
     }).then(function(val) {
-       $.each(val,function(err,data){
+       $.each(val[0],function(err,data){
         bank.bank_d1(data).then(function(result){
-          $("#body1_bank").append('<tr><td id=b'+gen_id+'>'+data+'</td><td>'+result[0]+'</td><td>'+web3.fromWei(result[1].toNumber(), "ether")+'</td><td>'+result[3]+'</td><td><input type="button" class="btn btn-primary form-control" id="bank-de" value="Choose FI" onclick=App.spvloan_tbody("#b'+gen_id+'");></td></tr>')
+          var a=result[0];
+          var s = '';
+          for (var k = 0; k < a.length; k += 2) 
+    {
+      s+= String.fromCharCode(parseInt(a.substr(k, 2), 16));
+
+    }
+          $("#body1_bank").append('<tr><td id=b'+gen_id+'>'+data+'</td><td>'+s+'</td><td>'+web3.fromWei(result[1].toNumber(), "ether")+'</td><td>'+result[3]+'</td><td><input type="button" class="btn btn-primary form-control" id="bank-de" value="Choose FI" onclick=App.spvloan_tbody("#b'+gen_id+'");></td></tr>')
           gen_id ++;
         })
        })
@@ -631,19 +764,24 @@ spvloan_tbody:function(fi){
     });
   },
     
-spv_tbody:function(){
+/*spv_tbody:function(){
   var self = this;
   var bank;
   $("#spv_tbody").html('')
   Bank.deployed().then(function(instance) {
     bank = instance;
-    return instance.storespvfi(account);
+    return instance.spv_registers({from:account});
   }).then(function(val) {
-    $.each(val,function(err,data1){
+    //alert(val[1])
+    for(var i=0;i<val[1].toNumber();i++)
+    { 
+      bank.storespvfi(account,i).then(function(data1){
         bank.bank_d1(data1).then(function(val2){
-          for(var i=val2[4].toNumber();i<=val2[5].toNumber();i++){
-            bank.ln_get(data1,i).then(function(data,err){
-              bank.loanadd(i).then(function(data2,err){
+          for(var j=val2[5].toNumber();j<val2[4].toNumber();j++){
+            let a=j;
+            bank.ln_get(data1,a).then(function(data,err){
+              bank.loanadd(a).then(function(data2,err){
+                //alert(val2)
                   if(account==data2[0]&&data[0]>0)
                    {       
           $("#spv_tbody").append('<tr><td>'+data[10]+'</td><td>'+data[0]+'</td><td>'+data[11]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td></tr>');
@@ -653,8 +791,44 @@ spv_tbody:function(){
     }
 }) 
 })
+  }
+});
+},*/
+
+spv_tbody:function(){
+  var self = this;
+  var bank;
+  $("#spv_tbody").html('')
+  Bank.deployed().then(function(instance) {
+    bank = instance;
+    return instance.show_registers();
+  }).then(function(val) {
+     $.each(val[0],function(err,val1){
+        bank.bank_d1(val1).then(function(val2){
+          for(var j=val2[5].toNumber();j<val2[4].toNumber();j++){
+            let e=j;
+            bank.ln_get(val1,e).then(function(data,err){
+              var a=data[2];
+              var s = '';
+              for (var k = 0; k < a.length; k += 2) 
+        {
+          s+= String.fromCharCode(parseInt(a.substr(k, 2), 16));
+    
+        }
+        //alert(e)
+              bank.loanadd(e).then(function(data2,err){
+                  if(account==data2[0]&&data[0]>0)
+                   {       
+          $("#spv_tbody").append('<tr><td>'+data[8]+'</td><td>'+data[0]+'</td><td>'+data[9]+'</td><td>'+data[1]+'</td><td>'+s+'</td><td>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td></tr>');
+        }
+      })
+      })
+    }
+}) 
+  })
 });
 },
+
 spvpack_body:function(){
   var self = this;
   var bank;
@@ -663,11 +837,13 @@ spvpack_body:function(){
     bank = instance;
     return bank.spv_details(account);
   }).then(function(val) {
-      for(var i=val[6].toNumber();i<=val[5].toNumber();i++){
+      for(var i=val[5].toNumber();i<=val[6].toNumber();i++){
 
-        bank.packagedetail(account,i).then(function(data,err){
-          
+        bank.ln_get(account,i).then(function(data,err){
+          if(data[0]>0)
+          {
           $("#spvpack_body").append('<tr><td>'+data[0]+'</td><td>'+web3.fromWei(data[1].toNumber(), "ether")+'</td></tr>');
+          }
         });
       }
 });
@@ -677,17 +853,18 @@ spvpackdetail_body:function(fii){
   $("#spv_add").val(address);
   var self = this;
   var bank;
-  
   $("#spvpackdetail_body").html('')
   Bank.deployed().then(function(instance) {
     bank = instance;
-    return bank.spv_details(account);
+    return bank.spv_details(address);
   }).then(function(val) {
-      for(var i=val[6].toNumber();i<=val[5].toNumber();i++){
+      for(var i=val[5].toNumber();i<=val[6].toNumber();i++){
 
-        bank.packagedetail(account,i).then(function(data,err){
-          
+        bank.ln_get(address,i).then(function(data,err){
+          if(data[0]>0)
+          {  
           $("#spvpackdetail_body").append('<tr><td>'+data[0]+'</td><td>'+web3.fromWei(data[1].toNumber(), "ether")+'</td></tr>');
+          }
         });
       }
 });
@@ -701,11 +878,13 @@ inverstorpack_body:function(){
     bank = instance;
     return bank.spv_details(account);
   }).then(function(val) {
-      for(var i=val[6].toNumber();i<=val[5].toNumber();i++){
+      for(var i=val[5].toNumber();i<=val[6].toNumber();i++){
 
-        bank.packagedetail(account,i).then(function(data,err){
-          
+        bank.ln_get(account,i).then(function(data,err){
+          if(data[0]>0)
+          {
           $("#inverstorpack_body").append('<tr><td>'+data[0]+'</td><td>'+web3.fromWei(data[1].toNumber(), "ether")+'</td></tr>');
+          }
         });
       }
 });
@@ -724,14 +903,26 @@ fi_loan_list:function(){
       {
         bank.ln_get(account,i).then(function(data,err)
         {
-          $("#fi_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[11]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[4]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td>'+data[6]+'</td><td>'+data[7]+'</td><td>'+web3.fromWei(data[8].toNumber(), "ether")+'</td><td id="month_ins">'+web3.fromWei(data[9].toNumber(), "ether")+'</td><td>'+"sold"+'</td></tr>');
+         
+          var e=data[5]/12;
+          var b=e/1000000000000000000;
+          var d=web3.fromWei(data[5].toNumber(), "ether")
+          var f=data[7]-data[6];
+          var c=b*f
+          var a=data[2];
+          var s = '';
+          for (var k = 0; k < a.length; k += 2) 
+    {
+      s+= String.fromCharCode(parseInt(a.substr(k, 2), 16));
+
+    }
+          $("#fi_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[9]+'</td><td>'+data[1]+'</td><td>'+s+'</td><td>'+data[4]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td>'+data[6]+'</td><td>'+data[7]+'</td><td>'+c+'</td><td id="month_ins">'+b+'</td></tr>');
         });
       }
   });
 },
 pay_due:function(id,amount){
   var address = $("#"+id).text().trim();
-  alert(amount)
   var self = this;
   var bank; 
     $("#status").html("Initiating transaction... (please wait)");

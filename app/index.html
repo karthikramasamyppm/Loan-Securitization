@@ -113,6 +113,74 @@ h5,td
   border-bottom: 3px solid #338ecf;
   background: #eee
 }
+
+/* */
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:700');
+
+
+
+#container {
+  color:#ff6600;
+  text-transform: uppercase;
+  font-size:36px;
+  font-weight:bold;
+  padding-top:200px;  
+  position:fixed;
+  width:100%;
+  bottom:45%;
+  display:block;
+  text-align: left;
+}
+
+#flip {
+  height:50px;
+  overflow:hidden;
+}
+
+#flip > div > div {
+  color:#fff;
+  padding:4px 12px;
+  height:45px;
+  margin-bottom:45px;
+  display:inline-block;
+}
+
+#flip div:first-child {
+  animation: show 5s linear infinite;
+}
+
+#flip div div {
+  background:#42c58a;
+}
+#flip div:first-child div {
+  background:#4ec7f3;
+}
+#flip div:last-child div {
+  background:#ff66ff;
+}
+
+@keyframes show {
+  0% {margin-top:-270px;}
+  5% {margin-top:-180px;}
+  33% {margin-top:-180px;}
+  38% {margin-top:-90px;}
+  66% {margin-top:-90px;}
+  71% {margin-top:0px;}
+  99.99% {margin-top:0px;}
+  100% {margin-top:-270px;}
+}
+
+p {
+  position:fixed;
+  width:100%;
+  bottom:30px;
+  font-size:12px;
+  color:#999;
+  margin-top:200px;
+}
+
+
 </style>
 </head>
 <body style="background-color:rgb(240, 240, 240);" onload="App.totalhide()">
@@ -124,6 +192,7 @@ h5,td
           -->   </div>
           </div>
     <div class="container" >
+      <div  class="row">
     <div class="col-sm-3 col-md-2 sidenav" style="background:white;">
         <ul class="nav nav-sidebar">
         <div id="a1"><center><h5><font size="4">ACCOUNT DETAILS</font></h5></center></div>
@@ -142,8 +211,20 @@ h5,td
         <h2 id="spv"><a href="#" onclick="App.spvregister()"><font size="4"><span class="fa fa-truck"></span>  SPV</font></a></h2>
         <h2 id="inv"><a href="#" onclick="App.investerregister()"><font size="4"><span class="fa fa-handshake-o"></span>  Investor</font></a></h2>
           </ul>
-        </div>       
+        </div>  
+        
+        <div id="container">
+          Connect With LoanSecuritization...
+          <div id=flip>
+            <div><div>Get Loan</div></div>
+            <div><div>Make Payment</div></div>
+            <div><div>Make Safe Investment</div></div>
+          </div>
+         Easier..!
+        </div> 
+
   <!--firegister-->
+  <div class="col-sm-9 col-md-2">
     <div id="fi_registered">
         <div class="col-sm-4" id="fidetail_hide">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -165,9 +246,9 @@ h5,td
             </div>
                  <div class="col-sm-12" id="fi_hide">
                     &nbsp;&nbsp;
-                    <div class="container" style="background:white;height:400px;width:1490px;">
+                    <div class="container" style="background:white;overflow-y:scroll;height:400px;width:1490px;">
                   <center><h3 style="color: #338ecf;">Financial Institute Loan Details</h3></center> 
-                   <table class="table table-hover" style="background:white;overflow-y:scroll;display:block;"  id=mon_th>
+                   <table class="table table-hover" style="background:white;display:block;"  id=mon_th>
                        <thead>
                          <tr>
                            <th><h4 style="color: black;">Loan Id</h4></th>
@@ -182,7 +263,6 @@ h5,td
                            <th><h4 style="color: black;">Total Months</h4></th>
                            <th><h4 style="color: black;">Balance Loan</h4></th>
                            <th><h4 style="color: black;">Balance Installment</h4></th>
-                           <th><h4 style="color: black;">sold/unsold</h4></th>
                          </tr>
                        </thead>
                        <tbody id="fi_loan_list">
@@ -207,21 +287,22 @@ h5,td
                   <div class="row" id="get_loan_hide" >
                  <div class="form-group col-sm-8">
                   <div class="container" style="background:white;height:300px;width:800px;">
-               <center><h3 style="color: #338ecf;">Get Loan From Financial institution</h3></center>  
+                <center><h3 style="color: #338ecf;">Get Loan From Financial institution</h3></center>  
                  <input type="text" id="Token-address" class="form-control" placeholder="Token Address" />
                  <input type="text" id="loan-address" class="form-control" placeholder="Bank Address" readonly/>
                  <input type="text" id="loan-amount" class="form-control" placeholder="(specify No of Tokens)" />
                  <input type="text" id="token-name" class="form-control" placeholder="Token Name" />
-                 <input type="button" class="btn btn-primary col-sm-2" onclick="App.get_loan();"  id="loan-bank" value="Get Loan"/>
+                 <input type="button" class="btn btn-primary form-control" onclick="App.get_loan();"  id="loan-bank" value="Get Loan"/>
+                 <div id="loan-status" style="color: #338ecf;"></div>
                 </div>
                 </div>                               
-                 <div id="loan-status"></div>
+                
                 
                  &nbsp;&nbsp;
                   <div class="col-sm-6" id="fidetail_hide">
-                      <div class="container" style="background:white;height:400px;width:800px;">
+                      <div class="container" style="background:white;overflow-y:scroll;height:400px;width:800px;">
                                             <center><h3 style="color: #338ecf;">Financial Institute Details</h3></center> 
-                                             <table class="table table-hover" style="background:white;overflow-y:scroll;display:block;">
+                                             <table class="table table-hover" style="background:white;display:block;">
                                                <thead>
                                                  <tr>
                                                    <th><h4 style="color: black;">Financial Institute Address</h4></th>
@@ -304,8 +385,7 @@ h5,td
                     </div>
                     <!--purchaseloan-->
 <div id="purchaseloan" class="tab-pane fade">
-    <div class="row">
-        <div class="form-group col-sm-6" id="purchase_set">
+     <!--   <div class="form-group col-sm-6" id="purchase_set">
             <div class="container" style="background:white;height:200px;width:460px;">
                           <center><h3 style="color: #338ecf;">Purchase Loan</h3></center>
                           <input type="text" id="finance_add" class="form-control" placeholder="Finance Address" readonly/>
@@ -313,11 +393,11 @@ h5,td
                           <input type="button" class="btn btn-primary form-control" id="purchase-bank" value="submit" onclick="App.purchase_ln();" />
                           <div id="status"></div>
                         </div> 
-                        </div>
-<div class="col-sm-6" id="fidetail_hide1">
-    <div class="container" style="background:white;height:350px;width:760px;">
+                        </div>-->
+<div class="col-sm-8" id="fidetail_hide1">
+    <div class="container" style="background:white;overflow-y:scroll;height:350px;width:860px;">
        <center><h3 style="color: #338ecf;">Financial Institute Details</h3></center> 
-        <table class="table table-hover" style="background:white;overflow-y:scroll;display:block;">
+        <table class="table table-hover" style="background:white;display:block;">
           <thead>
             <tr>
               <th><h4 style="color: black;">Financial Institute Address</h4></th>
@@ -331,13 +411,12 @@ h5,td
           </table>
     </div>
           </div>
-          </div>
           &nbsp;  &nbsp;  &nbsp;  &nbsp;
           <div class="col-sm-8" id="spv_deta">
               &nbsp;
-              <div class="container" style="background:white;height:400px;width:1060px;">
+              <div class="container" style="background:white;overflow-y:scroll;height:400px;width:1060px;">
               <center><h3 style="color: #338ecf;">FI Loan Details</h3></center>
-              <table class="table table-hover" id="spvloan_table" style="background:white;overflow-y:scroll;display:block;">
+              <table class="table table-hover" id="spvloan_table" style="background:white;display:block;">
                   <thead>
                     <tr>
                       <th><h4 style="color: black;">Loan Id</h4></th>
@@ -359,22 +438,23 @@ h5,td
  <!--createpack-->
  <div id="createpack" class="tab-pane fade">       
     <div class="row">
-          <div class="form-group col-sm-4" id="create_pack">
-              <div class="container" style="background:white;height:200px;width:360px;">
+          <div class="form-group col-sm-6" id="create_pack">
+              <div class="container" style="background:white;height:350px;width:560px;">
+                &nbsp; &nbsp; &nbsp; &nbsp;
              <center><h3 style="color: #338ecf;">Create Pack</h3></center> 
               <input type="text" id="spv_id" class="form-control" placeholder="SPV Id"/>
               <input type="button" class="btn btn-primary form-control" id="Investor" value="Submit" onclick="App.create_pack();" />
-              <div id="status"></div>
+              <div style="color: #338ecf;" id="status"></div>
               </div>
           </div>
               <div class="col-sm-6" id="spv_pack">
-                  <div class="container" style="background:white;height:350px;width:660px;">
+                  <div class="container" style="background:white;overflow-y:scroll;height:350px;width:370px;">
                <center><h3 style="color: #338ecf;">SPV package details</h3></center> 
-                <table class="table table-hover" id="invester_cls" style="background:white;overflow-y:scroll;display:block;">
+                <table class="table table-hover" id="invester_cls" style="background:white;display:block;">
                     <thead>
                       <tr>
                         <th><h4 style="color: black;">Package Id</h4></th>
-                        <th><h4 style="color: black;">token value</h4></th>
+                        <th><h4 style="color: black;">Total Amount</h4></th>
                       </tr>
                     </thead>
                     <tbody id="spvpack_body">
@@ -387,9 +467,9 @@ h5,td
             &nbsp;  &nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <div class="row">
             <div class="col-sm-8" id="spv_loan_detail">
-                <div class="container" style="background:white;height:350px;width:1060px;">
+                <div class="container" style="background:white;overflow-y:scroll;height:350px;width:1060px;">
                   <center> <h3 style="color: #338ecf;">SPV Loan Details</h3></center> 
-              <table class="table table-hover" id="spv_table1" style="background:white;overflow-y:scroll;display:block;">
+              <table class="table table-hover" id="spv_table1" style="background:white;display:block;">
                   <thead>
                     <tr>
                       <th><h4 style="color: black;">SPV id</h4></th>
@@ -451,14 +531,14 @@ h5,td
                           <div id="status"></div>
                           </div>
                         </div>
-                      <div class="col-sm-8" id="invester_pack_details">
-                          <div class="container" style="background:white;height:350px;width:900px;">
+                      <div class="col-sm-4" id="invester_pack_details">
+                          <div class="container" style="background:white;overflow-y:scroll;height:350px;width:370px;">
                             <center> <h3 style="color: #338ecf;">Inverster Package Details</h3></center> 
-                          <table class="table table-hover" id="inves_loan_table" style="background:white;overflow-y:scroll;display:block;">
+                          <table class="table table-hover" id="inves_loan_table" style="background:white;display:block;">
                               <thead>
                                 <tr>
                                   <th><h4 style="color: black;">Package</h4></th>
-                                  <th><h4 style="color: black;">token value</h4></th>            
+                                  <th><h4 style="color: black;">Total Amount</h4></th>            
                                 </tr>
                               </thead>
                               <tbody id="inverstorpack_body">
@@ -471,13 +551,13 @@ h5,td
                                   &nbsp;
                                   <div class="row">
                                       <div class="col-sm-4" id="spv_packdetail">
-                                          <div class="container" style="background:white;height:350px;width:370px;">
+                                          <div class="container" style="background:white;overflow-y:scroll;height:350px;width:370px;">
                                             <center> <h3 style="color: #338ecf;">SPV package details</h3></center> 
-                                          <table class="table table-hover" id="invester_cls" style="background:white;overflow-y:scroll;display:block;">
+                                          <table class="table table-hover" id="invester_cls" style="background:white;display:block;">
                                               <thead>
                                                 <tr>
                                                   <th><h4 style="color: black;">Package</h4></th>
-                                                  <th><h4 style="color: black;">Token value</h4></th>
+                                                  <th><h4 style="color: black;">Total Amount</h4></th>
                                                 </tr>
                                               </thead>
                                               <tbody id="spvpackdetail_body">
@@ -487,9 +567,9 @@ h5,td
                                             </div>
                                         </div>  
                                         <div class="col-sm-8" id="spvdetail_hide1">
-                                            <div class="container" style="background:white;height:350px;width:900px;">
+                                            <div class="container" style="background:white;overflow-y:scroll;height:350px;width:900px;">
                                               <center>  <h3 style="color: #338ecf;">SPV Details</h3></center> 
-                                            <table class="table table-hover" style="background:white;overflow-y:scroll;display:block;">
+                                            <table class="table table-hover" style="background:white;display:block;">
                                               <thead>
                                                 <tr>
                                                   <th><h4 style="color: black;">SPV Address</h4></th>
@@ -510,6 +590,8 @@ h5,td
              
             </div>
             </div>
+        </div>
+        </div>
         </div>
       </div>
         <!--end-->
@@ -549,10 +631,10 @@ h5,td
                   </div>
                   <div class="modal-body">
                       <input type="text" id="spv_ehter_value" class="form-control" placeholder="SPV Ethers" />
-                      <input class="btn btn-primary form-control" id="salling" value="SPV Register" data-dismiss="modal" aria-hidden="true" onclick="App.sale_loan();" />
+                      <input type="button" class="btn btn-primary form-control" id="salling" value="SPV Register" data-dismiss="modal" aria-hidden="true" onclick="App.sale_loan();" />
                       </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="App.totalhide()">Close</button>
+                    <button  type="button" class="btn btn-danger" data-dismiss="modal" onclick="App.totalhide()">Close</button>
                   </div>
                 </div>
                 
