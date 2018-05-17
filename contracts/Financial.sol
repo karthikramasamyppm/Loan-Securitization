@@ -21,7 +21,6 @@ contract Financial
     { 
         uint256 id;
         uint256 token;
-        bytes32 token_symbol;
         address bank_address;
         address borr_address;
         uint256 amount;
@@ -39,6 +38,7 @@ contract Financial
             uint256 spvlnid;
             uint256 packln_id;
             uint256 packid;
+            address addr;
     }
    /* struct package
     {
@@ -52,6 +52,7 @@ contract Financial
      mapping (address=>mapping(uint256=>loan_get))public ln_get;
     // mapping (address=>mapping(uint256=>package))public  ln_get;
      mapping(address=>spv_detail)public spv_details;
+     mapping(address=>address)public inv_details;
    //  mapping(uint256 => mapping(uint256 =>uint256))public packageivd;
      address[] public spv_reg;
      address[] public invs_reg;
@@ -78,7 +79,7 @@ contract Financial
     {
         return (reg_user,spv_reg,invs_reg);
     }
-    function req_loan(address _token,address bank_address,uint256 tokenvalue,bytes32 tokensymbol) public //payable   // add token_symbol
+    function req_loan(address _token,address bank_address,uint256 tokenvalue) public //payable   // add token_symbol
     {   
         LoanToken(_token).transferFrom(msg.sender,bank_address,tokenvalue);
         bank_d1[bank_address].bal -= ((tokenvalue * 1 ether)*80 / 100);
@@ -87,7 +88,6 @@ contract Financial
         ln_get[bank_address][ bank_d1[bank_address].fi_id].months=12;
         ln_get[bank_address][ bank_d1[bank_address].fi_id].id =  bank_d1[bank_address].fi_id;
         ln_get[bank_address][ bank_d1[bank_address].fi_id].token = tokenvalue;
-        ln_get[bank_address][ bank_d1[bank_address].fi_id].token_symbol = tokensymbol;
         ln_get[bank_address][ bank_d1[bank_address].fi_id].token_address = _token;
         ln_get[bank_address][ bank_d1[bank_address].fi_id].borr_address=msg.sender;
         msg.sender.transfer( ((tokenvalue * 1 ether)*80 / 100) * 1 wei);
@@ -124,6 +124,7 @@ contract Financial
     }
     function SPV_ether()public payable
     {
+         spv_details[msg.sender].addr = msg.sender;
          spv_details[msg.sender].initial_spv_ether=msg.value;
          spv_details[msg.sender].spv_id=spvloanid;
          spv_details[msg.sender].spvlnid=spvloanid;
@@ -155,6 +156,7 @@ contract Financial
     function Investor_ether()public payable
         {
          invs_reg.push(msg.sender);
+         inv_details[msg.sender] = msg.sender;
          spv_details[msg.sender].initial_spv_ether=msg.value;
          spv_details[msg.sender].packln_id=invespackid;
          spv_details[msg.sender].packid=invespackid;
