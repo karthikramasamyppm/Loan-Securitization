@@ -28,6 +28,7 @@ window.App = {
     web3.eth.getAccounts(function(err, accs) {
       if (err != null) {
         alert("There was an error fetching your accounts.");
+
         return;
       }
 
@@ -61,7 +62,7 @@ window.App = {
 
   basicfunctions : function(){
     $("#account").val(account)
-    
+    document.getElementById('loader').style.display="none";
     web3.eth.getBalance(account, (err, balance) => {
       balance = web3.fromWei(balance, "ether") + ""
       $("#balance").val(balance.trim())
@@ -168,36 +169,26 @@ window.App = {
           $("#inv").removeClass("active");
       Bank.deployed().then(function(instance) {
       bank = instance;
-      return instance.show_registers();
+      return instance.spv_details(account);
     }).then(function(val) {
-      console.log(val[1].length)
-      if(val[1].length > 0)
-      {
-       $.each(val[1],function(err,data){
+      console.log(val[7])
+      if (val[7]==account) {
+        $("#fi_registered").hide();
+        $("#borrower").hide();
+        $('#spv_registered').show();
+        $('#invester_register').hide();
+        $("#container").hide();
+        $("#a1").show();
+        $("#a2").show();
+        $("#a3").show();
+        $("#bank-info").val("This SPV has registered");
+      } else {
+        $("#bank-info").val("This SPV has not registered");
+        $("#container").hide();
+          $('#myModal1').modal('show');
+            }
+         
        
-            if (data==account) {
-              $("#fi_registered").hide();
-              $("#borrower").hide();
-              $('#spv_registered').show();
-              $('#invester_register').hide();
-              $("#container").hide();
-              $("#a1").show();
-              $("#a2").show();
-              $("#a3").show();
-              $("#bank-info").val("This SPV has registered");
-            } 
-            else {
-              $("#bank-info").val("This SPV has not registered");
-              $("#container").hide();
-              $('#myModal1').modal('show');
-             }
-          });
-        }
-        else {
-          $("#bank-info").val("This SPV has not registered");
-          $("#container").hide();
-            $('#myModal1').modal('show');
-              }
       return bank.spv_details(account);
     }).then(function(val) {
      $("#balance-address").val("This SPV balance is " +web3.fromWei(val[0].toNumber(), "ether"));
@@ -215,13 +206,9 @@ investerregister: function() {
             $("#inv").addClass("active");
   Bank.deployed().then(function(instance) {
       bank = instance;
-      return instance.show_registers();
-    }).then(function(val) {
-      console.log(val[2].length)
-      if(val[2].length>0)
-      {
-       $.each(val[2],function(err,data){
-      if (data==account) {
+      return instance.inv_details(account);
+    }).then(function(val) { 
+      if (val==account) {
         $("#fi_registered").hide();
         $("#borrower").hide();
         $('#spv_registered').hide();
@@ -236,13 +223,7 @@ investerregister: function() {
         $("#container").hide();
           $('#myModal2').modal('show');
             }
-          })
-        }
-        else {
-          $("#bank-info").val("This Investor has not registered");
-          $("#container").hide();
-            $('#myModal2').modal('show');
-              }
+        
       return bank.spv_details(account);
     }).then(function(val) {
      $("#balance-address").val("This Invester balance is " +web3.fromWei(val[0].toNumber(), "ether"));
@@ -391,15 +372,13 @@ get_loan : function(){
   var Token_add=$("#Token-address").val().trim();
   var loan_amount  = parseInt($("#loan-amount").val().trim());
   var loan_address = $("#loan-address").val().trim();
-  // change
-  var token_name=$("#token-name").val().trim();
   $("#loan-status").html("Initiating transaction... (please wait)");
   
   var self = this;
   var bank;
   Bank.deployed().then(function(instance) {
     bank = instance;
-    return bank.req_loan(Token_add,loan_address,loan_amount,token_name,{from:account,gas: 6000000});
+    return bank.req_loan(Token_add,loan_address,loan_amount,{from:account,gas: 6000000});
   }).then(function(val) {
     $("#loan-status").html("Transaction complete!");
   }).catch(function(e) {
@@ -592,7 +571,7 @@ purchase_pack: function(){
 },*/
 
 register_bank:function() {
-
+  document.getElementById('loader').style.display="block";
   var self = this;
   var duration = parseInt((document.getElementById("duration").value));
   var loan_interest = parseInt((document.getElementById("loan-interest").value));
@@ -601,9 +580,18 @@ register_bank:function() {
   $("#status").html("Initiating transaction... (please wait)");
   Bank.deployed().then(function(instance) {
     return instance.register(bank_name, loan_interest,duration, {from:account,value:web3.toWei(deposit_Amount,"ether"),gas: 6000000});
-  }).then(function() {
-    $("#status").html("Transaction complete!");
-    self.firegister();
+  }).then(function(data) {
+    setTimeout(15000);
+if(data)
+{
+  setTimeout( self.firegister(),15000);
+  document.getElementById('loader').style.display="none";
+  $("#status").html("Transaction complete!");
+ 
+}
+else{
+  document.getElementById('loader').style.display="none"; 
+}
   }).catch(function(e) {
     console.log(e);
     $("#status").html("Error in transaction; see log.");
@@ -652,21 +640,14 @@ get_loan_list : function(){
         bank.bank_d1(val1).then(function(val2){
           for(var j=val2[5].toNumber();j<val2[4].toNumber();j++){
             bank.ln_get(val1,j).then(function(data,err){
-              var e=data[5]/12;
+              var e=data[4]/12;
               var b=e/1000000000000000000;
-              var d=web3.fromWei(data[5].toNumber(), "ether")
-              var f=data[7]-data[6];
+              var d=web3.fromWei(data[4].toNumber(), "ether")
+              var f=data[6]-data[5];
               var c=b*f
-              var a=data[2];
-              var s = '';
-              for (var k = 0; k < a.length; k += 2) 
-        {
-          s+= String.fromCharCode(parseInt(a.substr(k, 2), 16));
-    
-        }
-                  if(account==data[4])
+                  if(account==data[3])
                    {
-              $("#get_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[9]+'</td><td>'+data[1]+'</td><td>'+s+'</td><td id='+data[0]+'>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td>'+data[6]+'</td><td>'+data[7]+'</td><td>'+c+'</td><td id="month_ins">'+b+'</td><td><input type="button" class="btn btn-primary form-control" id="due-bank" value="Payment" onclick="App.pay_due('+data[0]+','+b+');"></td></tr>');
+              $("#get_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[8]+'</td><td>'+data[1]+'</td><td id='+data[0]+'>'+data[2]+'</td><td>'+web3.fromWei(data[4].toNumber(), "ether")+'</td><td>'+data[5]+'</td><td>'+data[6]+'</td><td>'+c+'</td><td id="month_ins">'+b+'</td><td><input type="button" class="btn btn-primary form-control" id="due-bank" value="Payment" onclick="App.pay_due('+data[0]+','+b+');"></td></tr>');
                  gen_id ++;   
                   }
             })
@@ -725,21 +706,14 @@ spvloan_tbody:function(fi){
       for(var i=val[5].toNumber();i<val[4].toNumber();i++){
         let e=i;
         bank.ln_get(address,e).then(function(data,err){
-          var a=data[2];
-          var s = '';
-          for (var k = 0; k < a.length; k += 2) 
-    {
-      s+= String.fromCharCode(parseInt(a.substr(k, 2), 16));
-
-    }
           bank.loanadd(e).then(function(data2,err){
             if(account==data2[0]&&data[0]>0)
             {
-          $("#spvloan_tbody").append('<tr><td>'+data[0]+'</td><td>'+data[9]+'</td><td>'+data[1]+'</td><td>'+s+'</td><td id='+data[0]+'>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td></tr>');
+          $("#spvloan_tbody").append('<tr><td>'+data[0]+'</td><td>'+data[8]+'</td><td>'+data[1]+'</td><td id='+data[0]+'>'+data[2]+'</td><td>'+web3.fromWei(data[4].toNumber(), "ether")+'</td></tr>');
            } 
            else
            {
-            $("#spvloan_tbody").append('<tr><td>'+data[0]+'</td><td>'+data[9]+'</td><td>'+data[1]+'</td><td>'+s+'</td><td id='+data[0]+'>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td><input type="button" class="btn btn-primary form-control" id="due-bank" value="Buy" onclick="App.purchase_ln('+data[0]+');"></td></tr>');
+            $("#spvloan_tbody").append('<tr><td>'+data[0]+'</td><td>'+data[8]+'</td><td>'+data[1]+'</td><td id='+data[0]+'>'+data[2]+'</td><td>'+web3.fromWei(data[4].toNumber(), "ether")+'</td><td><input type="button" class="btn btn-primary form-control" id="due-bank" value="Buy" onclick="App.purchase_ln('+data[0]+');"></td></tr>');
            }
           });
       });
@@ -819,18 +793,12 @@ spv_tbody:function(){
           for(var j=val2[5].toNumber();j<val2[4].toNumber();j++){
             let e=j;
             bank.ln_get(val1,e).then(function(data,err){
-              var a=data[2];
-              var s = '';
-              for (var k = 0; k < a.length; k += 2) 
-        {
-          s+= String.fromCharCode(parseInt(a.substr(k, 2), 16));
-    
-        }
+            
         //alert(e)
               bank.loanadd(e).then(function(data2,err){
                   if(account==data2[0]&&data[0]>0)
                    {       
-          $("#spv_tbody").append('<tr><td>'+data[8]+'</td><td>'+data[0]+'</td><td>'+data[9]+'</td><td>'+data[1]+'</td><td>'+s+'</td><td>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td></tr>');
+          $("#spv_tbody").append('<tr><td>'+data[7]+'</td><td>'+data[0]+'</td><td>'+data[8]+'</td><td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+web3.fromWei(data[4].toNumber(), "ether")+'</td></tr>');
         }
       })
       })
@@ -920,14 +888,7 @@ fi_loan_list:function(){
           var d=web3.fromWei(data[5].toNumber(), "ether")
           var f=data[7]-data[6];
           var c=b*f
-          var a=data[2];
-          var s = '';
-          for (var k = 0; k < a.length; k += 2) 
-    {
-      s+= String.fromCharCode(parseInt(a.substr(k, 2), 16));
-
-    }
-          $("#fi_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[9]+'</td><td>'+data[1]+'</td><td>'+s+'</td><td>'+data[4]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td><td>'+data[6]+'</td><td>'+data[7]+'</td><td>'+c+'</td><td id="month_ins">'+b+'</td></tr>');
+          $("#fi_loan_list").append('<tr><td>'+data[0]+'</td><td>'+data[8]+'</td><td>'+data[1]+'</td><td>'+data[3]+'</td><td>'+web3.fromWei(data[4].toNumber(), "ether")+'</td><td>'+data[5]+'</td><td>'+data[6]+'</td><td>'+c+'</td><td id="month_ins">'+b+'</td></tr>');
         });
       }
   });
