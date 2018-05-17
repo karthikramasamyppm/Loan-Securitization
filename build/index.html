@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="app.js"></script>
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+}
+.header {
+  resize:none;
+    overflow:auto; 
+  padding: 1px 1px;
+  background:rgb(34, 33, 33);
+  color: rgb(34, 33, 33);
+}
+.footer {
+  padding: 60px 16px;
+  background: #555;
+  color: #f1f1f1;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky + .content {
+  padding-top: 102px;
+}
+.text-line {
+   background-color: transparent;
+   color: black;
+   outline: none;
+   outline-style: none;
+   border-top: none;
+   border-left: none;
+   border-right: none;
+   border-bottom: solid#338ecf 3px;
+   width: 100%;
+  
+   margin: 5px 0 22px 0;
+   padding: 5px 10px;
+}
+.text-line1 {
+   background-color: transparent;
+   color: black;
+   outline: none;
+   outline-style: none;
+   border-top: none;
+   border-left: none;
+   border-right: none;
+   border-bottom: solid #338ecf 1px;
+   width: 17%;
+  
+   margin: 5px 0 22px 0;
+   padding: 5px 0px;
+}
+h1,h4
+{
+  color: whitesmoke;
+}
+h5,td
+{
+  color: black;
+}
+   .sidenav {
+    height: 100%;
+    width: 300px;
+    position: fixed;
+    z-index: 1;
+    top: 5;
+    left: 0;
+    background-color:rgb(240, 240, 240);
+    overflow-x: hidden;
+    padding-top: 2px;
+}
+
+.sidenav a {
+    padding: 6px 6px;
+    text-decoration: none;
+    font-size: 15px;
+    color: black;
+    display: block;
+}
+
+.sidenav a:hover {
+    color: black;
+}
+
+.main {
+    margin-left: 100px; /* Same as the width of the sidenav */
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+.nav h2 {
+  border-bottom: 3px solid rgba(0, 0, 0, 0);
+}
+.nav h2:hover {
+  border-bottom: 3px solid #eee;
+}
+.nav h2.active {
+  border-bottom: 3px solid #338ecf;
+  background: #eee
+}
+
+/* */
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:700');
+
+
+
+#container {
+  color:#ff6600;
+  text-transform: uppercase;
+  font-size:36px;
+  font-weight:bold;
+  padding-top:200px;  
+  position:fixed;
+  width:100%;
+  bottom:45%;
+  display:block;
+  text-align: left;
+}
+
+#flip {
+  height:50px;
+  overflow:hidden;
+}
+
+#flip > div > div {
+  color:#fff;
+  padding:4px 12px;
+  height:45px;
+  margin-bottom:45px;
+  display:inline-block;
+}
+
+#flip div:first-child {
+  animation: show 5s linear infinite;
+}
+
+#flip div div {
+  background:#42c58a;
+}
+#flip div:first-child div {
+  background:#4ec7f3;
+}
+#flip div:last-child div {
+  background:#ff66ff;
+}
+
+@keyframes show {
+  0% {margin-top:-270px;}
+  5% {margin-top:-180px;}
+  33% {margin-top:-180px;}
+  38% {margin-top:-90px;}
+  66% {margin-top:-90px;}
+  71% {margin-top:0px;}
+  99.99% {margin-top:0px;}
+  100% {margin-top:-270px;}
+}
+
+p {
+  position:fixed;
+  width:100%;
+  bottom:30px;
+  font-size:12px;
+  color:#999;
+  margin-top:200px;
+}
+
+
+</style>
+</head>
+<body style="background-color:rgb(240, 240, 240);" onload="App.totalhide()">
+    <div class="header" id="myHeader"> 
+        <div class="container-fluid" >
+            <h4><span style="color: #338ecf;"><font size="6">LOAN</font></span><font size="6">SECURITIZATION</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <!-- <span><font  style="color: #338ecf;">Info:</font><input type="text" class="text-line1"  id="bank-info"  size="4" style="color: white;" readonly/>
+           </span>&nbsp;&nbsp;&nbsp; <font  style="color: #338ecf;">Balance:</font><input type="text"  size="4" class="text-line1"  id="balance-address"  style="color: white;" readonly/></h4>
+          -->   </div>
+          </div>
+    <div class="container" >
+      <div  class="row">
+    <div class="col-sm-3 col-md-2 sidenav" style="background:white;">
+        <ul class="nav nav-sidebar">
+        <div id="a1"><center><h5><font size="4">ACCOUNT DETAILS</font></h5></center></div>
+        <div id="a2">
+        <h5><font size="4">Account:</font></h5><input type="text" class="text-line" size="38%" style="color: black;" id="account" readonly/>
+        <h5><font size="4">Balance in ETH:</font></h5><input type="text" class="text-line" size="5%" id="balance" style="color:black;" readonly/>
+        </div>
+        <div id="a3">
+        <h5><font size="4">Info:</font></h5><input type="text" class="text-line" size="38%" style="color: black;"  id="bank-info" readonly/>
+        <h5><font size="4">Balance:</font></h5><input type="text" class="text-line" size="5%" id="balance-address" style="color:black;" readonly/>
+        </div>
+        <center><h5><font size="4"><span class="glyphicon glyphicon-menu-hamburger"></span>   MENU</font></h5></center>
+        <h2 id="home" class="active"><a href="#" onclick="App.totalhide()"><font size="4"><span class="glyphicon glyphicon-home"></span> Home</font></a></h2>
+        <h2 id="fi"><a href="#" onclick="App.firegister()"> <font size="4"><span class="glyphicon glyphicon-briefcase"></span> Financial Institution</font></a></h2>
+        <h2 id="brr"><a href="#" onclick="App.borrower()"><font size="4"><span class="glyphicon glyphicon-user"></span>  Borrower</font></a></h2>
+        <h2 id="spv"><a href="#" onclick="App.spvregister()"><font size="4"><span class="fa fa-truck"></span>  SPV</font></a></h2>
+        <h2 id="inv"><a href="#" onclick="App.investerregister()"><font size="4"><span class="fa fa-handshake-o"></span>  Investor</font></a></h2>
+          </ul>
+        </div>  
+        
+        <div id="container">
+          Connect With LoanSecuritization...
+          <div id=flip>
+            <div><div>Get Loan</div></div>
+            <div><div>Make Payment</div></div>
+            <div><div>Make Safe Investment</div></div>
+          </div>
+         Easier..!
+        </div> 
+
+  <!--firegister-->
+  <div class="col-sm-9 col-md-2">
+    <div id="fi_registered">
+        <div class="col-sm-4" id="fidetail_hide">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="container" style="background:white;height:200px;width:630px;">
+          <center><h3 style="color: #338ecf;">Financial Institute Details</h3></center>
+            <table class="table table-hover">
+            <thead>
+            <tr>
+            <th><h4 style="color: black;">Financial Institute Address</h4></th>
+            <th><h4 style="color: black;">Bank Name</h4></th>
+            <th><h4 style="color: black;">Balance</h4></th>
+            <th><h4 style="color: black;">Fixed Int</h4></th>
+            </tr>
+            </thead>
+            <tbody id="body_bank">
+            </tbody>
+            </table>
+            </div>
+            </div>
+                 <div class="col-sm-12" id="fi_hide">
+                    &nbsp;&nbsp;
+                    <div class="container" style="background:white;overflow-y:scroll;height:400px;width:1490px;">
+                  <center><h3 style="color: #338ecf;">Financial Institute Loan Details</h3></center> 
+                   <table class="table table-hover" style="background:white;display:block;"  id=mon_th>
+                       <thead>
+                         <tr>
+                           <th><h4 style="color: black;">Loan Id</h4></th>
+                           <th><h4 style="color: black;">Token Address</h4></th>
+                           <th><h4 style="color: black;">token value</h4></th>
+                           <th><h4 style="color: black;">token name</h4></th>
+                           <!--<th><h4 style="color: black;">Bank Address</h4></th>-->
+                           <th><h4 style="color: black;">Borrower Address</h4></th>
+                           <th><h4 style="color: black;">Total Amount</h4></th>
+                           <th><h4 style="color: black;">Total Paid Ins.</h4></th>
+                          <!-- <th><h4 style="color: black;">Last Paid</h4></th>-->
+                           <th><h4 style="color: black;">Total Months</h4></th>
+                           <th><h4 style="color: black;">Balance Loan</h4></th>
+                           <th><h4 style="color: black;">Balance Installment</h4></th>
+                         </tr>
+                       </thead>
+                       <tbody id="fi_loan_list">
+       
+                       </tbody>
+                     </table>
+                 </div>  
+                 </div>
+              </div>
+  
+              <!--borrower-->
+              <div id="borrower">
+                &nbsp; &nbsp; &nbsp;
+                  <div class="container" >
+                  <ul class="nav nav-pills" style="background:white;">
+                      <li class="active"><a data-toggle="pill" href="#home1">Home</a></li>
+                      <li><a data-toggle="pill" href="#borrrowhide">Monthly Payment</a></li>
+                    </ul>
+                    &nbsp;
+                    <div class="tab-content">
+                  <div id="home1" class="tab-pane fade in active" >
+                  <div class="row" id="get_loan_hide" >
+                 <div class="form-group col-sm-8">
+                  <div class="container" style="background:white;height:300px;width:800px;">
+                <center><h3 style="color: #338ecf;">Get Loan From Financial institution</h3></center>  
+                 <input type="text" id="Token-address" class="form-control" placeholder="Token Address" />
+                 <input type="text" id="loan-address" class="form-control" placeholder="Bank Address" readonly/>
+                 <input type="text" id="loan-amount" class="form-control" placeholder="(specify No of Tokens)" />
+                 <input type="text" id="token-name" class="form-control" placeholder="Token Name" />
+                 <input type="button" class="btn btn-primary form-control" onclick="App.get_loan();"  id="loan-bank" value="Get Loan"/>
+                 <div id="loan-status" style="color: #338ecf;"></div>
+                </div>
+                </div>                               
+                
+                
+                 &nbsp;&nbsp;
+                  <div class="col-sm-6" id="fidetail_hide">
+                      <div class="container" style="background:white;overflow-y:scroll;height:400px;width:800px;">
+                                            <center><h3 style="color: #338ecf;">Financial Institute Details</h3></center> 
+                                             <table class="table table-hover" style="background:white;display:block;">
+                                               <thead>
+                                                 <tr>
+                                                   <th><h4 style="color: black;">Financial Institute Address</h4></th>
+                                                   <th><h4 style="color: black;">Bank Name</h4></th>
+                                                   <th><h4 style="color: black;">Balance</h4></th>
+                                                   <th><h4 style="color: black;">Fixed Int.</h4></th>
+                                                 </tr>
+                                               </thead>
+                                               <tbody id="body_bank1">
+                                                </tbody>
+                                               </table>
+                                         </div>
+                                         </div>
+                                         </div>
+                                         </div>
+                       <div class="tab-pane fade" id="borrrowhide">                        
+                 <div class="row" >
+                    <div class="container" style="background:white;overflow-y:scroll;display:block;height:700px;width:1490px;">
+                             <div class="col-sm-12" id="borrrow_hide">
+                               <center><h3 style="color: #338ecf;">Borrowing Loan Details</h3></center>
+                               <table class="table table-hover" style="background:white;" id=mon_th>
+                                   <thead>
+                                     <tr>
+                                       <th><h4 style="color: black;">Loan Id</h4></th>
+                                       <th><h4 style="color: black;">Token Address</h4></th>
+                                       <th><h4 style="color: black;">Token value</h4></th>
+                                       <th><h4 style="color: black;">Token name</h4></th>
+                                       <th><h4 style="color: black;">Bank Address</h4></th>
+                                       <!-- <th><h4 style="color: black;">Borrower Address</h4></th> -->
+                                       <th><h4 style="color: black;">Total Amount</h4></th>
+                                       <th><h4 style="color: black;">Total Paid Ins.</h4></th>
+                                       <!--<th><h4 style="color: black;">Last Paid</h4></th>-->
+                                       <th><h4 style="color: black;">Total Months</h4></th>
+                                       <th><h4 style="color: black;">Balance Loan</h4></th>
+                                       <th><h4 style="color: black;">Balance Installment</h4></th>
+                                     </tr>
+                                   </thead>
+                                   <tbody id="get_loan_list">
+                   
+                                   </tbody>
+                                 </table>
+                             </div>  
+                             </div>
+                           </div>
+                           </div>
+                           </div>
+                           </div>
+                 </div> 
+
+                 <!--spvregister1-->
+                 <div id="spv_registered">
+                    &nbsp; &nbsp; &nbsp;
+                    <div class="container">
+                    <ul class="nav nav-pills" style="background:white;">
+                        <li class="active"><a data-toggle="pill" href="#home2">Home</a></li>
+                        <li><a data-toggle="pill" href="#purchaseloan">Purchase Loan</a></li>
+                        <li><a data-toggle="pill" href="#createpack">Create Pack</a></li>
+                      </ul>
+                      <div class="tab-content">
+                          &nbsp; &nbsp; &nbsp;
+                          <div id="home2" class="tab-pane fade in active">
+                   <div class="container" style="background:white;height:200px;width:600px;">
+                    <div class="col-sm-4" id="spvdetail_hide">
+                      <center><h3 style="color: #338ecf;" >SPV Details</h3></center>  
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th><h4 style="color: black;">SPV Address</h4></th>
+                              <th><h4 style="color: black;">Total Amount</h4></th>
+                              <th><h4 style="color: black;">Total Loan</h4></th>
+                              <th><h4 style="color: black;">Available pack</h4></th>
+                            </tr>
+                          </thead>
+                          <tbody id="spv_list">
+    
+                          </tbody>
+                      </table>
+                    </div>
+                    </div>
+                    </div>
+                    <!--purchaseloan-->
+<div id="purchaseloan" class="tab-pane fade">
+     <!--   <div class="form-group col-sm-6" id="purchase_set">
+            <div class="container" style="background:white;height:200px;width:460px;">
+                          <center><h3 style="color: #338ecf;">Purchase Loan</h3></center>
+                          <input type="text" id="finance_add" class="form-control" placeholder="Finance Address" readonly/>
+                          <input type="text" id="spvLoan_id" class="form-control" value="0" placeholder="Loan ID"/>
+                          <input type="button" class="btn btn-primary form-control" id="purchase-bank" value="submit" onclick="App.purchase_ln();" />
+                          <div id="status"></div>
+                        </div> 
+                        </div>-->
+<div class="col-sm-8" id="fidetail_hide1">
+    <div class="container" style="background:white;overflow-y:scroll;height:350px;width:860px;">
+       <center><h3 style="color: #338ecf;">Financial Institute Details</h3></center> 
+        <table class="table table-hover" style="background:white;display:block;">
+          <thead>
+            <tr>
+              <th><h4 style="color: black;">Financial Institute Address</h4></th>
+              <th><h4 style="color: black;">Bank Name</h4></th>
+              <th><h4 style="color: black;">Balance</h4></th>
+              <th><h4 style="color: black;">Fixed Int.</h4></th>
+            </tr>
+          </thead>
+          <tbody id="body1_bank">
+           </tbody>
+          </table>
+    </div>
+          </div>
+          &nbsp;  &nbsp;  &nbsp;  &nbsp;
+          <div class="col-sm-8" id="spv_deta">
+              &nbsp;
+              <div class="container" style="background:white;overflow-y:scroll;height:400px;width:1060px;">
+              <center><h3 style="color: #338ecf;">FI Loan Details</h3></center>
+              <table class="table table-hover" id="spvloan_table" style="background:white;display:block;">
+                  <thead>
+                    <tr>
+                      <th><h4 style="color: black;">Loan Id</h4></th>
+                      <th><h4 style="color: black;">token address</h4></th>
+                      <th><h4 style="color: black;">Token Value</h4></th>
+                      <th><h4 style="color: black;">Token Name</h4></th>
+                      <th><h4 style="color: black;">Bank Address</h4></th>
+                      <th><h4 style="color: black;">Total Amount</h4></th>
+                    </tr>
+                  </thead>
+                  <tbody id="spvloan_tbody">
+  
+                  </tbody>
+                </table>
+                </div>
+            </div>  
+         
+ </div>  
+ <!--createpack-->
+ <div id="createpack" class="tab-pane fade">       
+    <div class="row">
+          <div class="form-group col-sm-6" id="create_pack">
+              <div class="container" style="background:white;height:350px;width:560px;">
+                &nbsp; &nbsp; &nbsp; &nbsp;
+             <center><h3 style="color: #338ecf;">Create Pack</h3></center> 
+              <input type="text" id="spv_id" class="form-control" placeholder="SPV Id"/>
+              <input type="button" class="btn btn-primary form-control" id="Investor" value="Submit" onclick="App.create_pack();" />
+              <div style="color: #338ecf;" id="status"></div>
+              </div>
+          </div>
+              <div class="col-sm-6" id="spv_pack">
+                  <div class="container" style="background:white;overflow-y:scroll;height:350px;width:370px;">
+               <center><h3 style="color: #338ecf;">SPV package details</h3></center> 
+                <table class="table table-hover" id="invester_cls" style="background:white;display:block;">
+                    <thead>
+                      <tr>
+                        <th><h4 style="color: black;">Package Id</h4></th>
+                        <th><h4 style="color: black;">Total Amount</h4></th>
+                      </tr>
+                    </thead>
+                    <tbody id="spvpack_body">
+    
+                    </tbody>
+                  </table>
+                  </div>
+              </div>  
+            </div>
+            &nbsp;  &nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<div class="row">
+            <div class="col-sm-8" id="spv_loan_detail">
+                <div class="container" style="background:white;overflow-y:scroll;height:350px;width:1060px;">
+                  <center> <h3 style="color: #338ecf;">SPV Loan Details</h3></center> 
+              <table class="table table-hover" id="spv_table1" style="background:white;display:block;">
+                  <thead>
+                    <tr>
+                      <th><h4 style="color: black;">SPV id</h4></th>
+                      <th><h4 style="color: black;">Loan Id</h4></th>
+                      <th><h4 style="color: black;">Token address</h4></th>
+                      <th><h4 style="color: black;">Token value</h4></th>
+                      <th><h4 style="color: black;">Token name</h4></th>
+                      <th><h4 style="color: black;">Bank Address</h4></th>
+                      <th><h4 style="color: black;">Total Amount</h4></th>
+                    </tr>
+                  </thead>
+                  <tbody id="spv_tbody">
+  
+                  </tbody>
+                </table>
+                </div>
+            </div>  
+          </div>
+      </div>
+      </div>
+      </div>
+</div>      
+      <!--investerregister-->
+      <div id="invester_register">
+          <div class="container">
+          <ul class="nav nav-pills" style="background:white;">
+              <li class="active"><a data-toggle="pill" href="#home3">Home</a></li>
+              <li><a data-toggle="pill" href="#menu2">Purchase Pack</a></li>
+            </ul>
+            &nbsp;
+            <div class="tab-content">
+              <div id="home3" class="tab-pane fade in active">
+               <div class="col-sm-4" id="investor_detail">
+                  <div class="container" style="background:white;height:200px;width:760px;">
+                    <center> <h3 style="color: #338ecf;">Investor  Details</h3></center> 
+                                    <table class="table table-hover" id="invesdetai_table">
+                                        <thead>
+                                          <tr>
+                                            <th><h4 style="color: black;">Investor Address</h4></th>
+                                            <th><h4 style="color: black;">Total Amount</h4></th>
+                                            <th><h4 style="color: black;">Package</h4></th>
+                                          </tr>
+                                        </thead>
+                                        <tbody id="invesdetail_tbody">
+                        
+                                        </tbody>
+                                      </table>
+                                      </div>
+                                  </div>  
+                            </div>
+              <div id="menu2" class="tab-pane fade">
+                  <div class="row">
+                      <div class="form-group col-sm-4" id="purchase_pack">
+                          <div class="container" style="background:white;height:200px;width:370px;">
+                            <center> <h3 style="color: #338ecf;">Purchase Pack</h3></center> 
+                          <input type="text" id="spv_add" class="form-control" placeholder="SPV Adress" readonly/>
+                          <input type="text" id="pack_id" class="form-control" placeholder="Pack Id"/>
+                          <input type="button" class="btn btn-primary form-control" id="Investor" value="Submit" onclick="App.purchase_pack();" />
+                          <div id="status"></div>
+                          </div>
+                        </div>
+                      <div class="col-sm-4" id="invester_pack_details">
+                          <div class="container" style="background:white;overflow-y:scroll;height:350px;width:370px;">
+                            <center> <h3 style="color: #338ecf;">Inverster Package Details</h3></center> 
+                          <table class="table table-hover" id="inves_loan_table" style="background:white;display:block;">
+                              <thead>
+                                <tr>
+                                  <th><h4 style="color: black;">Package</h4></th>
+                                  <th><h4 style="color: black;">Total Amount</h4></th>            
+                                </tr>
+                              </thead>
+                              <tbody id="inverstorpack_body">
+              
+                              </tbody>
+                            </table>
+                            </div>
+                        </div>  
+                                  </div>
+                                  &nbsp;
+                                  <div class="row">
+                                      <div class="col-sm-4" id="spv_packdetail">
+                                          <div class="container" style="background:white;overflow-y:scroll;height:350px;width:370px;">
+                                            <center> <h3 style="color: #338ecf;">SPV package details</h3></center> 
+                                          <table class="table table-hover" id="invester_cls" style="background:white;display:block;">
+                                              <thead>
+                                                <tr>
+                                                  <th><h4 style="color: black;">Package</h4></th>
+                                                  <th><h4 style="color: black;">Total Amount</h4></th>
+                                                </tr>
+                                              </thead>
+                                              <tbody id="spvpackdetail_body">
+                              
+                                              </tbody>
+                                            </table>
+                                            </div>
+                                        </div>  
+                                        <div class="col-sm-8" id="spvdetail_hide1">
+                                            <div class="container" style="background:white;overflow-y:scroll;height:350px;width:900px;">
+                                              <center>  <h3 style="color: #338ecf;">SPV Details</h3></center> 
+                                            <table class="table table-hover" style="background:white;display:block;">
+                                              <thead>
+                                                <tr>
+                                                  <th><h4 style="color: black;">SPV Address</h4></th>
+                                                  <th><h4 style="color: black;">Total Amount</h4></th>
+                                                  <th><h4 style="color: black;">Total Loan</h4></th>
+                                                  <th><h4 style="color: black;">Available pack</h4></th>
+                                                </tr>
+                                              </thead>
+                                              <tbody id="spv_list1">
+                        
+                                              </tbody>
+                                          </table>
+                                          </div>
+                                        </div>
+                                  
+                                    </div>  
+                                    </div>
+             
+            </div>
+            </div>
+        </div>
+        </div>
+        </div>
+      </div>
+        <!--end-->
+        <!--fipopup-->
+        <div class="container">
+            <div class="modal fade" id="myModal" role="dialog">
+              <div class="modal-dialog">               
+                 <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><center><font  style="color: black;">You are not yet Register as Financial Institution...please Register</font></center></h4>
+                  </div>
+                  <div class="modal-body">
+                      <input type="text" id="bank-name" placeholder="Bank Name" class="form-control"/>
+                      <input type="text" id="loan-interest" placeholder="Loan Interest" class="form-control"/>
+                      <input type="text" id="deposit-amount" placeholder="Deposit Amount" class="form-control"/>
+                      <input type="text" id="duration" placeholder="Duration" class="form-control"/>
+                      <input type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true" onclick="App.register_bank();" value="Register">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="App.totalhide()">Close</button>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+            
+          </div>
+          <!--spvpopup-->
+            <div class="container">
+            <div class="modal fade" id="myModal1" role="dialog">
+              <div class="modal-dialog">                
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><center><font  style="color: black;">You are not yet Register as SPV...please Register</font></center></h4>
+                  </div>
+                  <div class="modal-body">
+                      <input type="text" id="spv_ehter_value" class="form-control" placeholder="SPV Ethers" />
+                      <input type="button" class="btn btn-primary form-control" id="salling" value="SPV Register" data-dismiss="modal" aria-hidden="true" onclick="App.sale_loan();" />
+                      </div>
+                  <div class="modal-footer">
+                    <button  type="button" class="btn btn-danger" data-dismiss="modal" onclick="App.totalhide()">Close</button>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+            
+          </div>
+          <!--invespopup-->
+          <div class="container">
+              <div class="modal fade" id="myModal2" role="dialog">
+                <div class="modal-dialog">                
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title"><center><font  style="color: black;">You are not yet Register as Investor...please Register</font></center></h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" id="invester_ether_value" class="form-control" placeholder="Invester Ethers"/>
+                        <button type="button" class="btn btn-primary form-control" id="Investor" value="Register" data-dismiss="modal" aria-hidden="true" onclick="App.Register();">Register</button>
+                        <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="App.totalhide()">Close</button>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              </div>
+            </div>
+<script>
+  $("button").click(function(){
+    $("#div1").load("demo_test.txt");
+});
+</script>
+
+</body>
+</html>

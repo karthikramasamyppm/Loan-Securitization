@@ -163,26 +163,27 @@ window.App = {
       return instance.show_registers();
     }).then(function(val) {
       console.log(val[1].length)
-      if(val[1].length>0)
+      if(val[1].length > 0)
       {
        $.each(val[1],function(err,data){
-       // alert(val[1])
-      if (data==account) {
-        $("#fi_registered").hide();
-        $("#borrower").hide();
-        $('#spv_registered').show();
-        $('#invester_register').hide();
-        $("#container").hide();
-        $("#a1").show();
-        $("#a2").show();
-        $("#a3").show();
-        $("#bank-info").val("This SPV has registered");
-      } else {
-        $("#bank-info").val("This SPV has not registered");
-        $("#container").hide();
-          $('#myModal1').modal('show');
-            }
-          })
+       
+            if (data==account) {
+              $("#fi_registered").hide();
+              $("#borrower").hide();
+              $('#spv_registered').show();
+              $('#invester_register').hide();
+              $("#container").hide();
+              $("#a1").show();
+              $("#a2").show();
+              $("#a3").show();
+              $("#bank-info").val("This SPV has registered");
+            } 
+            else {
+              $("#bank-info").val("This SPV has not registered");
+              $("#container").hide();
+              $('#myModal1').modal('show');
+             }
+          });
         }
         else {
           $("#bank-info").val("This SPV has not registered");
@@ -382,6 +383,7 @@ get_loan : function(){
   var Token_add=$("#Token-address").val().trim();
   var loan_amount  = parseInt($("#loan-amount").val().trim());
   var loan_address = $("#loan-address").val().trim();
+  // change
   var token_name=$("#token-name").val().trim();
   $("#loan-status").html("Initiating transaction... (please wait)");
   
