@@ -65,6 +65,14 @@ window.App = {
     web3.eth.getBalance(account, (err, balance) => {
       balance = web3.fromWei(balance, "ether") + ""
       $("#balance").val(balance.trim())
+      var accountInterval = setInterval(function() {
+        if (web3.eth.accounts[0] !== account) {
+          account = web3.eth.accounts[0];
+          
+          // your actions
+        window.location.reload();
+        }
+      }, 100);
     });
   },
   firegister: function() {
@@ -595,6 +603,7 @@ register_bank:function() {
     return instance.register(bank_name, loan_interest,duration, {from:account,value:web3.toWei(deposit_Amount,"ether"),gas: 6000000});
   }).then(function() {
     $("#status").html("Transaction complete!");
+    self.firegister();
   }).catch(function(e) {
     console.log(e);
     $("#status").html("Error in transaction; see log.");
@@ -714,8 +723,8 @@ spvloan_tbody:function(fi){
     return bank.bank_d1(address);
   }).then(function(val) {
       for(var i=val[5].toNumber();i<val[4].toNumber();i++){
-        let a=i;
-        bank.ln_get(address,a).then(function(data,err){
+        let e=i;
+        bank.ln_get(address,e).then(function(data,err){
           var a=data[2];
           var s = '';
           for (var k = 0; k < a.length; k += 2) 
@@ -723,7 +732,7 @@ spvloan_tbody:function(fi){
       s+= String.fromCharCode(parseInt(a.substr(k, 2), 16));
 
     }
-          bank.loanadd(a).then(function(data2,err){
+          bank.loanadd(e).then(function(data2,err){
             if(account==data2[0]&&data[0]>0)
             {
           $("#spvloan_tbody").append('<tr><td>'+data[0]+'</td><td>'+data[9]+'</td><td>'+data[1]+'</td><td>'+s+'</td><td id='+data[0]+'>'+data[3]+'</td><td>'+web3.fromWei(data[5].toNumber(), "ether")+'</td></tr>');
